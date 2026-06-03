@@ -1,0 +1,46 @@
+name: tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    name: Regresión canónica
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verificación rápida del CANONICAL
+        run: python tests/verify_canonical.py
+
+      - name: Tests de regresión completos
+        run: python -m pytest tests/ -v --tb=short
+
+      - name: Smoke test — import del modelo
+        run: |
+          python -c "from configs.parametros import CANONICAL; print('CANONICAL keys:', len(CANONICAL))"
+          python -c "from core.analysis import compute_power_chain; print('analysis OK')"
+          python -c "from core.rectifier import SchottkyDiode_SMS7630; print('rectifier OK')"
+          python -c "from core.flpda import FLPDA_Koch; print('flpda OK')"
+          python -c "from core.lora_budget import harvested_uw; print('lora_budget OK')"
