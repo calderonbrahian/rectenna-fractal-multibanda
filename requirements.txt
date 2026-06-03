@@ -1,0 +1,22 @@
+# Rectenna Fractal Multibanda — Dependencias
+# Autor: Brahian Calderon Munera · UdeA · 2026
+# Python >= 3.9 requerido
+#
+# Instalar: pip install -r requirements.txt
+# Tests:    python -m pytest tests/ -v
+
+# --- Core ---
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+
+# --- Dashboard ---
+streamlit>=1.57
+plotly>=5.18
+pandas>=2.0
+
+# --- Testing ---
+pytest>=7.0
+
+# --- Configuracion ---
+pyyaml>=6.0

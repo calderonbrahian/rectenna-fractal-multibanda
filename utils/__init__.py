@@ -1,0 +1,1 @@
+"""Utilidades — gráficas y exportación."""

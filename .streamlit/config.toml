@@ -1,0 +1,66 @@
+# Tema institucional UdeA — Light academic
+# Limpio, profesional, optimizado para lectura prolongada y proyección en sala.
+
+[theme]
+base = "light"
+primaryColor       = "#1E40AF"   # Azul UdeA institucional
+backgroundColor    = "#FFFFFF"
+secondaryBackgroundColor = "#F8FAFC"
+codeBackgroundColor      = "#F1F5F9"
+textColor           = "#0F172A"   # Slate-900
+linkColor           = "#1E40AF"
+borderColor         = "#CBD5E1"
+codeTextColor       = "#1E293B"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius   = "8px"
+buttonRadius = "8px"
+
+font = "'Inter':https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+headingFont = "'Inter':https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap"
+codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+baseFontSize = 14
+baseFontWeight = 400
+codeFontSize = "13px"
+headingFontSizes = ["28px", "22px", "18px", "16px", "14px", "12px"]
+headingFontWeights = [700, 600, 600, 600, 500, 500]
+linkUnderline = false
+
+# Colores semánticos (consistentes con paleta accesible Paul Tol)
+greenColor  = "#15803D"   # éxito / sostenible / canónico verde
+redColor    = "#B91C1C"   # error / no viable
+yellowColor = "#B45309"   # advertencia / cap activo
+orangeColor = "#C2410C"
+blueColor   = "#1E40AF"
+violetColor = "#6D28D9"
+grayColor   = "#475569"
+
+# Paleta categorical para gráficas (legible sobre blanco)
+chartCategoricalColors = [
+    "#1E40AF",   # azul UdeA
+    "#15803D",   # verde botánico
+    "#B45309",   # ámbar academico
+    "#B91C1C",   # rojo señal
+    "#6D28D9",   # violeta
+    "#0E7490",   # cian profundo
+    "#9F1239",   # rosa profundo
+    "#475569",   # gris pizarra
+]
+chartSequentialColors = [
+    "#EFF6FF","#DBEAFE","#BFDBFE","#93C5FD","#60A5FA",
+    "#3B82F6","#2563EB","#1D4ED8","#1E40AF","#1E3A8A",
+]
+
+dataframeBorderColor = "#CBD5E1"
+dataframeHeaderBackgroundColor = "#F1F5F9"
+
+[theme.sidebar]
+backgroundColor = "#F8FAFC"
+secondaryBackgroundColor = "#FFFFFF"
+codeBackgroundColor = "#F1F5F9"
+textColor = "#0F172A"
+borderColor = "#CBD5E1"
+primaryColor = "#1E40AF"
+
+[server]
+headless = true
