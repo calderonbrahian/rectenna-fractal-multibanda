@@ -39,8 +39,11 @@ jobs:
 
       - name: Smoke test — import del modelo
         run: |
-          python -c "from configs.parametros import CANONICAL; print('CANONICAL keys:', len(CANONICAL))"
-          python -c "from core.analysis import compute_power_chain; print('analysis OK')"
-          python -c "from core.rectifier import SchottkyDiode_SMS7630; print('rectifier OK')"
+          python -c "from configs.parametros import CANONICAL; assert len(CANONICAL) == 19, f'esperaba 19 claves, encontré {len(CANONICAL)}'; print('CANONICAL OK (19 claves)')"
+          python -c "from core.analysis import sensitivity_tornado, monte_carlo_pdc, link_budget_table, supercap_sizing; print('analysis OK')"
+          python -c "from core.rectifier import SchottkyDiode_SMS7630, RectifierCircuit; print('rectifier OK')"
           python -c "from core.flpda import FLPDA_Koch; print('flpda OK')"
-          python -c "from core.lora_budget import harvested_uw; print('lora_budget OK')"
+          python -c "from core.lora_budget import harvested_uw, fspl_dB, received_power_dBm; print('lora_budget OK')"
+          python -c "from core.antenna import FractalAntenna; print('antenna OK')"
+          python -c "from core.matching import LMatchResult; print('matching OK')"
+          python -c "from core.comparacion import validate_wang2022; print('comparacion OK')"

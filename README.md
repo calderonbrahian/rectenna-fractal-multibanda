@@ -110,7 +110,7 @@ rectenna-fractal-multibanda/
 ├── .streamlit/
 │   └── config.toml                 Tema institucional UdeA blanco
 ├── configs/
-│   └── parametros.py               CANONICAL: 20 magnitudes (SSOT)
+│   └── parametros.py               CANONICAL: 19 magnitudes (SSOT)
 ├── core/                           Modelo físico (NO TOCAR sin tests)
 │   ├── antenna.py                  FractalAntenna Sierpinski
 │   ├── flpda.py                    FLPDA Koch (Carrel 1961)
