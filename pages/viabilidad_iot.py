@@ -192,6 +192,14 @@ def render():
         "El resultado es el número de mensajes que el nodo puede transmitir en 24 horas "
         "sin batería de cebado."
     )
+    st.caption(
+        ":material/push_pin: **Tabla de referencia fija** — calculada con la fuente "
+        "canónica de la tesis (TDT, EIRP 70 dBm, 550 MHz). *No* depende de los "
+        "controles del supercondensador de arriba: el número de mensajes/día lo fija "
+        "la potencia cosechada y la energía por mensaje, no el tamaño del buffer. "
+        "Para explorar otras fuentes y EIRP usa el **mapa de viabilidad** más abajo "
+        "o la **Calculadora del modelo**."
+    )
     st.dataframe(_messages_per_day_table(),
                  hide_index=True, height=290,
                  column_config={

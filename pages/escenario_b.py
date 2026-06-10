@@ -268,15 +268,76 @@ def render():
 
     with tab_budget:
         st.markdown(f"#### Potencia cosechada DC a d = {dist_m} m")
-        st.caption("Modelo: cadena completa Shockley aplicada sobre P_in (4 factores: η_mm · η_IMN · PCE · η_PMIC)")
+        st.caption("Modelo: cadena completa Shockley aplicada sobre P_in (4 factores: η_mm · η_IMN · PCE · η_PMIC). "
+                   "**Mueve el slider de distancia en la barra lateral y esta sección entera se recalcula.**")
 
-        # Curva P_DC vs distancia (diagnóstico de propagación)
+        # ── KPIs reactivos a la distancia seleccionada (fuente TDT) ─────────
+        _tdt_key = next(iter(budget['cosecha']))            # 'TV UHF (DVB-T)'
+        _sf12_key = next(iter(budget['cosecha'][_tdt_key])) # primer perfil = SF12
+        _tdt = budget['cosecha'][_tdt_key][_sf12_key]
+        _cold_ok = _tdt['Vdc_mV'] >= CANONICAL['V_cs_mV']
+        with st.container(horizontal=True):
+            st.metric(f"P_DC (TDT @ {dist_m} m)", f"{_tdt['P_cosechada_uW']:.1f} µW",
+                      delta=f"{_tdt['P_cosechada_uW'] - CANONICAL['P_dc_uW']:+.0f} µW vs canónico (100 m)",
+                      delta_color="off", border=True)
+            st.metric("P recibida en antena", f"{_tdt['Pr_dBm']:.1f} dBm", border=True)
+            st.metric("V_DC al PMIC", f"{_tdt['Vdc_mV']:.0f} mV",
+                      delta="≥ 130 mV: arranca ✓" if _cold_ok else "< 130 mV: NO arranca ✗",
+                      delta_color="off", border=True)
+            _margen = _tdt['margen_uW']
+            st.metric("Margen vs consumo SF12", f"{_margen:+.1f} µW",
+                      delta="sostenible" if _margen > 0 else "déficit",
+                      delta_color="normal" if _margen > 0 else "inverse", border=True)
+
+        # ── Tabla reactiva: cada fuente RF × cada perfil LoRa ───────────────
+        st.markdown("**Presupuesto por fuente RF y perfil LoRa** — "
+                    "*¿qué fuente sostiene qué perfil a esta distancia?*")
+        _rows = []
+        for _src, _profs in budget['cosecha'].items():
+            _first = next(iter(_profs.values()))
+            _row = {
+                'Fuente RF': _src,
+                'P_rx [dBm]': _first['Pr_dBm'],
+                'P_DC [µW]': _first['P_cosechada_uW'],
+                'V_DC [mV]': _first['Vdc_mV'],
+            }
+            for _prof, _d in _profs.items():
+                _sf = _prof.split()[1]  # 'SF12', 'SF9', 'SF7'
+                _row[_sf] = ("✓ " if _d['viable'] else "✗ ") + f"{_d['margen_uW']:+.1f} µW"
+            _rows.append(_row)
+        st.dataframe(pd.DataFrame(_rows), hide_index=True,
+                     column_config={
+                         'SF12': st.column_config.TextColumn('SF12 (margen)', help="✓ = P_DC supera el consumo medio del perfil; el número es el margen."),
+                         'SF9':  st.column_config.TextColumn('SF9 (margen)'),
+                         'SF7':  st.column_config.TextColumn('SF7 (margen)'),
+                     })
+        st.caption(
+            ":material/visibility: **Qué observar físicamente:** al alejarte, P_rx cae "
+            "6 dB por cada duplicación de distancia (Friis ∝ 1/d²) y P_DC cae aún más "
+            "rápido porque la PCE del diodo se degrada a baja potencia (zona sub-umbral "
+            "de Shockley). El cold-start falla cuando V_DC < 130 mV: a esa distancia el "
+            "nodo ya no puede arrancar sin batería de cebado, aunque coseche algo de energía."
+        )
+
+        st.divider()
+
+        # ── Curva P_DC vs distancia con marcador en la distancia elegida ─────
         with st.spinner("Curva P_DC vs distancia..."):
             dist_data = run_harvested_vs_dist()
-        st.plotly_chart(fig_harvested_vs_dist(dist_data))
+        _fig_dist = fig_harvested_vs_dist(dist_data)
+        _fig_dist.add_vline(
+            x=dist_m, line=dict(color='#B45309', dash='dash', width=1.6),
+            annotation_text=f"d = {dist_m} m (slider)",
+            annotation_position='top right', annotation_font_size=10,
+        )
+        st.plotly_chart(_fig_dist, key="curva_pdc_dist")
         st.caption(
             "Modelo: Friis (Pozar eq. 2.6) + ITU-R P.1546 +6 dB | "
-            "Shockley cadena completa | PMIC BQ25504 η=85 % | cold-start 130 mV"
+            "Shockley cadena completa | PMIC BQ25504 η=85 % | cold-start 130 mV. "
+            "La **línea vertical ámbar** sigue al slider de distancia: donde cruza cada "
+            "curva de color es la P_DC de esa fuente; las líneas punteadas horizontales "
+            "son el consumo medio de cada perfil LoRa — si el cruce queda por encima, "
+            "el nodo es autónomo con esa fuente y ese perfil."
         )
 
         st.info(

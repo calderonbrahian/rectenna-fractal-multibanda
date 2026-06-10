@@ -111,11 +111,30 @@ def render():
             'Impedancia Zₐ(f) — Sierpinski (modelo RLC multimodo)'
         )
         st.plotly_chart(fig)
-        col1, col2 = st.columns(2)
+        banda_z_sel = st.selectbox(
+            "Leer impedancia en la banda:",
+            [b['banda'] for b in bandas], index=2, key="banda_imp",
+            help="La impedancia compleja Zₐ determina cuánta potencia entra al rectificador. "
+                 "Lejos de 50 Ω reales → mala adaptación → η_mm baja.",
+        )
+        _bz = next(b for b in bandas if b['banda'] == banda_z_sel)
+        col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("Re(Zₐ) @ 2.45 GHz", f"{bandas[2]['Za_real']:.1f} Ω")
+            st.metric(f"Re(Zₐ) @ {_bz['f_GHz']} GHz", f"{_bz['Za_real']:.1f} Ω",
+                      delta=f"{_bz['Za_real'] - 50:+.0f} Ω vs 50 Ω ideal", delta_color="off")
         with col2:
-            st.metric("Im(Zₐ) @ 2.45 GHz", f"{bandas[2]['Za_imag']:+.1f} Ω")
+            st.metric(f"Im(Zₐ) @ {_bz['f_GHz']} GHz", f"{_bz['Za_imag']:+.1f} Ω",
+                      delta="reactiva ≠ 0 → requiere IMN", delta_color="off")
+        with col3:
+            st.metric("PCE en esa banda", f"{_bz['PCE_pct']:.1f} %",
+                      delta="con red L adaptada", delta_color="off")
+        st.caption(
+            ":material/visibility: **Qué observar físicamente:** en las resonancias "
+            "(1,84 / 3,68 / 7,36 GHz) la parte imaginaria cruza por cero y la real se "
+            "acerca a valores manejables — ahí la antena entrega potencia. Entre "
+            "resonancias, |Im(Zₐ)| crece y la antena refleja casi todo. Cambia la banda "
+            "del selector y compara los tres números."
+        )
 
     with tab_pce:
         col_f, _ = st.columns(2)
