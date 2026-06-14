@@ -197,8 +197,7 @@ def render():
         "canónica de la tesis (TDT, EIRP 70 dBm, 550 MHz). *No* depende de los "
         "controles del supercondensador de arriba: el número de mensajes/día lo fija "
         "la potencia cosechada y la energía por mensaje, no el tamaño del buffer. "
-        "Para explorar otras fuentes y EIRP usa el **mapa de viabilidad** más abajo "
-        "o la **Calculadora del modelo**."
+        "Para explorar otras fuentes y EIRP usa el **mapa de viabilidad** más abajo."
     )
     st.dataframe(_messages_per_day_table(),
                  hide_index=True, height=290,

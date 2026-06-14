@@ -150,16 +150,14 @@ def render():
 ├── app.py                       # Entrada: navegación multipágina
 ├── .streamlit/config.toml       # Tema oscuro técnico
 ├── pages/
-│   ├── inicio.py                # [Tesis] Resultados oficiales (read-only)
-│   ├── viabilidad_iot.py        # [Aplicación] T_ciclo, heatmap EIRP×d, LoRa timeline
-│   ├── escenario_b.py           # [Diagnóstico] FLPDA Koch · 470–900 MHz
-│   ├── escenario_a.py           # [Diagnóstico] Sierpinski · 1,8–5,8 GHz
-│   ├── calculadora.py           # [Exploración] Sandbox de parámetros
-│   ├── analisis_avanzado.py     # [Exploración] Tornado, MC, Supercap, Link Budget
-│   ├── sensibilidad.py          # [Exploración] Barridos Q_L, R_load, τ–σ
-│   ├── validacion.py            # [Validación] Wang (2022) + Carrel (1961)
-│   ├── jurado.py                # [Defensa] Q1–Q9 + L1–L8 + What-if PCE + MC del modelo
-│   └── acerca.py                # Esta página
+│   ├── inicio.py                # Resultado de referencia (energía capturada)
+│   ├── escenario_a.py           # Escenario A — Sierpinski · 1,8–5,8 GHz
+│   ├── escenario_b.py           # Escenario B — FLPDA Koch · 470–900 MHz
+│   ├── viabilidad_iot.py        # Aplicación del nodo IoT
+│   ├── validacion.py            # Validación con literatura (Wang 2022)
+│   ├── analisis_avanzado.py     # Análisis de incertidumbre (tornado, MC)
+│   ├── sensibilidad.py          # Sensibilidad paramétrica (Q_L, R_load, τ–σ)
+│   └── acerca.py                # Esta página (metodología y referencias)
 ├── core/                        # Implementaciones físicas (fuente de verdad)
 │   ├── antenna.py               # FractalAntenna (Sierpinski)
 │   ├── flpda.py                 # FLPDA_Koch (Carrel + Koch)
@@ -195,7 +193,7 @@ La revisión metodológica de 2026-05-28 corrigió **15 hallazgos** entre el doc
 - **Caveats explícitos** sobre sustrato Duroid vs FR-4 y punto de comparación P_in = −10 dBm en la página de Validación.
 - **PCE = 0,85 reconocido como cap del modelo**, no como medida; el resultado de referencia opera en el techo.
 
-La página *Defensa → Pregunta del jurado* contiene las nueve preguntas frecuentes pre-respondidas y la tabla L1–L8 con el impacto cuantitativo de cada limitación.
+La tabla L1–L8 de limitaciones, con el impacto cuantitativo de cada una, se documenta en el Apéndice E del informe de grado.
 """
         )
 

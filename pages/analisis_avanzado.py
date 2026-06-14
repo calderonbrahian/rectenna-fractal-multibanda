@@ -115,7 +115,7 @@ incertidumbre del modelo en sí.** La segunda se trata en las limitaciones L1–
 
 :material/info: **No incluido** en este MC (por estar declarado como hipótesis del modelo):
 ganancia G (modelo paramétrico), η_rad (expresión empírica), IL nominal de la red L,
-cap de PCE = 0,85. Para estos, ver el **What-if** de la página *Pregunta del jurado*.
+cap de PCE = 0,85.
 """
         )
         with st.spinner(f"Monte Carlo N={n_mc}... (puede tardar ~{n_mc//200} s)"):

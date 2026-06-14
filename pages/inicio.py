@@ -202,9 +202,8 @@ def render():
             )
 
     st.caption(
-        "Para responder \"¿Y si cambio EIRP, distancia, frecuencia…?\" usa la página "
-        "**Calculadora del modelo** (sandbox). Para \"¿Por qué creerle al modelo?\" usa "
-        "**Validación e incertidumbre**. Para \"¿Para qué sirve esto?\" usa **Viabilidad IoT**."
+        "Para \"¿Por qué creerle al modelo?\" usa **Validación y análisis de error**. "
+        "Para \"¿Para qué sirve esto?\" usa la **Aplicación del nodo IoT**."
     )
 
 

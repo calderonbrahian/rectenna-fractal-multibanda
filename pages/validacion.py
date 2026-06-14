@@ -193,8 +193,7 @@ entre diseños sobre el mismo material; léase como **verificación de orden de 
         })
         st.dataframe(df, hide_index=True)
         st.caption(
-            ":material/info: Topología fija: **doubler** (la canónica de la tesis). "
-            "Para explorar otras topologías, ve a la Calculadora del modelo."
+            ":material/info: Topología fija: **doubler** (la canónica de la tesis)."
         )
 
     # ── Carrel (1961) ───────────────────────────────────────────────────────
