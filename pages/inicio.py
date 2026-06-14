@@ -202,8 +202,8 @@ def render():
             )
 
     st.caption(
-        "Para \"¿Por qué creerle al modelo?\" usa **Validación y análisis de error**. "
-        "Para \"¿Para qué sirve esto?\" usa la **Aplicación del nodo IoT**."
+        "La verificación del modelo se presenta en **Validación y análisis de error**; "
+        "la aplicación práctica, en **Aplicación del nodo IoT**."
     )
 
 

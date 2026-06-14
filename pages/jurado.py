@@ -125,7 +125,7 @@ def _q1_double_count():
 def _q2_clip():
     _q_card(
         2,
-        "Tu PCE = 85 %. ¿Es un resultado físico o un cap impuesto?",
+        "La PCE reportada es 85 %. ¿Es un resultado físico o un cap impuesto?",
         """
 Es **un cap impuesto explícitamente en el código** como cota termodinámica de la
 topología dobladora (Greinacher). En el escenario de referencia el cap **sí está activo**:
@@ -158,7 +158,7 @@ razonable; para fabricación, requiere verificación.
 def _q4_substrate():
     _q_card(
         4,
-        "Wang midió en Duroid 5880. ¿Tu RMSE de 15,50 pp es comparable?",
+        "Wang midió en Duroid 5880. ¿El RMSE de 15,50 pp es comparable?",
         """
 **Parcialmente, y se admite explícitamente.** El sustrato es la causa dominante del sesgo
 sistemático: FR-4 (tan δ ≈ 0,02) tiene **~22× más pérdidas** que el Duroid 5880
@@ -303,7 +303,7 @@ def _q9_model_uncertainty():
             "propaga la incertidumbre de las **heurísticas del modelo**: ganancia "
             "(±1–2 dBi por ser paramétrica), η_rad (±2 pp por ser empírica), IL nominal "
             "(0,23 dB nominal frente a posibles 0,5 dB reales), y un PCE real menor que "
-            "el cap. Es la versión rigurosa de la pregunta \"¿qué tan apretado es tu número?\"."
+            "el cap. Es la versión rigurosa de la pregunta sobre cuán ajustado es el resultado."
         )
         c1, c2, c3 = st.columns(3)
         with c1:

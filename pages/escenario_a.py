@@ -56,7 +56,7 @@ def render():
     with st.sidebar:
         st.subheader("Parámetros Esc. A")
         st.caption(":material/lock: Topología fija: **doubler** (canónica de la tesis). "
-                    "Para comparar contra halfwave/dickson3, usa el tab *Topologías* "
+                    "La comparación con las topologías halfwave/dickson3 se presenta en el tab *Topologías*. "
                     "dentro de esta página.")
         topology = 'doubler'
         Pin_dBm = st.slider(

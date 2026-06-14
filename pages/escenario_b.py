@@ -155,7 +155,7 @@ def render():
             options=[470, 550, 600, 700, 800, 900],
             value=550,
             key="freq_active_flpda",
-            help="Mueve para ver qué dipolos se 'encienden' a cada frecuencia.",
+            help="Cada frecuencia activa un subconjunto distinto de dipolos.",
         )
         st.plotly_chart(_fig_flpda_schematic(geom, freq_active), width="stretch",
                          key="flpda_active_region")
@@ -204,7 +204,7 @@ def render():
         st.divider()
         st.markdown("##### Diseño paramétrico — *por qué τ = 0,90 y σ = 0,15*")
         st.markdown(
-            "Mueve los dos parámetros de Carrel y observa cómo cambia el arreglo: "
+            "Al variar los dos parámetros de Carrel, el arreglo cambia: "
             "**τ** (razón de escala) controla cuán parecidas son las longitudes de "
             "dipolos consecutivos; **σ** (factor de espaciado relativo) controla "
             "qué tan separados van. El diseño de la tesis (τ = 0,90, σ = 0,15) es "
@@ -261,7 +261,7 @@ def render():
             f":material/lightbulb: Con τ = {tau_param:.2f} y σ = {sigma_param:.2f}, "
             f"el arreglo tiene **{geom_param['n_elements']} dipolos** sobre un boom de "
             f"**{geom_param['boom_cm']:.1f} cm**. "
-            "Mueve los sliders para responder en vivo a preguntas como "
+            "La sección responde a preguntas como "
             "*'¿qué pasaría si τ fuera 0,80?'* (menos dipolos, menos ganancia) "
             "o *'¿por qué no σ = 0,22?'* (boom más largo sin ganancia adicional)."
         )
@@ -269,7 +269,7 @@ def render():
     with tab_budget:
         st.markdown(f"#### Potencia cosechada DC a d = {dist_m} m")
         st.caption("Modelo: cadena completa Shockley aplicada sobre P_in (4 factores: η_mm · η_IMN · PCE · η_PMIC). "
-                   "**Mueve el slider de distancia en la barra lateral y esta sección entera se recalcula.**")
+                   "**Esta sección se recalcula con la distancia seleccionada en la barra lateral.**")
 
         # ── KPIs reactivos a la distancia seleccionada (fuente TDT) ─────────
         _tdt_key = next(iter(budget['cosecha']))            # 'TV UHF (DVB-T)'
@@ -438,7 +438,7 @@ def render():
         )
         st.latex(r"I_D = I_S \left( e^{V_D / (n\,V_T)} - 1 \right)")
         st.markdown(
-            "Mueve el slider para situar el punto operativo en la curva I-V y ver "
+            "El punto operativo sobre la curva I-V se sitúa con el control de la barra lateral, y muestra "
             "la corriente del diodo y su **resistencia dinámica** "
             "R_d = n·V_T / (|I| + I_S). El cambio de R_d con el punto operativo es la "
             "razón por la que el rectificador se comporta como casi-lineal a pequeña "

@@ -18,7 +18,7 @@ from utils.pagina import encabezado, badge_exploracion, impacto_parametros, como
 def render():
     encabezado(
         ":material/calculate: Calculadora del modelo",
-        "Sandbox: mueve los parámetros y observa cómo varía la cadena RF→DC.",
+        "Exploración paramétrica: los valores seleccionados modifican la cadena RF→DC.",
         que_es=("Una calculadora interactiva del modelo completo de la rectena. "
                 "Tomando los mismos modelos que el pipeline canónico, recalcula "
                 "P_in, P_DC, V_DC y el tiempo de carga del nodo IoT con los "
@@ -30,10 +30,10 @@ def render():
         entradas=("Sliders de EIRP, distancia, frecuencia, ganancia, η_IMN, PCE y "
                   "corrección urbana. Cada parámetro tiene un rango sugerido y un "
                   "valor por defecto coincidente con el canónico."),
-        salidas=("Una tabla con tu exploración vs el valor canónico, una fila de "
+        salidas=("Una tabla con la exploración frente al valor de referencia, una fila de "
                   "5 KPIs y una curva exploratoria P_DC vs distancia o vs EIRP "
                   "con un marcador azul en el equivalente al escenario de referencia."),
-        como_leer=("Si una celda en la columna Δ es **positiva**, tu exploración "
+        como_leer=("Si una celda en la columna Δ es **positiva**, la configuración seleccionada "
                    "supera al canónico; si es **negativa**, lo subestima. El marcador "
                    "azul ★ en la gráfica te indica dónde caería el escenario de "
                    "referencia si dejaras los demás parámetros como están."),
@@ -151,7 +151,7 @@ def render():
     msg_dia = 86400.0 / T_ciclo if T_ciclo > 0 else 0.0
 
     # ── Comparación lado a lado: tu exploración vs canónico ──────────────────
-    st.subheader("Tu exploración vs valor oficial de la tesis")
+    st.subheader("Exploración paramétrica frente al valor de referencia")
     def _delta_str(user, canon, unit="", decimals=1):
         d = user - canon
         sign = "+" if d > 0 else ("−" if d < 0 else "±")
@@ -178,7 +178,7 @@ def render():
     st.dataframe(df_cmp, hide_index=True, height=300,
                   column_config={
                       "Δ": st.column_config.TextColumn("Δ vs tesis", width="small",
-                                                        help="Diferencia tu exploración − valor canónico"),
+                                                        help="Diferencia entre la exploración y el valor de referencia"),
                   })
 
     st.divider()
@@ -206,7 +206,7 @@ def render():
     st.subheader("Curva exploratoria")
     eje = st.segmented_control(
         "Eje a barrer", options=["P_DC vs distancia", "P_DC vs EIRP"],
-        default="P_DC vs distancia", help="Mueve los sliders y la curva responde."
+        default="P_DC vs distancia", help="La curva se recalcula con los parámetros seleccionados."
     ) or "P_DC vs distancia"
 
     R_load = CANONICAL['R_load_ohm']
@@ -257,7 +257,7 @@ def render():
         marker_label = (
             f"  Canónico: {CANONICAL['P_dc_uW']:.0f} µW"
             if is_canonical_point
-            else f"  Eq. canónico (con tus parámetros): {y_marker:.0f} µW"
+            else f"  Eq. de referencia (con los parámetros seleccionados): {y_marker:.0f} µW"
         )
         fig.add_trace(go.Scatter(
             x=[x_marker], y=[y_marker], mode='markers+text',
@@ -287,7 +287,7 @@ def render():
 
     como_interpretar(
         titulo_grafica="la curva exploratoria",
-        objetivo=("Comparar la potencia DC que tu configuración entrega en función de la "
+        objetivo=("Comparar la potencia DC que la configuración seleccionada entrega en función de la "
                    "distancia (o la EIRP) contra el valor oficial del proyecto a 100 m."),
         ejes=("**Eje X** (logarítmico): distancia al transmisor en metros, o EIRP en dBm "
                "según el toggle. **Eje Y** (logarítmico): P_DC en µW."),
@@ -296,9 +296,9 @@ def render():
                      "La línea roja de **13 µW** marca el umbral en el que la tensión rectificada "
                      "ya no permite el arranque en frío del PMIC."),
         si_sube_baja=("Si la curva queda **por encima** del marcador azul ★ en el punto de "
-                       "referencia (100 m), tu configuración entrega más potencia que la canónica. "
+                       "referencia (100 m), la configuración seleccionada entrega más potencia que la de referencia. "
                        "Si queda **por debajo**, entrega menos. Cuanto antes la curva cruza el umbral "
-                       "rojo, menor el alcance autónomo de tu rectena."),
+                       "rojo, menor el alcance autónomo de la rectena."),
         impacto_parametros=("Subir EIRP, ganancia o frecuencia (baja en UHF) **eleva** toda la curva. "
                              "Subir L_urb o reducir η_IMN/PCE **baja** la curva. La forma de la "
                              "curva (pendiente) no cambia: solo se traslada arriba o abajo."),

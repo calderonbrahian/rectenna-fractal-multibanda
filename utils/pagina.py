@@ -118,11 +118,10 @@ def badge_oficial():
     """Banner verde indicando que los valores de la página son resultados de
     referencia oficiales del proyecto (read-only, protegidos por test)."""
     st.success(
-        ":material/verified: **Resultados de Referencia del Proyecto.** "
-        "Los valores que se muestran aquí son los reportados en la tesis y están "
-        "**protegidos por la suite de 51 tests del pipeline** (auditoría 2026-05-28). "
-        "Para explorar cómo cambian al modificar parámetros, ve a la página "
-        "**Calculadora del modelo**.",
+        ":material/verified: **Resultados de referencia del proyecto.** "
+        "Los valores de esta sección corresponden a los reportados en el informe de "
+        "grado y están respaldados por la suite de 51 pruebas de regresión del modelo. "
+        "Su exploración paramétrica se presenta en la sección «Calculadora del modelo».",
         icon=":material/verified:",
     )
 
@@ -130,10 +129,10 @@ def badge_oficial():
 def badge_exploracion(detalle: str = ""):
     """Banner ámbar indicando que los valores producidos dependen de los
     sliders del usuario y NO son resultados oficiales del proyecto."""
-    base = ("**Página de exploración paramétrica.** Los valores que produzcas "
-            "aquí dependen de los parámetros que muevas; **no son los resultados "
-            "oficiales del proyecto**. Para ver los resultados oficiales ve a "
-            "**Resultados de Referencia del Proyecto** (página de inicio).")
+    base = ("**Sección de exploración paramétrica.** Los valores presentados "
+            "dependen de los parámetros seleccionados y **no corresponden a los "
+            "resultados de referencia del informe**, que se reportan en la sección "
+            "de inicio.")
     if detalle:
         base += f"\n\n{detalle}"
     st.warning(":material/science:  " + base, icon=":material/science:")
