@@ -140,6 +140,41 @@ def donde_se_desarrolla(seccion: str):
     st.caption(f":material/menu_book: **Dónde se desarrolla en el proyecto:** {seccion}")
 
 
+def correspondencia(tipo: str, detalle: str):
+    """Declara la correspondencia de una gráfica con el trabajo de grado.
+
+    tipo:
+        'directa'        → reproduce una figura del documento.
+        'derivada'       → construida a partir de datos/ecuaciones de una figura/tabla.
+        'complementaria' → no aparece literal; creada para facilitar la interpretación.
+    Llamar inmediatamente debajo de `st.plotly_chart(...)`.
+    """
+    iconos = {
+        'directa':        (":material/content_copy:", "Reproducción directa"),
+        'derivada':       (":material/insights:",     "Visualización interactiva derivada"),
+        'complementaria': (":material/add_chart:",    "Visualización complementaria"),
+    }
+    ic, label = iconos.get(tipo, (":material/image:", "Visualización"))
+    st.caption(f"{ic} **{label}.** {detalle}")
+
+
+def control_interactivo(*, magnitud: str, referencia: str, al_subir: str,
+                        al_bajar: str, limite: str):
+    """Bloque de contexto para un control interactivo (slider/selector).
+
+    Responde, para cualquier parámetro editable: qué magnitud física representa,
+    cuál es el valor de referencia del trabajo, qué pasa al subirlo/bajarlo y
+    cuándo deja de ser razonable. Llamar junto al control.
+    """
+    with st.expander(":material/tune:  ¿Qué hace este control y hasta dónde tiene sentido?",
+                     expanded=False):
+        st.markdown(f"**Qué representa.** {magnitud}")
+        st.markdown(f"**Valor de referencia del trabajo.** {referencia}")
+        st.markdown(f"**Si aumenta.** {al_subir}")
+        st.markdown(f"**Si disminuye.** {al_bajar}")
+        st.markdown(f"**Cuándo deja de ser representativo.** {limite}")
+
+
 def badge_exploracion(detalle: str = ""):
     """Banner ámbar indicando que los valores producidos dependen de los
     sliders del usuario y NO son resultados oficiales del proyecto."""

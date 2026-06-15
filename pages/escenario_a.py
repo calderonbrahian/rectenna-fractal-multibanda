@@ -20,7 +20,8 @@ from plots.charts import (
 )
 from core.antenna import FractalAntenna
 from utils.exportar import resultados_a_csv, sweep_a_csv
-from utils.pagina import encabezado, badge_exploracion, donde_se_desarrolla as _ref
+from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+                          control_interactivo, donde_se_desarrolla as _ref)
 from configs.parametros import BANDS_A
 
 
@@ -75,6 +76,19 @@ def render():
                        "topología que adopta el proyecto.")
             st.caption("εᵣ FR-4 dinámico: 4.4 @ 1 GHz → 4.1 @ 5.8 GHz · "
                        "Ref: Wang et al. (2022) IEEE TAP")
+        control_interactivo(
+            magnitud="**Pin** es la potencia de RF que llega a la entrada del "
+                     "rectificador, en dBm (escala logarítmica: +3 dB ≈ el doble de "
+                     "potencia).",
+            referencia="**−10 dBm**, el punto de comparación con Wang (2022) en el "
+                       "régimen lineal del diodo.",
+            al_subir="El diodo entra antes en conducción y la PCE sube hacia su techo "
+                     "(~85 %): el doblador rinde mejor.",
+            al_bajar="El diodo trabaja en zona sub-umbral, la PCE cae rápido y la "
+                     "tensión puede no alcanzar el arranque del PMIC (130 mV).",
+            limite="Por encima de ~0 dBm ya no es cosecha *ambiental* (sería una fuente "
+                   "dedicada); por debajo de ~−30 dBm la conversión deja de ser útil.",
+        )
 
     with st.spinner("Calculando bandas..."):
         bandas = run_bandas(topology=topology, Pin_dBm=Pin_dBm)
@@ -107,13 +121,23 @@ def render():
         fig = fig_s11(sweep['freqs_GHz'], sweep['s11_dB'],
                       'S11 — Sierpinski Gasket it.3 (sin IMN)', xunit='GHz', bandas=bandas_dict)
         st.plotly_chart(fig)
+        correspondencia('directa',
+                        "Reproduce la **Figura 1** del trabajo: S₁₁ vs frecuencia del "
+                        "Sierpinski it. 3 sobre FR-4.")
         st.info(
             "**Nota:** S11 corresponde a la antena **sin** red de adaptación. "
             "La métrica de sistema relevante es la PCE con IMN (ver pestaña PCE).",
             icon=":material/info:",
         )
+        st.markdown(
+            ":material/lightbulb: **Qué concluye el trabajo.** El Sierpinski it. 3 sobre "
+            "FR-4 solo cae por debajo de −10 dB en **1 de las 7 bandas objetivo** "
+            "(5G-3,5 GHz, S₁₁ = −16,4 dB). Por eso el informe cuestiona el valor del "
+            "fractal puro —sin elementos adicionales— para recolección multibanda (§5.1)."
+        )
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
-             "§4.1.1 Resultados del modelo computacional")
+             "§4.1.1 Resultados del modelo computacional · "
+             "Figura 1 (S₁₁ Sierpinski) · Tabla 2 (bandas del Escenario A)")
 
     with tab_imp:
         fig = fig_impedancia(
@@ -121,6 +145,9 @@ def render():
             'Impedancia Zₐ(f) — Sierpinski (modelo RLC multimodo)'
         )
         st.plotly_chart(fig)
+        correspondencia('complementaria',
+                        "No aparece literal en la tesis; visualiza la impedancia Zₐ(f) "
+                        "del modelo RLC de §3.4.1 para ver dónde la antena entrega potencia.")
         banda_z_sel = st.selectbox(
             "Leer impedancia en la banda:",
             [b['banda'] for b in bandas], index=2, key="banda_imp",
@@ -161,24 +188,37 @@ def render():
             f'PCE vs Pin — {f_sel} ({f_GHz} GHz) · {topology}'
         )
         st.plotly_chart(fig)
+        correspondencia('derivada',
+                        "Construida con el modelo PCE–P_in de la tesis (Tabla 7), evaluado "
+                        "banda por banda del Escenario A (η por banda en la Figura 2).")
         col1, col2 = st.columns(2)
         with col1:
             st.metric("IL red L", f"{sweep_pce['IL_dB']:.2f} dB")
         with col2:
             st.metric(f"PCE @ {Pin_dBm} dBm", f"{banda_data['PCE_pct']:.1f}%")
+        st.caption(
+            ":material/lightbulb: **Cómo se interpreta.** La PCE crece con Pin hasta "
+            "saturar en el techo del modelo (~85 %). A la potencia de cosecha real "
+            "(Pin ≤ −10 dBm) opera lejos de ese techo: por eso las cifras del Escenario A "
+            "son **cotas superiores**, no el resultado firme."
+        )
         st.download_button(
             "Descargar CSV",
             sweep_a_csv(sweep_pce, ['Pin_dBm', 'PCE_pct', 'Vdc_mV']),
             file_name=f"pce_vs_pin_{f_sel}.csv", mime="text/csv",
         )
         _ref("§2.7 Física del diodo Schottky: modelo de Shockley · "
-             "§3.5 Módulo 2 — Cadena RF-DC")
+             "§3.5 Módulo 2 — Cadena RF-DC · "
+             "Figura 2 (η_total por banda) · Tabla 2 · Tabla 7 (PCE–P_in)")
 
     with tab_geom:
         it_geom = st.slider("Iteraciones a mostrar", 0, 4, 3, key='it_sierp')
         with st.spinner("Generando geometría..."):
             triangulos = run_geometry(iterations=it_geom)
         st.plotly_chart(fig_sierpinski(triangulos, it_geom))
+        correspondencia('complementaria',
+                        "No aparece literal en la tesis; dibuja la geometría del Sierpinski "
+                        "(it. 0–4) para ilustrar la autosimilitud descrita en §2.3.2.")
         ant_info = {
             'Tipo': 'Sierpinski Gasket', 'Iteraciones': 3, 'Sustrato': 'FR-4',
             'εᵣ @ f₀': '4.28 (interpolado)', 'h': '1.6 mm', 'tan δ': '0.02',
@@ -235,7 +275,8 @@ def render():
         )
         _ref("§2.3.1 Dimensión de Hausdorff y autosimilitud · "
              "§2.3.2 Triángulo de Sierpinski: propiedades y dimensionado · "
-             "§3.4.1 Sierpinski: modelo RLC y resonancias")
+             "§3.4.1 Sierpinski: modelo RLC y resonancias · "
+             "Tabla 12 (verificación de resonancias vs Puente-Baliarda 1998)")
 
     with tab_tabla:
         df = pd.DataFrame(bandas).rename(columns={
@@ -253,7 +294,8 @@ def render():
             file_name=f"escenario_a_{topology}.csv", mime="text/csv",
         )
         st.caption(f"Pin = {Pin_dBm} dBm · Rectificación: doblador Greinacher · R_load = 1300 Ω (BQ25504)")
-        _ref("§4.1 Escenario A — Sierpinski · §4.1.1 Resultados del modelo computacional")
+        _ref("§4.1 Escenario A — Sierpinski · §4.1.1 Resultados del modelo computacional · "
+             "Tabla 2 (bandas del Escenario A y resultados del modelo)")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
