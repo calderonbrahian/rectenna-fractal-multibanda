@@ -13,7 +13,8 @@ from analysis.avanzado import (
 )
 from plots.charts import fig_tornado, fig_mc_histogram, fig_rectifier_bw, COLORS
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, badge_exploracion, donde_se_desarrolla as _ref
+from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+                          control_interactivo, donde_se_desarrolla as _ref)
 
 
 def render():
@@ -69,6 +70,19 @@ def render():
             n_mc = st.select_slider("N muestras MC",
                                     options=[500, 1000, 2000, 5000],
                                     value=2000)
+    control_interactivo(
+        magnitud="**EIRP** (potencia de la fuente, dBm), **distancia** (m), **frecuencia** "
+                 "(GHz), **R_load** (carga del rectificador, Ω) y **N** (muestras del Monte "
+                 "Carlo). Definen el punto de operación que se analiza.",
+        referencia="Escenario de referencia: EIRP = 70 dBm · d = 100 m · f = 550 MHz · "
+                   "R_load = 1 300 Ω · N = 2 000.",
+        al_subir="Más EIRP o menor distancia → más P_DC. Más N → estimación Monte Carlo más "
+                 "estable (pero más lenta).",
+        al_bajar="Menos EIRP o más distancia → menos P_DC; pocas muestras → histograma "
+                 "ruidoso; R_load muy lejos de 1 300 Ω desadapta el diodo.",
+        limite="Fuera de EIRP 40–80 dBm o d 50–500 m se sale del rango analizado; el modelo "
+               "es válido en el régimen de cosecha (P_in baja), no para fuentes dedicadas.",
+    )
 
     tab_tornado, tab_mc, tab_bw, tab_link, tab_sc, tab_art = st.tabs([
         ":material/bar_chart: Sensibilidad (tornado)",
@@ -98,6 +112,9 @@ def render():
                           f"{sens['results'][0]['pct_change']:.0f}%", border=True)
 
         st.plotly_chart(fig_tornado(sens))
+        correspondencia('directa',
+                        "Reproduce la **Figura 8** del trabajo (análisis de sensibilidad "
+                        "tipo tornado sobre P_DC).")
 
         st.markdown("#### Tabla de sensibilidad")
         df_s = pd.DataFrame([{
@@ -113,7 +130,8 @@ def render():
             "Δ EIRP = ±3 dB · Δ dist = ±20 m · Δ freq = ±0.05 GHz · Δ R_load = ±300 Ω"
         )
         _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
-             "Apéndice E.7 Sensibilidad ante variación de Q_L y R_load")
+             "Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
+             "Figura 8 (tornado sobre P_DC)")
 
     # ── Monte Carlo ───────────────────────────────────────────────────────────
     with tab_mc:
@@ -149,9 +167,12 @@ cap de PCE = 0,85.
                       f"[{mc['p5']:.0f}, {mc['p95']:.0f}] µW", border=True)
 
         st.plotly_chart(fig_mc_histogram(mc))
+        correspondencia('directa',
+                        "Reproduce la **Figura 9** del trabajo (distribución Monte Carlo de "
+                        "P_DC, n = 2 000).")
         st.caption(f"Muestras válidas (P_DC > 0): {mc['n_valid']}/{mc['n_total']}")
         _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
-             "§5.3 Limitaciones del estudio (L1–L8)")
+             "§5.3 Limitaciones del estudio (L1–L8) · Figura 9 (Monte Carlo de P_DC)")
 
     # ── Ancho de banda rectificador ───────────────────────────────────────────
     with tab_bw:
@@ -350,10 +371,14 @@ cap de PCE = 0,85.
                 margin=dict(l=60, r=20, t=45, b=120),
             )
             st.plotly_chart(fig_cmp)
+            correspondencia('complementaria',
+                            "No es una figura del documento; compara la PCE máxima de este "
+                            "trabajo con la literatura (estado del arte, §2.2).")
             st.caption(":material/star: Este trabajo destacado en amarillo")
 
         _ref("§2.2 Estado del arte en rectenas fractales · "
-             "§5.3 Limitaciones del estudio (L6: PCE = 0,85 es cap del modelo)")
+             "§5.3 Limitaciones del estudio (L6: PCE = 0,85 es cap del modelo) · "
+             "Tabla 14 (resumen estructural por subsistema)")
 
 
 render()

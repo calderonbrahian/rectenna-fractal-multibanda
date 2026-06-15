@@ -9,7 +9,8 @@ import plotly.graph_objects as go
 from analysis.sensibilidad import sweep_Q_L, sweep_R_load, sweep_tau_sigma
 from plots.charts import fig_sweep_generic, fig_heatmap_tau_sigma
 from utils.exportar import sweep_a_csv
-from utils.pagina import encabezado, badge_exploracion, donde_se_desarrolla as _ref
+from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+                          control_interactivo, donde_se_desarrolla as _ref)
 
 
 def render():
@@ -67,6 +68,19 @@ def render():
         with cs3:
             st.caption(":material/lock: Rectificación: **doblador Greinacher** "
                        "(la del proyecto)")
+    control_interactivo(
+        magnitud="**Frecuencia** de evaluación (GHz, las 7 bandas canónicas de Wang) y "
+                 "**Pin** (potencia de entrada al rectificador, dBm). Fijan el punto en el "
+                 "que se barre cada parámetro de las pestañas.",
+        referencia="f = 2,36 GHz y Pin = **−10 dBm** (el punto de comparación con Wang en "
+                   "régimen lineal).",
+        al_subir="Más Pin acerca la PCE a su techo y aplana las curvas; frecuencias más "
+                 "altas penalizan por la capacitancia parásita del diodo.",
+        al_bajar="Menos Pin → zona sub-umbral, donde la sensibilidad a Q_L y R_load se "
+                 "acentúa.",
+        limite="Fuera del rango de cosecha (Pin > 0 dBm) o de las bandas canónicas, la "
+               "comparación con Wang deja de ser representativa.",
+    )
 
     tab_ql, tab_rl, tab_ts = st.tabs([
         ":material/tune: Factor Q inductor (Q_L)",
@@ -110,6 +124,9 @@ def render():
             file_name=f"sensibilidad_QL_{topology}_{f_GHz}GHz.csv",
             mime="text/csv",
         )
+        correspondencia('complementaria',
+                        "Barridos de sensibilidad del **Apéndice E.7**; no aparecen como "
+                        "figura numerada en el documento.")
         _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
              "§2.8 Redes de adaptación de impedancias (IMN)")
 
@@ -145,6 +162,9 @@ def render():
             file_name=f"sensibilidad_Rload_{topology}_{f_GHz}GHz.csv",
             mime="text/csv",
         )
+        correspondencia('complementaria',
+                        "Barridos de sensibilidad del **Apéndice E.7**; no aparecen como "
+                        "figura numerada en el documento.")
         _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
              "§2.7 Física del diodo Schottky (carga del rectificador)")
 
@@ -170,6 +190,9 @@ def render():
             "**Eje Y** τ ∈ [0.80, 0.95] | **Eje X** σ ∈ [0.10, 0.22] | "
             "Ganancia promediada sobre 470–900 MHz | ⭐ = punto de diseño Escenario B"
         )
+        correspondencia('complementaria',
+                        "Mapa de diseño del **Apéndice E.4** (τ–σ del FLPDA), construido a "
+                        "partir del barrido paramétrico; no es una figura numerada.")
         _ref("Apéndice E.4 Mapa de diseño τ–σ del FLPDA · "
              "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
