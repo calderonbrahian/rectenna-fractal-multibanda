@@ -25,10 +25,15 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# 7 secciones principales + 1 de referencia, en orden narrativo. La app abre en
-# la Introducción: primero el problema, luego la solución, después los resultados.
+# La app abre en "Presentación" (cabecera institucional + enfoque metodológico),
+# que fija el marco; luego el recorrido narrativo: problema → solución → resultados.
 page = st.navigation(
     {
+        "Presentación": [
+            st.Page("pages/presentacion.py",
+                    title="El trabajo de grado",
+                    icon=":material/school:"),
+        ],
         "Introducción": [
             st.Page("pages/problema.py",
                     title="El problema del IoT",
@@ -37,13 +42,10 @@ page = st.navigation(
                     title="Qué es una rectena",
                     icon=":material/bolt:"),
         ],
-        "Diseño y metodología": [
+        "Diseño de las antenas": [
             st.Page("pages/topologias.py",
                     title="Topologías evaluadas",
                     icon=":material/category:"),
-            st.Page("pages/metodologia.py",
-                    title="Metodología de simulación",
-                    icon=":material/build:"),
         ],
         "Escenarios estudiados": [
             st.Page("pages/escenario_a.py",

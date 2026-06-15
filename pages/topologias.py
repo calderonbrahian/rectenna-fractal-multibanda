@@ -71,8 +71,8 @@ def render():
          "§2.3.3 Curva de Koch · §3.4 Módulo 1 — Geometrías fractales · "
          "Figura 4 (geometría del arreglo FLPDA Koch it. 2)")
 
-    st.page_link("pages/metodologia.py",
-                 label="Siguiente — cómo se simuló todo esto →",
+    st.page_link("pages/escenario_a.py",
+                 label="Siguiente — los escenarios estudiados →",
                  icon=":material/arrow_forward:")
 
 
