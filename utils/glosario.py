@@ -46,6 +46,8 @@ GLOSARIO: dict[str, str] = {
              "IoT (sensor + radio).",
     "filtro DC": "Etapa que alisa la tensión rectificada para entregar una corriente "
                  "continua estable.",
+    "LoRa": "Tecnología de radio de bajo consumo y largo alcance, habitual en sensores "
+            "IoT; transmite en ráfagas breves y separadas.",
     "RMSE": "Raíz del error cuadrático medio: error promedio del modelo frente a los datos "
             "de referencia (Wang 2022), en puntos porcentuales (pp).",
     "sesgo": "Error medio con signo: si es positivo, el modelo sobreestima en promedio.",
@@ -83,13 +85,15 @@ CRITERIOS: dict[str, str] = {
 
 
 # ── Término con definición en hover (HTML <abbr>) ───────────────────────────
-def termino(clave: str) -> str:
+def termino(clave: str, texto: str | None = None) -> str:
     """Devuelve el término con su definición en **hover** (HTML <abbr>), subrayado
-    punteado para indicar que es consultable. Usar dentro de una cadena que se
-    pase a st.markdown(..., unsafe_allow_html=True). Fuente única: GLOSARIO."""
+    punteado para indicar que es consultable. `texto` permite mostrar una etiqueta
+    distinta de la clave (p. ej. capitalizada). Usar dentro de una cadena pasada a
+    st.markdown(..., unsafe_allow_html=True). Fuente única: GLOSARIO."""
     d = GLOSARIO.get(clave, "").replace('"', "'")
+    label = texto if texto is not None else clave
     return (f'<abbr title="{d}" style="text-decoration:underline dotted; '
-            f'cursor:help;">{clave}</abbr>')
+            f'cursor:help;">{label}</abbr>')
 
 
 # ── Glosario por página (colapsable, solo términos relevantes) ──────────────

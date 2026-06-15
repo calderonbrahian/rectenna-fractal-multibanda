@@ -39,11 +39,22 @@ def render():
     )
     st.plotly_chart(_fig_rectena(), width="stretch")
     st.markdown(
-        f"En palabras: la **antena** capta, la {termino('IMN')} **acopla**, el "
-        f"{termino('rectificador')} **convierte** la radio en continua, el "
-        f"{termino('filtro DC')} la **alisa** y la {termino('carga')} —aquí, el **nodo "
-        "IoT**— la **usa**. "
-        ":material/info: *Pasa el cursor sobre los términos subrayados para ver su definición.*",
+        "**El recorrido de la energía, etapa por etapa:**\n\n"
+        f"- 📡 **Antena** — opera en modo recepción: convierte la potencia electromagnética "
+        f"que llega del entorno ({termino('RF')}) en potencia eléctrica en sus terminales.\n"
+        f"- ⚙️ **Red de adaptación ({termino('IMN')})** — acopla la impedancia de la antena "
+        "a la del sistema (**Z₀ = 50 Ω**). Actúa como un **puente**: si las impedancias no "
+        "coinciden, parte de la energía **rebota** (se refleja) y se pierde; la red de "
+        "adaptación minimiza ese rebote.\n"
+        f"- ▷| **{termino('rectificador', 'Rectificador')}** — convierte la señal de radio "
+        "(que oscila) en corriente continua. Es el corazón de la conversión RF→DC.\n"
+        f"- 〜 **{termino('filtro DC', 'Filtro DC')}** — alisa la tensión rectificada para "
+        "entregar una corriente continua estable.\n"
+        f"- 🔋 **{termino('carga', 'Carga')}** — el dispositivo que finalmente usa la "
+        f"energía. Aquí es un **nodo IoT** con radio {termino('LoRa')}, que necesita "
+        "**acumular ≈ 259,3 mJ por ciclo** (despertar, medir y transmitir) para operar.\n\n"
+        ":material/info: *Pasa el cursor sobre los términos subrayados para ver su "
+        "definición.*",
         unsafe_allow_html=True,
     )
 
@@ -79,10 +90,11 @@ def render():
         "menor eficiencia es la que **domina las pérdidas** y marca el techo de todo el "
         "sistema. Por eso conviene que cada bloque rinda lo más alto posible."
     )
-    st.caption(
-        "Orden de magnitud: en sustratos de baja pérdida (Duroid 5880) las eficiencias "
-        "totales típicas son del **28–50 % a −10 dBm**; sobre **FR-4** —el sustrato "
-        "económico que adopta este proyecto— se ubican entre el **30 % y el 40 %**."
+    st.markdown(
+        "**En este proyecto** la rectena se implementa sobre **FR-4**, un sustrato económico "
+        "y accesible, para el que la eficiencia total esperada se ubica entre el "
+        "**30 % y el 40 %**. En sustratos de baja pérdida (Duroid 5880) puede alcanzar el "
+        "**28–50 % a −10 dBm**, a mayor costo."
     )
 
     _ref("§2.1 El sistema rectenna: arquitectura y eficiencia · "
