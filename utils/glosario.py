@@ -43,10 +43,16 @@ GLOSARIO: dict[str, str] = {
     "sesgo": "Error medio con signo: si es positivo, el modelo sobreestima en promedio.",
     "incertidumbre": "Rango en el que varía el resultado cuando el entorno (EIRP, "
                      "distancia, frecuencia) cambia respecto al caso de referencia.",
-    "EIRP": "Potencia isotrópica radiada equivalente de la fuente: cuánta potencia emite la "
-            "torre en la dirección útil.",
+    "EIRP": "Potencia isotrópica radiada equivalente. Medida de la potencia efectiva "
+            "radiada por una antena en la dirección de máxima emisión.",
     "FSPL": "Pérdida de propagación en espacio libre: la atenuación natural de la onda al "
             "repartirse en una superficie cada vez mayor con la distancia.",
+    "TDT": "Televisión Digital Terrestre. Sistema de transmisión de televisión mediante "
+           "radiofrecuencia utilizado para cobertura masiva.",
+    "RF": "Radiofrecuencia. Región del espectro electromagnético utilizada para "
+          "comunicaciones inalámbricas.",
+    "IoT": "Internet de las Cosas: dispositivos (sensores) conectados que transmiten datos "
+           "de forma inalámbrica.",
 }
 
 # ── Criterios visuales canónicos (una sola fuente) ──────────────────────────
@@ -66,6 +72,16 @@ CRITERIOS: dict[str, str] = {
     "Q_L 40": "factor de calidad típico de un inductor SMD 0402/0603; valor de diseño del "
               "proyecto.",
 }
+
+
+# ── Término con definición en hover (HTML <abbr>) ───────────────────────────
+def termino(clave: str) -> str:
+    """Devuelve el término con su definición en **hover** (HTML <abbr>), subrayado
+    punteado para indicar que es consultable. Usar dentro de una cadena que se
+    pase a st.markdown(..., unsafe_allow_html=True). Fuente única: GLOSARIO."""
+    d = GLOSARIO.get(clave, "").replace('"', "'")
+    return (f'<abbr title="{d}" style="text-decoration:underline dotted; '
+            f'cursor:help;">{clave}</abbr>')
 
 
 # ── Glosario por página (colapsable, solo términos relevantes) ──────────────
