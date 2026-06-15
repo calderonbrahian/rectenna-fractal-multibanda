@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 from analysis.sensibilidad import sweep_Q_L, sweep_R_load, sweep_tau_sigma
 from plots.charts import fig_sweep_generic, fig_heatmap_tau_sigma
 from utils.exportar import sweep_a_csv
-from utils.pagina import encabezado, badge_exploracion
+from utils.pagina import encabezado, badge_exploracion, donde_se_desarrolla as _ref
 
 
 def render():
@@ -36,10 +36,18 @@ def render():
 
     badge_exploracion()
 
+    st.markdown(
+        "Cada barrido fija un parámetro como variable y mantiene los demás en su valor "
+        "de diseño, para ver **cuánto cambia el resultado** al moverlo. Una curva plana "
+        "alrededor del punto canónico indica robustez; una pendiente fuerte, alta "
+        "sensibilidad."
+    )
+    _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo")
+
     with st.sidebar:
         st.subheader("Controles de sensibilidad")
         topology = 'doubler'  # fijo: topología canónica
-        st.caption(":material/lock: Topología: **doubler** (canónica de la tesis)")
+        st.caption(":material/lock: Rectificación: **doblador Greinacher** (la del proyecto)")
         f_GHz = st.select_slider(
             "Frecuencia [GHz]",
             options=[1.84, 2.04, 2.36, 2.54, 3.30, 4.76, 5.80],
@@ -75,7 +83,7 @@ def render():
                 'Q_L (inductor SMD)', 'PCE [%]',
                 f'PCE vs Q_L — {f_GHz} GHz · {topology}',
             )
-            fig.add_vline(x=40, line=dict(color='#FBBF24', dash='dash', width=1),
+            fig.add_vline(x=40, line=dict(color='#B45309', dash='dash', width=1),
                           annotation_text='Q_L=40 (diseño)', annotation_position='top right')
             st.plotly_chart(fig)
         with col2:
@@ -84,7 +92,7 @@ def render():
                 'Q_L (inductor SMD)', 'IL [dB]',
                 f'Pérdida de inserción vs Q_L — {f_GHz} GHz',
             )
-            fig2.add_vline(x=40, line=dict(color='#FBBF24', dash='dash', width=1))
+            fig2.add_vline(x=40, line=dict(color='#B45309', dash='dash', width=1))
             st.plotly_chart(fig2)
         st.caption(
             "**R_L** = ω·L / Q_L. A mayor Q_L, menor pérdida óhmica → mayor PCE. "
@@ -96,6 +104,8 @@ def render():
             file_name=f"sensibilidad_QL_{topology}_{f_GHz}GHz.csv",
             mime="text/csv",
         )
+        _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
+             "§2.8 Redes de adaptación de impedancias (IMN)")
 
     # ── R_load ────────────────────────────────────────────────────────────────
     with tab_rl:
@@ -112,7 +122,7 @@ def render():
                 'R_load [Ω]', 'PCE [%]',
                 f'PCE vs R_load — {f_GHz} GHz · {topology}',
             )
-            fig.add_vline(x=1300, line=dict(color='#FBBF24', dash='dash', width=1),
+            fig.add_vline(x=1300, line=dict(color='#B45309', dash='dash', width=1),
                           annotation_text='BQ25504 (1300 Ω)', annotation_position='top left')
             st.plotly_chart(fig)
         with col2:
@@ -121,7 +131,7 @@ def render():
                 'R_load [Ω]', 'Vdc [mV]',
                 f'Vdc vs R_load — {f_GHz} GHz · {topology}',
             )
-            fig2.add_vline(x=1300, line=dict(color='#FBBF24', dash='dash', width=1))
+            fig2.add_vline(x=1300, line=dict(color='#B45309', dash='dash', width=1))
             st.plotly_chart(fig2)
         st.download_button(
             "Descargar CSV",
@@ -129,6 +139,8 @@ def render():
             file_name=f"sensibilidad_Rload_{topology}_{f_GHz}GHz.csv",
             mime="text/csv",
         )
+        _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
+             "§2.7 Física del diodo Schottky (carga del rectificador)")
 
     # ── Mapa τ–σ ──────────────────────────────────────────────────────────────
     with tab_ts:
@@ -143,7 +155,7 @@ def render():
         fig.add_trace(
             go.Scatter(x=[0.15], y=[0.90],
                        mode='markers',
-                       marker=dict(symbol='star', size=14, color='#FBBF24'),
+                       marker=dict(symbol='star', size=14, color='#B45309'),
                        name='Diseño (τ=0.90, σ=0.15)',
                        showlegend=True)
         )
@@ -152,6 +164,8 @@ def render():
             "**Eje Y** τ ∈ [0.80, 0.95] | **Eje X** σ ∈ [0.10, 0.22] | "
             "Ganancia promediada sobre 470–900 MHz | ⭐ = punto de diseño Escenario B"
         )
+        _ref("Apéndice E.4 Mapa de diseño τ–σ del FLPDA · "
+             "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
 
 render()
