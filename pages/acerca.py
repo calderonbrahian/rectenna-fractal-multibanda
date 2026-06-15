@@ -4,46 +4,45 @@ import streamlit as st
 import pandas as pd
 
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado
+from utils.pagina import encabezado, donde_se_desarrolla as _ref
 
 
 def render():
     encabezado(
         "Información del proyecto",
-        "Metodología · Referencias bibliográficas · Arquitectura del software",
-        que_es=("Página de **información de referencia** sobre el proyecto. Contiene la "
-                 "metodología completa del cálculo, las referencias bibliográficas con su "
-                 "uso específico en el modelo y la arquitectura del software."),
+        "Metodología · Referencias bibliográficas · Arquitectura de la simulación",
+        que_es=("Página de **información de referencia** sobre el proyecto de grado. "
+                 "Reúne la metodología completa del cálculo, las referencias "
+                 "bibliográficas con su uso específico en el modelo y la arquitectura "
+                 "de la simulación."),
         para_que_sirve=("Que un docente, investigador o profesional pueda **reproducir el "
                          "trabajo** o entender cómo se conectan los conceptos teóricos con "
                          "su implementación. Sirve también como punto de partida para "
                          "extender el modelo en trabajo futuro."),
         entradas=("Ninguna; es una página de lectura."),
         salidas=("Cadena de cálculo del Escenario B (Carrel + Koch + Friis + Shockley + "
-                  "PMIC), modelo RLC del Escenario A (Sierpinski), 10 referencias bibliográficas "
-                  "con su uso específico y el árbol de directorios de la aplicación."),
-        como_leer=("Lee primero la sección de **metodología expandida** para entender la "
-                   "cadena de cálculo. La tabla de **referencias** te dice exactamente "
-                   "dónde se usa cada una en el modelo. El árbol al final muestra dónde "
-                   "vive cada página en el código."),
+                  "PMIC), modelo RLC del Escenario A (Sierpinski), 10 referencias "
+                  "bibliográficas con su uso específico y la arquitectura de la simulación."),
+        como_leer=("Empieza por la sección de **metodología** para entender la cadena de "
+                   "cálculo. La tabla de **referencias** indica dónde se usa cada una en "
+                   "el modelo. La arquitectura final muestra cómo está organizada la "
+                   "simulación."),
     )
 
     col1, col2 = st.columns([2, 1])
     with col1:
         st.markdown(
-            "**Proyecto de tesis:** Diseño y simulación computacional de una rectena "
-            "fractal multibanda para la recolección de energía de radiofrecuencia "
-            "en entornos IoT  \n"
+            "**Trabajo de grado:** Diseño y simulación computacional de rectenas "
+            "fractales multibanda para recolección de energía RF en entornos IoT  \n"
             "**Programa:** Ingeniería de Telecomunicaciones · Universidad de Antioquia  \n"
-            "**Autor:** Brahian Calderón Múnera · 2026  \n"
-            "**Revisión metodológica:** auditoría 2026-05-28"
+            "**Autor:** Brahian Calderón Múnera  \n"
+            "**Director:** Luis Alberto Flórez Serna, M.Sc. · 2026"
         )
     with col2:
         with st.container(border=True):
-            st.markdown("**Aplicación:** `rectenna_dashboard_st`")
-            st.markdown("**Base física:** `core/` (Shockley + Carrel + Friis)")
-            st.markdown(":material/verified: Sincronizado con la plataforma "
-                         "`rectenna_platform`")
+            st.markdown("**Modelo físico:** Shockley + Carrel + Friis")
+            st.markdown("**Enfoque:** analítico circuital (no onda completa)")
+            st.markdown(":material/menu_book: Metodología en §2.9 y Capítulo 3")
 
     st.divider()
 
@@ -117,6 +116,8 @@ def render():
             ":material/warning: El escenario A **no cuantifica P_DC final** porque los EIRP de "
             "fuentes urbanas (GSM/5G/WiFi) son variables y no están especificados."
         )
+    _ref("§2.9 Métodos de análisis electromagnético: enfoque adoptado · "
+         "§3.3 Arquitectura del pipeline de simulación · §3.4–§3.6 Módulos del modelo")
 
     st.divider()
 
@@ -140,15 +141,16 @@ def render():
         "Referencia": st.column_config.TextColumn("Referencia APA7", width="large"),
         "Uso":        st.column_config.TextColumn("Uso en el modelo", width="medium"),
     })
+    _ref("Referencias del informe de grado · §2.2 Estado del arte en rectenas fractales")
 
     st.divider()
 
-    # ── Arquitectura del software ─────────────────────────────────────────────
-    st.subheader(":material/folder_open: Arquitectura de la aplicación")
+    # ── Arquitectura de la simulación ─────────────────────────────────────────
+    st.subheader(":material/folder_open: Arquitectura de la simulación")
     st.code(
         """rectenna_dashboard_st/
 ├── app.py                       # Entrada: navegación multipágina
-├── .streamlit/config.toml       # Tema oscuro técnico
+├── .streamlit/config.toml       # Tema claro institucional UdeA
 ├── pages/
 │   ├── inicio.py                # Resultado de referencia (energía capturada)
 │   ├── escenario_a.py           # Escenario A — Sierpinski · 1,8–5,8 GHz
@@ -171,11 +173,14 @@ def render():
 ├── plots/charts.py              # Funciones Plotly reutilizables
 ├── configs/parametros.py        # CANONICAL (auditado 2026-05-28) + constantes
 ├── utils/exportar.py            # CSV export
-└── tests/                       # 51 tests: regresión canónica + unitarios
+└── tests/                       # Pruebas de regresión del modelo
     ├── test_regression_canonical.py
     └── test_models.py""",
         language="",
     )
+    _ref("§3.2 Justificación del entorno Python de código abierto · "
+         "§3.3 Arquitectura del pipeline de simulación · "
+         "Apéndice A Arquitectura de la plataforma de simulación")
 
     st.divider()
 
@@ -196,13 +201,14 @@ La revisión metodológica de 2026-05-28 corrigió **15 hallazgos** entre el doc
 La tabla L1–L8 de limitaciones, con el impacto cuantitativo de cada una, se documenta en el Apéndice E del informe de grado.
 """
         )
+    _ref("§4.5 Validación cruzada y análisis del error · "
+         "Apéndice D Limitaciones metodológicas documentadas · "
+         "Apéndice E.11 Tabla canónica de limitaciones del estudio (L1–L8)")
 
     st.caption(
-        "Este dashboard es la capa de presentación interactiva del trabajo de grado. "
-        "Los módulos físicos en `core/` son la fuente de verdad y están protegidos por "
-        "51 tests unitarios y de regresión. Para reproducir las figuras estáticas APA7 "
-        "que aparecen en el documento, ejecutar `generate_thesis_figures.py` en el "
-        "directorio raíz."
+        "Esta aplicación es la capa de presentación interactiva del trabajo de grado. "
+        "El modelo físico es la fuente única de los valores presentados; los detalles "
+        "de reproducibilidad se documentan en el Apéndice B del informe de grado."
     )
 
 
