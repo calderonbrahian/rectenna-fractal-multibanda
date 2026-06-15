@@ -22,10 +22,33 @@ def render():
                  "de radiofrecuencia ambiental)."),
     )
 
-    st.caption(
-        "Trabajo de grado · Ingeniería de Telecomunicaciones · Universidad de Antioquia · "
-        "Brahian Calderón Múnera · Director: Luis Alberto Flórez Serna, M.Sc. · 2026"
-    )
+    # ── Portada del trabajo de grado (identidad del proyecto en la entrada) ──
+    with st.container(border=True):
+        st.markdown(
+            "**Trabajo de grado para optar al título de Ingeniero de Telecomunicaciones "
+            "· Universidad de Antioquia**"
+        )
+        st.markdown(
+            "### Diseño y simulación computacional de rectenas fractales multibanda "
+            "para recolección de energía RF en entornos IoT"
+        )
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Autor**  \nBrahian Calderón Múnera")
+            st.markdown("**Director**  \nLuis Alberto Flórez Serna, M.Sc.")
+        with c2:
+            st.markdown("**Programa**  \nIngeniería de Telecomunicaciones")
+            st.markdown("**Institución**  \nUniversidad de Antioquia · Medellín · 2026")
+        st.markdown(
+            "**Objetivo general**  \n"
+            "Modelar y simular computacionalmente, con bibliotecas científicas de código "
+            "abierto en Python, dos topologías de rectenas fractales multibanda —el "
+            "**Triángulo de Sierpinski** (1,8–5,8 GHz) y la **FLPDA Koch** para UHF de TDT "
+            "y LTE sub-GHz (470–900 MHz)— orientadas a la recolección de energía RF "
+            "ambiental en dispositivos IoT de bajo consumo, evaluando su viabilidad "
+            "técnica y económica en el contexto espectral colombiano."
+        )
+        _ref("§1.2.1 Objetivo general · §1.2.2 Objetivos específicos")
 
     st.subheader("La batería es el límite práctico de la autonomía")
     st.markdown(

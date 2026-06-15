@@ -2,12 +2,13 @@
 Rectenna Fractal Multibanda — Demostración interactiva del proyecto de grado
 ============================================================================
 Punto de entrada Streamlit. La navegación está pensada como **experiencia de
-usuario**, no como índice del documento: 7 secciones principales (más una de
-referencia). La aplicación abre en el **Resultado de referencia**, que responde
-de inmediato qué logró el proyecto (quién lo hizo, qué se diseñó, qué resultado
-se obtuvo y si es útil); las secciones siguientes permiten profundizar en el
-recorrido narrativo del informe. Cada página indica, mediante el bloque "Dónde
-se desarrolla en el proyecto", a qué sección del documento corresponde.
+usuario** y sigue el principio "primero explicar, luego justificar, finalmente
+mostrar resultados": 7 secciones principales (más una de referencia) en orden
+narrativo — Introducción → Diseño y metodología → Escenarios estudiados →
+Resultados → Aplicación al nodo IoT → Validación → Conclusiones. La aplicación
+abre en la Introducción (el problema y la identidad del trabajo). Cada página
+indica, con el bloque "Dónde se desarrolla en el proyecto", a qué sección del
+documento corresponde.
 
 Ejecución local:
     .venv/Scripts/streamlit run app.py
@@ -24,15 +25,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# 7 secciones principales + 1 de referencia. La app abre en el Resultado de
-# referencia (primera página) para responder primero "¿qué logró el proyecto?".
+# 7 secciones principales + 1 de referencia, en orden narrativo. La app abre en
+# la Introducción: primero el problema, luego la solución, después los resultados.
 page = st.navigation(
     {
-        "Resultado del proyecto": [
-            st.Page("pages/inicio.py",
-                    title="Resultado de referencia",
-                    icon=":material/verified:"),
-        ],
         "Introducción": [
             st.Page("pages/problema.py",
                     title="El problema del IoT",
@@ -59,6 +55,11 @@ page = st.navigation(
             st.Page("pages/comparacion.py",
                     title="Comparación de escenarios",
                     icon=":material/compare:"),
+        ],
+        "Resultados del proyecto": [
+            st.Page("pages/inicio.py",
+                    title="Resultado de referencia",
+                    icon=":material/verified:"),
         ],
         "Aplicación al nodo IoT": [
             st.Page("pages/viabilidad_iot.py",

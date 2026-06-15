@@ -1,19 +1,14 @@
 """
-Página de inicio — Puerta de entrada al proyecto de grado.
+Página de Resultados — el resultado de referencia del proyecto.
 
-Funciona como una introducción guiada: un lector que nunca ha visto el informe
-ni el código debería poder entender qué problema se resuelve, qué representa la
-simulación y cómo interpretar los resultados antes de entrar a las secciones
-técnicas. Es una vista de lectura (sin sliders): los valores corresponden al
-escenario de referencia del proyecto.
+Esta página muestra ÚNICAMENTE resultados: el resultado central (P_DC), los
+indicadores que lo resumen, el recorrido de la energía hasta obtenerlo y el
+detalle técnico (cómo se calcula, dónde se pierde, parámetros). El planteamiento
+del problema, el contexto y los escenarios viven en sus propias secciones
+narrativas (Introducción, Diseño y metodología, Escenarios estudiados); aquí no
+se repiten. Es una vista de lectura, sin controles.
 
-Orden de la página (explicar → resultados → detalle técnico):
-    1. Contexto del proyecto
-    2. Los dos escenarios (esta página = Escenario B)
-    3. El resultado principal (narrado) + los indicadores justificados
-    4. Cómo fluye la energía (narrativa primero, figura después)
-    5. Detalle técnico: cómo se calcula, dónde se pierde, tabla de parámetros
-    6. Hacia dónde profundizar
+Orden: resultado → cómo fluye la energía → detalle técnico.
 """
 
 import streamlit as st
@@ -26,159 +21,38 @@ from utils.pagina import encabezado, badge_oficial, donde_se_desarrolla as _ref
 
 def render():
     encabezado(
-        ":material/verified: Resultados de Referencia del Proyecto",
-        "Recolección de energía de radiofrecuencia para alimentar dispositivos "
-        "IoT de bajo consumo",
-        que_es=("Es la puerta de entrada al proyecto de grado. Reúne en una sola vista "
-                "el escenario principal estudiado y sus resultados más importantes. "
-                "**No tiene sliders ni controles editables**: es una página de lectura "
-                "pensada para entender el sistema antes de explorar el resto de la "
-                "aplicación."),
-        para_que_sirve=("Permite comprender qué problema aborda el proyecto, cómo está "
-                         "construida la rectena y cuánta energía entrega, antes de pasar "
-                         "a los análisis más técnicos de las demás secciones."),
+        ":material/verified: Resultado de referencia del proyecto",
+        "La potencia útil que entrega la rectena bajo el escenario base, y cómo se obtiene",
+        que_es=("Página de **resultados**: presenta el resultado central del proyecto —la "
+                "potencia continua útil que entrega la rectena bajo el escenario de "
+                "referencia— y cómo se obtiene a lo largo de la cadena. Es una vista de "
+                "lectura, sin controles editables."),
+        para_que_sirve=("Ver en un solo lugar el resultado principal, los indicadores que "
+                        "lo resumen, el recorrido de la energía y los parámetros del "
+                        "escenario de referencia."),
         entradas=("Ninguna entrada por parte del lector. Los valores corresponden al "
-                  "escenario de referencia definido en el proyecto de grado "
-                  "(transmisor TDT del Cerro Nutibara, 100 m, 550 MHz)."),
-        salidas=("Los indicadores clave del sistema (potencia útil, mensajes IoT por "
-                 "día, eficiencia global), el recorrido de la energía etapa por etapa "
-                 "y un resumen de los parámetros del escenario base."),
-        como_leer=("La página avanza de lo general a lo técnico: primero qué problema se "
-                   "resuelve y qué se diseñó, después el resultado principal y, al final, "
-                   "el detalle de cómo se calcula y dónde se pierde la energía."),
+                  "escenario de referencia (transmisor TDT del Cerro Nutibara, 100 m, "
+                  "550 MHz)."),
+        salidas=("El resultado principal (P_DC), los tres indicadores clave, el diagrama de "
+                 "bloques con los caudales de potencia, la identidad de cálculo, el Sankey "
+                 "de pérdidas y la tabla de parámetros."),
+        como_leer=("Primero el resultado y sus indicadores; después cómo fluye la energía "
+                   "hasta obtenerlo; al final, el detalle técnico de cómo se calcula y "
+                   "dónde se pierde."),
     )
-
-    # ── Portada del proyecto de grado ────────────────────────────────────────
-    with st.container(border=True):
-        st.markdown(
-            "**Trabajo de grado para optar al título de Ingeniero de Telecomunicaciones "
-            "· Universidad de Antioquia**"
-        )
-        st.markdown(
-            "### Diseño y simulación computacional de rectenas fractales multibanda "
-            "para recolección de energía RF en entornos IoT"
-        )
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown("**Autor**  \nBrahian Calderón Múnera")
-            st.markdown("**Director**  \nLuis Alberto Flórez Serna, M.Sc.")
-        with c2:
-            st.markdown("**Programa**  \nIngeniería de Telecomunicaciones")
-            st.markdown("**Institución**  \nUniversidad de Antioquia · Medellín · 2026")
-        st.markdown(
-            "**Objetivo general**  \n"
-            "Modelar y simular computacionalmente, con bibliotecas científicas de código "
-            "abierto en Python, dos topologías de rectenas fractales multibanda —el "
-            "**Triángulo de Sierpinski** (1,8–5,8 GHz) y la **FLPDA Koch** para UHF de TDT "
-            "y LTE sub-GHz (470–900 MHz)— orientadas a la recolección de energía RF "
-            "ambiental en dispositivos IoT de bajo consumo, evaluando su viabilidad "
-            "técnica y económica en el contexto espectral colombiano."
-        )
-        _ref("§1.2.1 Objetivo general · §1.2.2 Objetivos específicos")
-
-    # ════════════════════════════════════════════════════════════════════════
-    # 1 · CONTEXTO DEL PROYECTO
-    # ════════════════════════════════════════════════════════════════════════
-    st.subheader("Contexto del proyecto")
-    st.markdown(
-        "Este proyecto de grado estudia la viabilidad de recolectar energía de "
-        "radiofrecuencia ambiental —las ondas de radio que ya existen en el aire, "
-        "emitidas por torres de televisión, telefonía y otras fuentes— para alimentar "
-        "dispositivos IoT de bajo consumo sin depender de una toma eléctrica.\n\n"
-        "El dispositivo que hace esto se llama **rectena**: la unión de una **antena**, "
-        "que capta las ondas de radio, y un **rectificador**, que las convierte en una "
-        "pequeña corriente continua aprovechable. La idea de fondo es sencilla: si hay "
-        "energía viajando por el aire, ¿se puede recoger una parte y usarla para que un "
-        "sensor inalámbrico funcione por sí mismo?\n\n"
-        "Esta aplicación acompaña al proyecto: permite **ver cómo la energía captada "
-        "atraviesa cada etapa del sistema** hasta llegar al dispositivo final, y explorar "
-        "cómo cambian los resultados al modificar las condiciones del escenario."
-    )
-    _ref("§1.1 Contexto y motivación · §2.1 El sistema rectenna: arquitectura y eficiencia")
-
-    st.divider()
-
-    # ════════════════════════════════════════════════════════════════════════
-    # 2 · LOS DOS ESCENARIOS  (antes de cualquier resultado)
-    # ════════════════════════════════════════════════════════════════════════
-    st.subheader("Los dos escenarios del proyecto")
-    st.markdown(
-        "El proyecto no estudia una sola antena, sino **dos topologías fractales "
-        "complementarias** (objetivo general). Conviene tener clara la diferencia "
-        "antes de ver cualquier resultado, porque cada una responde una pregunta distinta "
-        "y **lo que cuantifica esta página corresponde al Escenario B**:"
-    )
-    st.markdown(
-        "- **Escenario A — Sierpinski (1,8–5,8 GHz).** *¿Puede una antena fractal "
-        "responder en varias bandas a la vez y abrir oportunidades de recolección en el "
-        "espectro urbano?* Es **exploratorio**: no fija una cifra de energía.\n"
-        "- **Escenario B — FLPDA Koch (470–900 MHz).** *¿Cuánta energía útil entrega "
-        "realmente la rectena ante una fuente concreta y bien caracterizada —la TDT del "
-        "Cerro Nutibara— y alcanza para un nodo IoT?* Es el escenario **cuantitativo**.\n\n"
-        "Ambos existen porque el trabajo busca **comparar las dos topologías** y establecer "
-        "criterios de selección según el entorno de despliegue. Esta página parte del "
-        "Escenario B porque su fuente está bien definida y por eso permite calcular la "
-        "potencia útil."
-    )
-    _ref("§4.1 Escenario A · §4.2 Escenario B · §4.4 Análisis comparativo de los dos escenarios")
-    col_a, col_b = st.columns(2)
-    with col_a:
-        with st.container(border=True):
-            st.markdown("#### :material/cell_tower: Escenario A — Exploración multibanda")
-            st.markdown(
-                "Es una **exploración complementaria** del proyecto. Estudia una antena "
-                "fractal **Sierpinski**, que por su geometría puede responder en varias "
-                "bandas a la vez, para analizar su **comportamiento multibanda** y valorar "
-                "si distintas fuentes de radiofrecuencia presentes en el entorno (telefonía "
-                "móvil, Wi-Fi, 5G…) podrían representar **oportunidades adicionales de "
-                "recolección**.\n\n"
-                "Su papel es abrir esa posibilidad, no cerrar un número: **no cuantifica la "
-                "energía final**, porque la potencia real de esas fuentes urbanas es "
-                "variable y no está especificada. Por eso sus resultados se interpretan como "
-                "una **cota superior**, mientras que el cálculo energético firme lo aporta "
-                "el Escenario B."
-            )
-            with st.expander("Detalle técnico"):
-                st.markdown(
-                    "- Antena fractal **Sierpinski it. 3** (FR-4)\n"
-                    "- 7 bandas: 1,84 / 2,04 / 2,36 / 2,54 / 3,30 / 4,76 / 5,80 GHz\n"
-                    "- Modelo RLC paralelo (Puente-Baliarda et al., 1998)\n"
-                    "- No se cuantifica P_DC: los EIRP de las fuentes urbanas no están "
-                    "especificados."
-                )
-            st.caption(":material/menu_book: §4.1 (resultados) · §3.4.1 (modelo RLC)")
-            st.page_link("pages/escenario_a.py",
-                         label="Explorar el Escenario A →",
-                         icon=":material/cell_tower:")
-    with col_b:
-        with st.container(border=True):
-            st.markdown("#### :material/radio: Escenario B — Resultado cuantitativo  ·  *esta página*")
-            st.markdown(
-                "Estudia una antena log-periódica fractal **Koch (FLPDA)** apuntando a una "
-                "fuente concreta y bien caracterizada: el **transmisor de televisión "
-                "digital del Cerro Nutibara**, en Medellín. Como la fuente se conoce, este "
-                "escenario **sí permite calcular la potencia útil** y el desempeño "
-                "energético. Por eso es el que se usa como referencia del proyecto."
-            )
-            with st.expander("Detalle técnico"):
-                st.markdown(
-                    "- Antena log-periódica fractal **Koch it. 2** (FR-4, 8 dipolos, boom ≈ 50 cm)\n"
-                    "- Banda UHF: 470 – 900 MHz (TDT DVB-T2 Colombia + ISM 915 MHz)\n"
-                    "- Diseño Carrel (1961): τ = 0,90 · σ = 0,15 · κ = 43,75 %\n"
-                    "- Fuente: TDT Cerro Nutibara, EIRP = 70 dBm (conservador frente a 72,15 dBm reales)\n"
-                    "- Rectificador doubler SMS7630 · PMIC BQ25504 (arranque en frío 130 mV)"
-                )
-            st.caption(":material/menu_book: §4.2 y §4.3 (resultados) · §3.4.2 (diseño Carrel + Koch)")
-            st.page_link("pages/escenario_b.py",
-                         label="Ver el Escenario B en detalle →",
-                         icon=":material/radio:")
 
     badge_oficial()
+    st.caption(
+        ":material/radio: Estos valores corresponden al **Escenario B** (antena FLPDA Koch "
+        "apuntando a la TDT del Cerro Nutibara), el escenario cuantitativo del proyecto. "
+        "El planteamiento y la comparación de escenarios están en las secciones "
+        "*Introducción* y *Escenarios estudiados*."
+    )
 
     st.divider()
 
     # ════════════════════════════════════════════════════════════════════════
-    # 3 · EL RESULTADO PRINCIPAL  (narrar antes de mostrar cifras)
+    # 1 · EL RESULTADO PRINCIPAL
     # ════════════════════════════════════════════════════════════════════════
     st.subheader("El resultado principal")
     st.markdown(
@@ -246,51 +120,19 @@ def render():
         )
     _ref("Potencia y eficiencia: §4.3.1 y Apéndice E.2 (identidades de cadena, 4 vs 5 "
          "factores) · Mensajes LoRa por día: §3.6 Presupuesto energético del nodo IoT")
-    st.page_link("pages/viabilidad_iot.py",
-                 label="Ir a Aplicación al nodo IoT →",
-                 icon=":material/sensors:")
 
     st.divider()
 
     # ════════════════════════════════════════════════════════════════════════
-    # 4 · CÓMO FLUYE LA ENERGÍA  (narrativa primero, figura después)
+    # 2 · CÓMO FLUYE LA ENERGÍA HASTA EL RESULTADO
     # ════════════════════════════════════════════════════════════════════════
-    st.subheader("Cómo fluye la energía en la rectena")
+    st.subheader("Cómo fluye la energía hasta el resultado")
     st.markdown(
-        "Antes de ver el diagrama, conviene seguir el recorrido de la energía en "
-        "palabras. La energía parte de una fuente lejana y va perdiendo intensidad y "
-        "transformándose hasta llegar al dispositivo:\n\n"
-        "**Fuente → propagación por el aire → antena → adaptación → rectificación → "
-        "gestión de energía → nodo IoT.**"
-    )
-    etapas = [
-        ("1", "Antena",
-         "Capta la energía de radiofrecuencia que llega del entorno (ya debilitada por "
-         "la distancia) y la concentra en sus terminales."),
-        ("2", "Red de adaptación",
-         "Acopla la antena con el rectificador para que se transfiera la mayor energía "
-         "posible y se pierda lo menos posible."),
-        ("3", "Rectificador",
-         "Convierte la señal de radiofrecuencia (que oscila) en una tensión continua "
-         "utilizable."),
-        ("4", "Gestión de energía (PMIC)",
-         "Eleva y estabiliza la energía obtenida para entregarla de forma aprovechable."),
-        ("5", "Nodo IoT",
-         "Acumula y usa la potencia disponible para realizar sus ciclos de comunicación."),
-    ]
-    cols = st.columns(len(etapas))
-    for col, (num, nombre, texto) in zip(cols, etapas):
-        with col:
-            with st.container(border=True):
-                st.markdown(f"**{num}. {nombre}**")
-                st.caption(texto)
-
-    st.markdown("")
-    st.markdown(
-        "El siguiente diagrama muestra ese mismo recorrido con los valores que el modelo "
-        "entrega en cada paso. Las etiquetas técnicas (ganancia, eficiencias, EIRP…) se "
-        "resumen en la tabla al final de la página; aquí basta con seguir el flujo de "
-        "izquierda a derecha."
+        "El diagrama muestra el recorrido de la energía con los valores que el modelo "
+        "entrega en cada paso del escenario de referencia. Las etiquetas técnicas se "
+        "resumen en la tabla del final; aquí basta con seguir el flujo de izquierda a "
+        "derecha. *(Qué es cada etapa de la rectena se explica en la sección "
+        "**Introducción → Qué es una rectena**.)*"
     )
     st.plotly_chart(_render_block_diagram(), width="stretch")
 
@@ -333,13 +175,13 @@ def render():
     st.divider()
 
     # ════════════════════════════════════════════════════════════════════════
-    # 5 · DETALLE TÉCNICO  (después de que el lector entiende qué observa)
+    # 3 · DETALLE TÉCNICO
     # ════════════════════════════════════════════════════════════════════════
     st.header("Detalle técnico")
-    st.caption("Las secciones siguientes mantienen toda la profundidad del modelo. "
-               "Amplían cómo se calcula el resultado y dónde se pierde la energía.")
+    st.caption("Cómo se calcula el resultado y dónde se pierde la energía, "
+               "con toda la profundidad del modelo.")
 
-    # ── 5a · Cómo se calcula la potencia útil ────────────────────────────────
+    # ── 3a · Cómo se calcula la potencia útil ────────────────────────────────
     st.subheader("Cómo se calcula la potencia útil")
     st.markdown(
         "La potencia continua útil se obtiene aplicando a **P_in** (la potencia "
@@ -380,7 +222,7 @@ def render():
 
     st.divider()
 
-    # ── 5b · Dónde se pierde la energía ──────────────────────────────────────
+    # ── 3b · Dónde se pierde la energía ──────────────────────────────────────
     st.subheader("¿Por dónde se pierde la energía?")
     st.markdown(
         "De los **{p_in:,.0f} µW** que capta la antena, solo **{p_dc:,.0f} µW** "
@@ -434,7 +276,7 @@ def render():
 
     st.divider()
 
-    # ── 5c · Tabla de parámetros del escenario de referencia ─────────────────
+    # ── 3c · Tabla de parámetros del escenario de referencia ─────────────────
     st.subheader("Resumen de parámetros del escenario de referencia")
     st.caption("Variables principales del modelo bajo el escenario base. "
                "El significado físico de las más importantes se detalla más abajo.")
@@ -486,34 +328,9 @@ def render():
          "Definición de cada parámetro: §2.4 Parámetros fundamentales de antenas y rectenas")
 
     st.divider()
-
-    # ════════════════════════════════════════════════════════════════════════
-    # 6 · HACIA DÓNDE PROFUNDIZAR
-    # ════════════════════════════════════════════════════════════════════════
-    st.subheader("Explora el resto de la aplicación")
-    st.markdown(
-        "Cada sección amplía un tramo de lo que se presentó en esta página."
-    )
-    nav = [
-        ("pages/escenario_a.py",     ":material/cell_tower:", "Antena multibanda (Sierpinski)",
-         "El Escenario A: geometría fractal y respuesta en las 7 bandas."),
-        ("pages/escenario_b.py",     ":material/radio:",      "Antena de referencia (FLPDA Koch)",
-         "El Escenario B en detalle, etapa por etapa."),
-        ("pages/viabilidad_iot.py",  ":material/sensors:",    "Aplicación al nodo IoT",
-         "Qué se puede hacer con la energía recolectada."),
-        ("pages/validacion.py",      ":material/biotech:",    "Validación con la literatura",
-         "Comparación del modelo con Wang (2022)."),
-        ("pages/sensibilidad.py",    ":material/tune:",       "Exploración de parámetros",
-         "Cómo cambian los resultados al variar el escenario."),
-        ("pages/analisis_avanzado.py", ":material/analytics:", "Análisis de incertidumbre",
-         "Margen de error de los resultados."),
-    ]
-    nav_cols = st.columns(3)
-    for i, (path, icon, titulo, desc) in enumerate(nav):
-        with nav_cols[i % 3]:
-            with st.container(border=True):
-                st.page_link(path, label=f"**{titulo}**", icon=icon)
-                st.caption(desc)
+    st.page_link("pages/viabilidad_iot.py",
+                 label="Siguiente — ¿qué se puede hacer con esta energía? →",
+                 icon=":material/sensors:")
 
 
 def _render_sankey():
@@ -639,9 +456,9 @@ def _render_size_comparison():
         x=flpda_x_center, y=42,
         text="★ Antena del trabajo<br><i>cabe sobre un escritorio</i>",
         showarrow=True, arrowhead=2, ax=0, ay=-25,
-        font=dict(color="#FBBF24", size=11),
-        bgcolor="rgba(15,23,42,0.6)",
-        bordercolor="#FBBF24", borderwidth=1, borderpad=5,
+        font=dict(color="#B45309", size=11),
+        bgcolor="rgba(255,255,255,0.85)",
+        bordercolor="#B45309", borderwidth=1, borderpad=5,
     )
 
     fig.update_layout(
