@@ -18,7 +18,8 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, donde_se_desarrolla as _ref
+from utils.pagina import (encabezado, correspondencia, control_interactivo,
+                          donde_se_desarrolla as _ref)
 
 
 # ── Perfiles LoRa (energía por ciclo TX+RX+sleep) ───────────────────────────
@@ -121,8 +122,12 @@ def render():
         "El cruce define el período entre transmisiones."
     )
     _render_t_ciclo_vs_d()
+    correspondencia('directa',
+                    "Reproduce la **Figura 7** del trabajo (intervalo entre transmisiones "
+                    "T_ciclo vs distancia, LoRa SF12).")
     _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-         "§2.5 Propagación RF y modelo de Friis")
+         "§2.5 Propagación RF y modelo de Friis · "
+         "Figura 6 (P_DC vs distancia) · Figura 7 (T_ciclo vs distancia)")
 
     st.divider()
 
@@ -141,6 +146,21 @@ def render():
         V_max = st.number_input("V_max [V]", 1.5, 5.5, 3.3, 0.1)
     with c3:
         V_min = st.number_input("V_min [V]", 0.5, 3.0, 1.8, 0.1)
+
+    control_interactivo(
+        magnitud="**Capacitancia C** del supercondensador [mF] y las tensiones de "
+                 "operación **V_max / V_min** [V]. La energía útil almacenada es "
+                 "E = ½·C·(V_max² − V_min²).",
+        referencia="C = **330 mF**, V_max = **3,3 V**, V_min = **1,8 V** (consistente con "
+                   "§5.1 y el Apéndice E.9: almacena ≥ 1 ciclo SF12).",
+        al_subir="Más C o mayor ventana V_max−V_min → más energía almacenada y más ciclos "
+                 "por carga, pero el tiempo de carga completa crece y el supercap ocupa más.",
+        al_bajar="Menos C → carga más rápido pero almacena menos; si no cubre un ciclo "
+                 "SF12, la tensión cae por debajo de V_min y el nodo se apaga entre envíos.",
+        limite="Por debajo del **mínimo C** que cubre un ciclo deja de ser viable; V_min no "
+               "debe bajar de los 130 mV de arranque del PMIC ni V_max superar la tensión "
+               "nominal del componente.",
+    )
 
     E_buffer_J = 0.5 * (C_mF * 1e-3) * (V_max**2 - V_min**2)
     E_buffer_mJ = E_buffer_J * 1000.0
@@ -189,6 +209,9 @@ def render():
         _fig_supercap_temporal(P_DC_uW, E_ciclo_temporal_mJ, C_mF, V_max, V_min, duracion_min),
         width="stretch",
     )
+    correspondencia('complementaria',
+                    "No aparece literal en la tesis; modela el diente de sierra del "
+                    "supercondensador descrito en el **Apéndice E.9**.")
     st.caption(
         ":material/info: Esta es la **firma temporal** del nodo IoT alimentado por "
         "recolección RF: una rampa lenta de carga (decenas de segundos a minutos) "
@@ -238,8 +261,12 @@ def render():
         f"SF12 ≈ {86400*0.01/LORA_SF['SF12 (máximo alcance)']['ToA_s']:.0f} mensajes/día. "
         "“—” = cold-start no asegurado."
     )
+    correspondencia('derivada',
+                    "Tabla calculada con el modelo de la cadena RF→DC; el desglose "
+                    "energético por ciclo del nodo es la **Tabla 5**.")
     _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-         "§4.3.1 Cálculo de la cadena de potencia")
+         "§4.3.1 Cálculo de la cadena de potencia · "
+         "Tabla 5 (desglose energético por ciclo del nodo IoT)")
 
     st.divider()
 
@@ -255,6 +282,9 @@ def render():
         default=list(LORA_SF.keys())[-1],   # SF12 por defecto
     ) or list(LORA_SF.keys())[-1]
     st.plotly_chart(_heatmap_t_ciclo(sf_sel), width="stretch")
+    correspondencia('complementaria',
+                    "No aparece literal en la tesis; generaliza el caso a una rejilla "
+                    "EIRP × distancia, según el **Apéndice E.10**.")
     _ref("Apéndice E.10 Operación fuera del caso canónico — mapa EIRP × distancia · "
          "§4.3 Caso de estudio: Cerro Nutibara")
 
@@ -269,7 +299,11 @@ def render():
         "del supercondensador."
     )
     st.plotly_chart(_lora_tx_timeline(), width="stretch")
-    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT (perfiles LoRa SX1276)")
+    correspondencia('derivada',
+                    "Construida a partir del desglose energético por ciclo del nodo "
+                    "(**Tabla 5**, perfiles LoRa SX1276).")
+    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT (perfiles LoRa SX1276) · "
+         "Tabla 5 (desglose energético por ciclo)")
 
     st.divider()
 
