@@ -27,9 +27,9 @@ def render():
                          "(tornado), **qué incertidumbre** introduce el entorno (Monte Carlo), "
                          "**cómo dimensionar** el supercondensador, ver el **presupuesto "
                          "de enlace** detallado y comparar con el **estado del arte**."),
-        entradas=("Sliders en la barra lateral: EIRP, distancia, frecuencia, R_load, "
-                  "número de muestras Monte Carlo. Cada tab tiene también sus propios "
-                  "controles específicos."),
+        entradas=("Controles en la parte superior de la página: EIRP, distancia, "
+                  "frecuencia, R_load y número de muestras Monte Carlo. Cada pestaña tiene "
+                  "además sus propios controles."),
         salidas=("6 tabs con tornado, histograma MC, curva BW del rectificador, waterfall "
                   "de presupuesto de enlace, métricas del supercap y tabla comparativa "
                   "con publicaciones recientes."),
@@ -49,19 +49,26 @@ def render():
     )
     _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo")
 
-    with st.sidebar:
-        st.subheader("Parámetros de análisis")
-        eirp_dbm  = st.slider("EIRP [dBm]", 40.0, 80.0, 70.0, 1.0)
-        dist_m    = st.slider("Distancia [m]", 50.0, 500.0, 100.0, 10.0)
-        freq_ghz  = st.select_slider("Frecuencia [GHz]",
-                                      options=[0.470, 0.550, 0.700, 0.900, 0.915],
-                                      value=0.550)
-        R_load    = st.select_slider("R_load [Ω]",
+    with st.container(border=True):
+        st.markdown("**:material/tune: Parámetros de análisis** "
+                    "*(afectan a varias pestañas)*")
+        cc1, cc2, cc3, cc4, cc5 = st.columns(5)
+        with cc1:
+            eirp_dbm = st.slider("EIRP [dBm]", 40.0, 80.0, 70.0, 1.0)
+        with cc2:
+            dist_m = st.slider("Distancia [m]", 50.0, 500.0, 100.0, 10.0)
+        with cc3:
+            freq_ghz = st.select_slider("Frecuencia [GHz]",
+                                        options=[0.470, 0.550, 0.700, 0.900, 0.915],
+                                        value=0.550)
+        with cc4:
+            R_load = st.select_slider("R_load [Ω]",
                                       options=[500, 700, 1000, 1300, 2000, 3000],
                                       value=1300)
-        n_mc      = st.select_slider("N muestras MC",
-                                      options=[500, 1000, 2000, 5000],
-                                      value=2000)
+        with cc5:
+            n_mc = st.select_slider("N muestras MC",
+                                    options=[500, 1000, 2000, 5000],
+                                    value=2000)
 
     tab_tornado, tab_mc, tab_bw, tab_link, tab_sc, tab_art = st.tabs([
         ":material/bar_chart: Sensibilidad (tornado)",

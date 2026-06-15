@@ -23,8 +23,9 @@ def render():
                          "Q = 25 en lugar de 40?*, *¿qué pasa si el PMIC presenta una R_load "
                          "distinta?* o *¿cuál sería el mapa de ganancia variando τ y σ "
                          "del FLPDA?*."),
-        entradas=("Sliders en la barra lateral: frecuencia de evaluación y potencia de entrada. "
-                  "Topología fija en doubler. Cada tab varía un parámetro distinto."),
+        entradas=("Controles dentro de la página: frecuencia de evaluación y potencia de "
+                  "entrada. Rectificación fija (doblador). Cada pestaña varía un parámetro "
+                  "distinto."),
         salidas=("Tres tabs: curva PCE vs Q_L (inductor), curva PCE vs R_load (PMIC), y "
                   "mapa de calor de ganancia FLPDA en función de τ y σ con el punto de diseño "
                   "marcado con una estrella."),
@@ -44,23 +45,28 @@ def render():
     )
     _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo")
 
-    with st.sidebar:
-        st.subheader("Controles de sensibilidad")
-        topology = 'doubler'  # fijo: topología canónica
-        st.caption(":material/lock: Rectificación: **doblador Greinacher** (la del proyecto)")
-        f_GHz = st.select_slider(
-            "Frecuencia [GHz]",
-            options=[1.84, 2.04, 2.36, 2.54, 3.30, 4.76, 5.80],
-            value=2.36,
-            key='f_sens',
-            help="Frecuencias canónicas de la validación Wang (2022).",
-        )
-        Pin_dBm = st.slider(
-            "Pin [dBm]",
-            min_value=-30.0, max_value=0.0, value=-10.0, step=1.0,
-            key='pin_sens',
-            help="−10 dBm es el punto de comparación con Wang (régimen lineal).",
-        )
+    topology = 'doubler'  # fijo: topología canónica
+    with st.container(border=True):
+        st.markdown("**:material/tune: Controles de sensibilidad**")
+        cs1, cs2, cs3 = st.columns([1, 1, 1.3])
+        with cs1:
+            f_GHz = st.select_slider(
+                "Frecuencia [GHz]",
+                options=[1.84, 2.04, 2.36, 2.54, 3.30, 4.76, 5.80],
+                value=2.36,
+                key='f_sens',
+                help="Frecuencias canónicas de la validación Wang (2022).",
+            )
+        with cs2:
+            Pin_dBm = st.slider(
+                "Pin [dBm]",
+                min_value=-30.0, max_value=0.0, value=-10.0, step=1.0,
+                key='pin_sens',
+                help="−10 dBm es el punto de comparación con Wang (régimen lineal).",
+            )
+        with cs3:
+            st.caption(":material/lock: Rectificación: **doblador Greinacher** "
+                       "(la del proyecto)")
 
     tab_ql, tab_rl, tab_ts = st.tabs([
         ":material/tune: Factor Q inductor (Q_L)",

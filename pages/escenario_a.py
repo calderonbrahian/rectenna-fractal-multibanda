@@ -35,9 +35,9 @@ def render():
                          "varias fuentes RF distintas gracias a la autoafinidad de su "
                          "geometría, y valorar si esas fuentes urbanas representan "
                          "oportunidades adicionales de recolección."),
-        entradas=("Slider de potencia de entrada Pin en la barra lateral y selectores de "
-                  "banda dentro de cada pestaña. Topología de rectificación: doblador "
-                  "Greinacher (la del proyecto)."),
+        entradas=("Control de potencia de entrada Pin y selectores de banda, todos dentro "
+                  "de la página. Topología de rectificación: doblador Greinacher (la del "
+                  "proyecto)."),
         salidas=("S₁₁ vs frecuencia, impedancia compleja, PCE banda por banda, geometría "
                   "del fractal con iluminación de las bandas activas y tabla resumen."),
         como_leer=("Las **tres resonancias** del Sierpinski caen a f_k = f₀·2^k, es decir, "
@@ -60,18 +60,21 @@ def render():
     _ref("§2.3 Geometría fractal aplicada a antenas · §3.4.1 Sierpinski: modelo RLC y "
          "resonancias · §4.1 Escenario A — Sierpinski (1,8–5,8 GHz)")
 
-    with st.sidebar:
-        st.subheader("Parámetros Esc. A")
-        st.caption(":material/lock: Rectificación: **doblador Greinacher**, la topología "
-                    "que adopta el proyecto.")
-        topology = 'doubler'
-        Pin_dBm = st.slider(
-            "Potencia de entrada Pin [dBm]",
-            min_value=-30.0, max_value=0.0, value=-10.0, step=1.0,
-            help="−10 dBm es el punto canónico de la validación con Wang (2022).",
-        )
-        st.caption("εᵣ FR-4 dinámico: 4.4 @ 1 GHz → 4.1 @ 5.8 GHz")
-        st.caption("Ref: Wang et al. (2022) IEEE TAP")
+    topology = 'doubler'
+    with st.container(border=True):
+        st.markdown("**:material/tune: Parámetros del Escenario A**")
+        c_ctrl, c_info = st.columns([1, 1])
+        with c_ctrl:
+            Pin_dBm = st.slider(
+                "Potencia de entrada Pin [dBm]",
+                min_value=-30.0, max_value=0.0, value=-10.0, step=1.0,
+                help="−10 dBm es el punto canónico de la validación con Wang (2022).",
+            )
+        with c_info:
+            st.caption(":material/lock: Rectificación: **doblador Greinacher**, la "
+                       "topología que adopta el proyecto.")
+            st.caption("εᵣ FR-4 dinámico: 4.4 @ 1 GHz → 4.1 @ 5.8 GHz · "
+                       "Ref: Wang et al. (2022) IEEE TAP")
 
     with st.spinner("Calculando bandas..."):
         bandas = run_bandas(topology=topology, Pin_dBm=Pin_dBm)

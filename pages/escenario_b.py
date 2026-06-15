@@ -38,9 +38,9 @@ def render():
                          "que opera en la banda 470–900 MHz, que el S₁₁ es bajo, que la "
                          "ganancia es ≈ 7 dBi en banda y entender de dónde sale el "
                          "valor canónico de P_DC = 1 637,6 µW del escenario de referencia."),
-        entradas=("Slider de distancia al transmisor TDT en la barra lateral; selectores "
-                  "de frecuencia para visualizar curvas PCE-vs-Pin específicas y la región "
-                  "activa del arreglo de dipolos."),
+        entradas=("Controles dentro de cada pestaña: distancia al transmisor TDT (en "
+                  "*Presupuesto LoRa*), selectores de frecuencia para las curvas PCE-vs-Pin "
+                  "y la región activa del arreglo de dipolos."),
         salidas=("Gráficas de S₁₁(f), ganancia(f), impedancia(f), tabla de los 8 dipolos, "
                   "vista de lado de la antena con la región activa resaltada, miniaturización "
                   "de Koch, curva PCE-vs-Pin, esquemático del doblador y curva I-V del diodo."),
@@ -66,21 +66,10 @@ def render():
          "§4.2 Escenario B — FLPDA Koch (470–900 MHz) · "
          "§2.3.3 Curva de Koch: reducción por iteración")
 
-    with st.sidebar:
-        st.subheader("Parámetros Esc. B")
-        dist_m = st.slider(
-            "Distancia fuente–antena [m]",
-            min_value=50, max_value=2000, value=500, step=50,
-        )
-        st.caption("Propagación: FSPL + corrección urbana ITU-R P.1546 +6 dB")
-        st.caption("Antena: FLPDA Koch it.2 · τ=0.90 · σ=0.15")
-
     with st.spinner("Barrido de frecuencia FLPDA..."):
         sweep = run_sweep_freq_b()
     with st.spinner("Calculando geometría..."):
         geom  = run_geometry_b()
-    with st.spinner(f"Presupuesto a {dist_m} m..."):
-        budget = run_budget_lora(dist_m=float(dist_m))
 
     with st.container(horizontal=True):
         st.metric("Elementos FLPDA",  geom['n_elements'],             border=True)
@@ -290,9 +279,23 @@ def render():
              "§4.2.1 Diseño paramétrico y dimensiones · Apéndice E.4 Mapa de diseño τ–σ")
 
     with tab_budget:
-        st.markdown(f"#### Potencia cosechada DC a d = {dist_m} m")
-        st.caption("Modelo: cadena completa Shockley aplicada sobre P_in (4 factores: η_mm · η_IMN · PCE · η_PMIC). "
-                   "**Esta sección se recalcula con la distancia seleccionada en la barra lateral.**")
+        st.markdown("#### Potencia cosechada DC en el nodo IoT")
+        with st.container(border=True):
+            st.markdown("**:material/tune: Distancia a la fuente TDT**")
+            c_dist, c_dinfo = st.columns([1, 1])
+            with c_dist:
+                dist_m = st.slider(
+                    "Distancia fuente–antena [m]",
+                    min_value=50, max_value=2000, value=500, step=50,
+                )
+            with c_dinfo:
+                st.caption("Propagación: FSPL + corrección urbana ITU-R P.1546 +6 dB")
+                st.caption("Antena: FLPDA Koch it.2 · τ = 0,90 · σ = 0,15")
+        with st.spinner(f"Presupuesto a {dist_m} m..."):
+            budget = run_budget_lora(dist_m=float(dist_m))
+        st.caption(f"Modelo: cadena completa Shockley sobre P_in (4 factores: "
+                   f"η_mm · η_IMN · PCE · η_PMIC). Resultados a **d = {dist_m} m**, "
+                   f"recalculados con el control de arriba.")
 
         # ── KPIs reactivos a la distancia seleccionada (fuente TDT) ─────────
         _tdt_key = next(iter(budget['cosecha']))            # 'TV UHF (DVB-T)'
@@ -469,7 +472,7 @@ def render():
         )
         st.latex(r"I_D = I_S \left( e^{V_D / (n\,V_T)} - 1 \right)")
         st.markdown(
-            "El punto operativo sobre la curva I-V se sitúa con el control de la barra lateral, y muestra "
+            "El punto operativo sobre la curva I-V se sitúa con el control de esta sección, y muestra "
             "la corriente del diodo y su **resistencia dinámica** "
             "R_d = n·V_T / (|I| + I_S). El cambio de R_d con el punto operativo es la "
             "razón por la que el rectificador se comporta como casi-lineal a pequeña "
