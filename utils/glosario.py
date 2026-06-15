@@ -38,6 +38,14 @@ GLOSARIO: dict[str, str] = {
             "cadena de conversión.",
     "IMN": "Red de adaptación de impedancias: acopla la antena con el rectificador para "
            "perder lo menos posible por desadaptación.",
+    "rectena": "Acrónimo de rectifying antenna (antena rectificadora): el dispositivo que "
+               "capta ondas de radio y las convierte en corriente continua.",
+    "rectificador": "Circuito que convierte la señal de radio (que oscila) en corriente "
+                    "continua, utilizable por un dispositivo.",
+    "carga": "El dispositivo que consume la energía al final de la cadena; aquí, el nodo "
+             "IoT (sensor + radio).",
+    "filtro DC": "Etapa que alisa la tensión rectificada para entregar una corriente "
+                 "continua estable.",
     "RMSE": "Raíz del error cuadrático medio: error promedio del modelo frente a los datos "
             "de referencia (Wang 2022), en puntos porcentuales (pp).",
     "sesgo": "Error medio con signo: si es positivo, el modelo sobreestima en promedio.",
