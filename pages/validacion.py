@@ -252,7 +252,8 @@ entre diseños sobre el mismo material; léase como **verificación de orden de 
                 '✅', '✅ miniaturización', '—',
             ],
         })
-        st.dataframe(df_c, hide_index=True)
+        # Columnas de tipo mixto (números + texto) → texto, para una tabla Arrow-compatible.
+        st.dataframe(df_c.astype(str), hide_index=True)
 
         with st.expander("Fundamento matemático de la reducción Koch", expanded=False):
             st.markdown(

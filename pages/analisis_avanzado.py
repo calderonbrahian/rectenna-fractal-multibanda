@@ -320,7 +320,8 @@ cap de PCE = 0,85.
         })
         cols_show = ['Referencia', 'Rango f', 'Bandas', 'G [dBi]', 'PCE máx.',
                      'Pin [dBm]', 'P_DC [µW]', 'Sustrato', 'Notas']
-        st.dataframe(df_art[cols_show], hide_index=True)
+        # Columnas de tipo mixto (p. ej. 'Bandas' con 'UWB') → texto, para Arrow.
+        st.dataframe(df_art[cols_show].astype(str), hide_index=True)
 
         # Gráfico comparativo PCE máx.
         refs_with_pce = [r for r in art if isinstance(r['PCE_max'], str) and '%' in str(r['PCE_max'])]
