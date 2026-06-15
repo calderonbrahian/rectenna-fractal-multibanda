@@ -127,6 +127,19 @@ def badge_oficial():
     )
 
 
+def donde_se_desarrolla(seccion: str):
+    """Ancla de *guía de lectura*: indica en qué sección del informe de grado se
+    desarrolla el tema que el lector tiene delante. La narrativa de la aplicación
+    no inventa contenido; remite al documento donde el concepto se trabaja en
+    detalle. Llamar inmediatamente debajo del contenido al que se refiere.
+
+    Patrón uniforme en toda la app:
+        1. Se muestra el contenido (texto, métrica, gráfica).
+        2. Debajo, este bloque indica dónde profundizar en el proyecto.
+    """
+    st.caption(f":material/menu_book: **Dónde se desarrolla en el proyecto:** {seccion}")
+
+
 def badge_exploracion(detalle: str = ""):
     """Banner ámbar indicando que los valores producidos dependen de los
     sliders del usuario y NO son resultados oficiales del proyecto."""

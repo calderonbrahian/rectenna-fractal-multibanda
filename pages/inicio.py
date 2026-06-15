@@ -21,14 +21,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, badge_oficial
-
-
-def _ref(seccion: str):
-    """Ancla de guía de lectura: indica dónde se desarrolla el tema en el
-    informe de grado. La narrativa de la app no inventa contenido; remite a la
-    sección del documento donde el concepto se desarrolla en detalle."""
-    st.caption(f":material/menu_book: **Dónde se desarrolla en el proyecto:** {seccion}")
+from utils.pagina import encabezado, badge_oficial, donde_se_desarrolla as _ref
 
 
 def render():
