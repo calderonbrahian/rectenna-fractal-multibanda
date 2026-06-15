@@ -20,6 +20,7 @@ import plotly.graph_objects as go
 from configs.parametros import CANONICAL
 from utils.pagina import (encabezado, correspondencia, control_interactivo,
                           donde_se_desarrolla as _ref)
+from utils.glosario import criterio
 
 
 # ── Perfiles LoRa (energía por ciclo TX+RX+sleep) ───────────────────────────
@@ -220,6 +221,8 @@ def render():
         "sostenible; si toca V_min o menos, el supercap es demasiado pequeño y el "
         "nodo se apaga entre transmisiones."
     )
+    criterio("V_min cut-off")
+    criterio("V_cs 130 mV")
     _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
          "Apéndice E.9 Caracterización temporal del supercondensador")
 

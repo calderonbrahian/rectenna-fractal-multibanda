@@ -15,6 +15,7 @@ from plots.charts import fig_tornado, fig_mc_histogram, fig_rectifier_bw, COLORS
 from configs.parametros import CANONICAL
 from utils.pagina import (encabezado, badge_exploracion, correspondencia,
                           control_interactivo, donde_se_desarrolla as _ref)
+from utils.glosario import aporta
 
 
 def render():
@@ -115,6 +116,8 @@ def render():
         correspondencia('directa',
                         "Reproduce la **Figura 8** del trabajo (análisis de sensibilidad "
                         "tipo tornado sobre P_DC).")
+        aporta("identifica qué parámetro mueve más P_DC; orienta dónde conviene ser "
+               "preciso al estimar el resultado final.")
 
         st.markdown("#### Tabla de sensibilidad")
         df_s = pd.DataFrame([{
@@ -170,6 +173,8 @@ cap de PCE = 0,85.
         correspondencia('directa',
                         "Reproduce la **Figura 9** del trabajo (distribución Monte Carlo de "
                         "P_DC, n = 2 000).")
+        aporta("acota el rango en que cae P_DC ante la variabilidad del entorno (mide la "
+               "robustez del resultado, no el error del modelo).")
         st.caption(f"Muestras válidas (P_DC > 0): {mc['n_valid']}/{mc['n_total']}")
         _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
              "§5.3 Limitaciones del estudio (L1–L8) · Figura 9 (Monte Carlo de P_DC)")

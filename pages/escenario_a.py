@@ -22,7 +22,7 @@ from core.antenna import FractalAntenna
 from utils.exportar import resultados_a_csv, sweep_a_csv
 from utils.pagina import (encabezado, badge_exploracion, correspondencia,
                           control_interactivo, donde_se_desarrolla as _ref)
-from utils.glosario import ficha_grafica, glosario_pagina
+from utils.glosario import ficha_grafica, glosario_pagina, aporta
 from configs.parametros import BANDS_A
 
 
@@ -173,6 +173,8 @@ def render():
             "resonancias, |Im(Zₐ)| crece y la antena refleja casi todo. Cambia la banda "
             "del selector y compara los tres números."
         )
+        aporta("la impedancia decide cuánta potencia entra al rectificador; en resonancia "
+               "η_mm sube y, con ello, P_DC.")
         _ref("§2.4.2 Impedancia de entrada Zₐ · §3.4.1 Sierpinski: modelo RLC y resonancias")
 
     with tab_pce:
@@ -203,6 +205,8 @@ def render():
             "(Pin ≤ −10 dBm) opera lejos de ese techo: por eso las cifras del Escenario A "
             "son **cotas superiores**, no el resultado firme."
         )
+        aporta("la PCE es el factor de la cadena que más recorta P_DC; aquí, a potencia "
+               "ambiental baja, opera lejos de su techo.")
         st.download_button(
             "Descargar CSV",
             sweep_a_csv(sweep_pce, ['Pin_dBm', 'PCE_pct', 'Vdc_mV']),

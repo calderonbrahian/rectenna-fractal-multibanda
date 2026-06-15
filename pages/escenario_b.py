@@ -25,7 +25,7 @@ from utils.exportar import sweep_a_csv
 from configs.parametros import CANONICAL
 from utils.pagina import (encabezado, badge_exploracion, correspondencia,
                           control_interactivo, donde_se_desarrolla as _ref)
-from utils.glosario import ficha_grafica, glosario_pagina, metrica
+from utils.glosario import ficha_grafica, glosario_pagina, metrica, criterio, aporta
 
 
 def render():
@@ -146,6 +146,8 @@ def render():
             "Referencia Carrel (1961): 7–9 dBi en banda.",
             icon=":material/info:",
         )
+        aporta("la ganancia concentra la energía hacia la torre TDT: más ganancia → más "
+               "P_in en la antena → mayor P_DC.")
         _ref("§2.4.4 Directividad, eficiencia de radiación y ganancia · "
              "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
@@ -455,6 +457,8 @@ def render():
             "El valor del proyecto usa la cadena completa de cuatro factores sobre P_in.",
             icon=":material/info:",
         )
+        aporta("la PCE fija cuánta RF se convierte en corriente continua; en el escenario "
+               "de referencia (550 MHz, P_in ≈ +3,85 dBm) opera en su techo (0,85).")
         st.download_button(
             "Descargar CSV", sweep_a_csv(pce_data),
             file_name=f"pce_uhf_{f_mhz_sel}MHz.csv", mime="text/csv",

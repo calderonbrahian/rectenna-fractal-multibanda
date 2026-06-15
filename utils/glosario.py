@@ -98,6 +98,22 @@ def ficha_grafica(*, evalua: str, concluye: str, criterio: str | None = None,
         st.caption(f":material/link: **Aporta al resultado final:** {contribuye}")
 
 
+# ── Criterio visual VISIBLE (1 línea, fuente única) ─────────────────────────
+def criterio(clave: str):
+    """Caption VISIBLE de 1 línea que explica un criterio/umbral.
+    `clave` es una entrada de CRITERIOS (o texto libre). Para criterios sueltos
+    que aparecen fuera de una `ficha_grafica` (líneas de referencia, cut-offs)."""
+    txt = CRITERIOS.get(clave, clave)
+    st.caption(f":material/straighten: **{clave}:** {txt}")
+
+
+# ── Conexión con el resultado final VISIBLE (1 línea) ───────────────────────
+def aporta(texto: str):
+    """Línea VISIBLE que conecta la sección con el resultado final (cadena hasta
+    P_DC). 1–2 frases, no un bloque. Usar cuando no hay `ficha_grafica`."""
+    st.caption(f":material/link: **Aporta al resultado final:** {texto}")
+
+
 # ── KPI con interpretación VISIBLE (una línea) ──────────────────────────────
 def metrica(label: str, value: str, *, interpretacion: str,
             ayuda: str | None = None, border: bool = True):
