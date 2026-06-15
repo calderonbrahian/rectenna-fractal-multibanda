@@ -62,7 +62,8 @@ def render():
     )
 
     _ref("§2.3 Geometría fractal aplicada a antenas · §2.3.2 Triángulo de Sierpinski · "
-         "§2.3.3 Curva de Koch · §3.4 Módulo 1 — Geometrías fractales")
+         "§2.3.3 Curva de Koch · §3.4 Módulo 1 — Geometrías fractales · "
+         "Figura 4 (geometría del arreglo FLPDA Koch it. 2)")
 
     st.page_link("pages/metodologia.py",
                  label="Siguiente — cómo se simuló todo esto →",

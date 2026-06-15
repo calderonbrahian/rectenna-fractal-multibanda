@@ -51,7 +51,8 @@ def render():
     )
 
     _ref("§2.9 Métodos de análisis electromagnético: enfoque adoptado y alternativas · "
-         "§3.1 Enfoque metodológico · §3.3 Arquitectura del pipeline de simulación")
+         "§3.1 Enfoque metodológico · §3.3 Arquitectura del pipeline de simulación · "
+         "Tabla 4 (arquitectura del pipeline de simulación)")
 
     st.page_link("pages/escenario_a.py",
                  label="Siguiente — los escenarios estudiados →",
