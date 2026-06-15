@@ -13,7 +13,7 @@ from analysis.avanzado import (
 )
 from plots.charts import fig_tornado, fig_mc_histogram, fig_rectifier_bw, COLORS
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, badge_exploracion
+from utils.pagina import encabezado, badge_exploracion, donde_se_desarrolla as _ref
 
 
 def render():
@@ -41,6 +41,13 @@ def render():
     )
 
     badge_exploracion()
+
+    st.markdown(
+        "Estas herramientas examinan **cuán robusto** es el resultado de referencia: "
+        "qué parámetro pesa más, qué incertidumbre añade el entorno, cómo se dimensiona "
+        "el almacenamiento y cómo se sitúa el trabajo frente a la literatura."
+    )
+    _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo")
 
     with st.sidebar:
         st.subheader("Parámetros de análisis")
@@ -98,6 +105,8 @@ def render():
         st.caption(
             "Δ EIRP = ±3 dB · Δ dist = ±20 m · Δ freq = ±0.05 GHz · Δ R_load = ±300 Ω"
         )
+        _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
+             "Apéndice E.7 Sensibilidad ante variación de Q_L y R_load")
 
     # ── Monte Carlo ───────────────────────────────────────────────────────────
     with tab_mc:
@@ -134,6 +143,8 @@ cap de PCE = 0,85.
 
         st.plotly_chart(fig_mc_histogram(mc))
         st.caption(f"Muestras válidas (P_DC > 0): {mc['n_valid']}/{mc['n_total']}")
+        _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
+             "§5.3 Limitaciones del estudio (L1–L8)")
 
     # ── Ancho de banda rectificador ───────────────────────────────────────────
     with tab_bw:
@@ -142,9 +153,9 @@ cap de PCE = 0,85.
             "Se barre la frecuencia alrededor del centro de la banda UHF."
         )
         st.info(
-            ":material/info: **No es una afirmación de la tesis.** Es una propiedad "
+            ":material/info: **No es una afirmación del proyecto.** Es una propiedad "
             "derivada del modelo del rectificador. Se incluye para mostrar que el "
-            "doubler funciona en una banda amplia, no para sustentar un valor "
+            "doubler opera en una banda amplia, no para sustentar un valor "
             "específico.",
             icon=":material/info:",
         )
@@ -173,6 +184,7 @@ cap de PCE = 0,85.
             st.metric("BW fraccional", f"{bw['fractional_bw']*100:.0f}%",   border=True)
 
         st.plotly_chart(fig_rectifier_bw(bw))
+        _ref("§2.7 Física del diodo Schottky · §2.7.2 Frecuencia de corte del SMS7630")
 
     # ── Presupuesto de enlace ─────────────────────────────────────────────────
     with tab_link:
@@ -219,6 +231,8 @@ cap de PCE = 0,85.
             f"PCE: {CANONICAL['PCE']*100:.0f}% · "
             f"η_PMIC: {CANONICAL['eta_pmic']*100:.0f}%"
         )
+        _ref("§2.5 Propagación RF y modelo de Friis · "
+             "§4.3.1 Cálculo de la cadena de potencia")
 
     # ── Supercondensador ──────────────────────────────────────────────────────
     with tab_sc:
@@ -270,6 +284,8 @@ cap de PCE = 0,85.
 | P_auto-descarga | {sc['P_leak_uW']:.2f} µW |
 | η_almacenamiento | {sc['eta_storage']*100:.1f}% |
 """)
+        _ref("Apéndice E.9 Caracterización temporal del supercondensador · "
+             "§3.6 Presupuesto energético del nodo IoT")
 
     # ── Estado del arte ───────────────────────────────────────────────────────
     with tab_art:
@@ -280,7 +296,7 @@ cap de PCE = 0,85.
             ":material/warning: **Cuidado al leer la comparación.** El valor de PCE "
             "de \"Este trabajo\" (85 %) corresponde al **cap del modelo**, no a una "
             "medición experimental. Los demás trabajos reportan valores **medidos** "
-            "en prototipos físicos. No es una comparación entre iguales. La tesis lo "
+            "en prototipos físicos. No es una comparación entre iguales. El proyecto lo "
             "declara explícitamente como limitación L6.",
             icon=":material/warning:",
         )
@@ -327,6 +343,9 @@ cap de PCE = 0,85.
             )
             st.plotly_chart(fig_cmp)
             st.caption(":material/star: Este trabajo destacado en amarillo")
+
+        _ref("§2.2 Estado del arte en rectenas fractales · "
+             "§5.3 Limitaciones del estudio (L6: PCE = 0,85 es cap del modelo)")
 
 
 render()
