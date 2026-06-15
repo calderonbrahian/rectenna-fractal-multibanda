@@ -115,13 +115,14 @@ def impacto_parametros(parametros: list[dict]):
 # ── 4. Distintivo visual: Resultado Oficial vs Exploración ──────────────────
 
 def badge_oficial():
-    """Banner verde indicando que los valores de la página son resultados de
-    referencia oficiales del proyecto (read-only, protegidos por test)."""
+    """Banner verde que presenta la página como los resultados de referencia
+    del proyecto de grado (vista de lectura, sin controles editables)."""
     st.success(
-        ":material/verified: **Resultados de referencia del proyecto.** "
-        "Los valores de esta sección corresponden a los reportados en el informe de "
-        "grado y están respaldados por la suite de 51 pruebas de regresión del modelo. "
-        "Su exploración paramétrica se presenta en la sección «Calculadora del modelo».",
+        ":material/verified: **Resultados de referencia del proyecto de grado.** "
+        "Esta sección presenta los resultados obtenidos para el escenario principal "
+        "estudiado. Estos valores sirven como punto de comparación para comprender el "
+        "comportamiento del sistema y, después, explorar distintos escenarios y "
+        "parámetros en las demás secciones de la aplicación.",
         icon=":material/verified:",
     )
 
