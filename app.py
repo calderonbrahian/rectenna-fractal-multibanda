@@ -1,13 +1,13 @@
 """
 Rectenna Fractal Multibanda — Demostración interactiva del proyecto de grado
 ============================================================================
-Punto de entrada Streamlit. La navegación sigue el recorrido narrativo del
-informe de grado en 11 secciones: el lector recorre el trabajo de principio a
-fin (problema → contexto → topologías → metodología → escenarios → comparación
-→ resultado → aplicación → validación → conclusiones), no un conjunto de
-simulaciones independientes. Cada página corresponde a una sección del informe
-e indica, mediante el bloque "Dónde se desarrolla en el proyecto", dónde
-profundizar en el documento.
+Punto de entrada Streamlit. La navegación está pensada como **experiencia de
+usuario**, no como índice del documento: 7 secciones principales (más una de
+referencia). La aplicación abre en el **Resultado de referencia**, que responde
+de inmediato qué logró el proyecto (quién lo hizo, qué se diseñó, qué resultado
+se obtuvo y si es útil); las secciones siguientes permiten profundizar en el
+recorrido narrativo del informe. Cada página indica, mediante el bloque "Dónde
+se desarrolla en el proyecto", a qué sección del documento corresponde.
 
 Ejecución local:
     .venv/Scripts/streamlit run app.py
@@ -24,53 +24,48 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Navegación en secuencia narrativa, alineada con la estructura del informe.
+# 7 secciones principales + 1 de referencia. La app abre en el Resultado de
+# referencia (primera página) para responder primero "¿qué logró el proyecto?".
 page = st.navigation(
     {
-        "1 · El problema": [
-            st.Page("pages/problema.py",
-                    title="La batería como límite del IoT",
-                    icon=":material/battery_alert:"),
+        "Resultado del proyecto": [
+            st.Page("pages/inicio.py",
+                    title="Resultado de referencia",
+                    icon=":material/verified:"),
         ],
-        "2 · Contexto": [
+        "Introducción": [
+            st.Page("pages/problema.py",
+                    title="El problema del IoT",
+                    icon=":material/battery_alert:"),
             st.Page("pages/contexto.py",
                     title="Qué es una rectena",
                     icon=":material/bolt:"),
         ],
-        "3 · Topologías evaluadas": [
+        "Diseño y metodología": [
             st.Page("pages/topologias.py",
-                    title="Sierpinski y FLPDA Koch",
+                    title="Topologías evaluadas",
                     icon=":material/category:"),
-        ],
-        "4 · Metodología": [
             st.Page("pages/metodologia.py",
                     title="Metodología de simulación",
                     icon=":material/build:"),
         ],
-        "5–6 · Escenarios evaluados": [
+        "Escenarios estudiados": [
             st.Page("pages/escenario_a.py",
-                    title="Escenario A — Sierpinski (multibanda)",
+                    title="Escenario A — Sierpinski",
                     icon=":material/cell_tower:"),
             st.Page("pages/escenario_b.py",
-                    title="Escenario B — FLPDA Koch (UHF)",
+                    title="Escenario B — FLPDA Koch",
                     icon=":material/radio:"),
-        ],
-        "7 · Comparación": [
             st.Page("pages/comparacion.py",
-                    title="Comparación de los dos escenarios",
+                    title="Comparación de escenarios",
                     icon=":material/compare:"),
         ],
-        "8 · Energía capturada": [
-            st.Page("pages/inicio.py",
-                    title="Resultado de referencia del proyecto",
-                    icon=":material/verified:"),
-        ],
-        "9 · Aplicación del nodo IoT": [
+        "Aplicación al nodo IoT": [
             st.Page("pages/viabilidad_iot.py",
                     title="¿Qué se puede hacer con esa energía?",
                     icon=":material/sensors:"),
         ],
-        "10 · Validación y análisis de error": [
+        "Validación del modelo": [
             st.Page("pages/validacion.py",
                     title="Validación con literatura (Wang 2022)",
                     icon=":material/biotech:"),
@@ -81,7 +76,7 @@ page = st.navigation(
                     title="Sensibilidad paramétrica",
                     icon=":material/tune:"),
         ],
-        "11 · Conclusiones": [
+        "Conclusiones": [
             st.Page("pages/conclusiones.py",
                     title="Conclusiones y limitaciones",
                     icon=":material/flag:"),
