@@ -28,12 +28,12 @@ def render():
     st.subheader("La batería: el límite práctico de la autonomía")
     st.markdown(
         "Un nodo IoT —un pequeño sensor inalámbrico desplegado en campo— suele alimentarse "
-        "con una batería, y ahí está su talón de Aquiles: la batería **se agota**. En "
-        "despliegues a gran escala (subestaciones eléctricas, estructuras de altura, zonas "
-        "industriales remotas, infraestructura agrícola), cada visita para reemplazarla "
-        "tiene un costo logístico que, cuando supera al del propio sensor, **vuelve "
-        "inviable el despliegue**. La batería deja de ser un detalle y se convierte en el "
-        "**límite real de la autonomía** del sistema."
+        "con una batería, y ahí está su talón de Aquiles: la batería **se agota**. Cuando "
+        "hay miles de sensores repartidos por una subestación eléctrica, en lo alto de una "
+        "torre o en una zona rural de difícil acceso, mantenerlos vivos significa ir hasta "
+        "cada uno a cambiarle la batería. Ese costo, cuando supera al del propio sensor, "
+        "**vuelve inviable el despliegue**: la batería deja de ser un detalle y se "
+        "convierte en el **límite real de la autonomía** del sistema."
     )
 
     st.subheader("La oportunidad: energía que ya viaja por el aire")
@@ -43,35 +43,25 @@ def render():
         "transportan **pequeñas cantidades de energía**. Casi siempre esa energía se "
         "desaprovecha.\n\n"
         "La pregunta de fondo del trabajo es sencilla: **¿se puede recoger una parte de "
-        "esa energía y usarla para que un sensor funcione por sí mismo?** No es una idea "
-        "nueva —ya en los años ochenta se demostró que las microondas podían alimentar "
-        "dispositivos a distancia—; lo que cambió es que hoy esas señales urbanas son "
-        "**persistentes** y la electrónica de muy bajo consumo vuelve la idea plausible."
+        "esa energía y usarla para que un sensor funcione por sí mismo?** Hoy esas señales "
+        "urbanas son **persistentes** y la electrónica de muy bajo consumo vuelve la idea "
+        "plausible."
     )
 
-    st.subheader("El caso de estudio: una fuente concreta para poder cuantificar")
+    st.subheader("El caso de estudio: una fuente real y conocida")
     st.markdown(
-        "Para pasar de la idea a un **número**, el trabajo necesita una fuente de radio "
-        "concreta y bien conocida: solo si la fuente está caracterizada se puede calcular "
-        "cuánta energía llega a la antena y cuánta se aprovecha. Por eso el estudio se "
-        "sitúa en **Medellín (Colombia)** y toma como caso de estudio el transmisor de "
-        f"{termino('TDT')} del **Cerro Nutibara**.",
+        "Para responder la pregunta con números reales —y no con suposiciones— hace falta "
+        "una fuente de radio concreta y bien caracterizada: solo así se puede calcular "
+        "cuánta energía llega y cuánta se aprovecha. En este trabajo se eligió el "
+        f"transmisor de {termino('TDT', 'televisión digital')} del **Cerro Nutibara**, en "
+        "Medellín.",
         unsafe_allow_html=True,
     )
-    with st.container(border=True):
-        st.markdown(
-            "**Por qué se eligió esta fuente.** El transmisor del Cerro Nutibara se "
-            f"seleccionó como caso de estudio porque es una fuente {termino('RF')} "
-            f"**potente y estable** ({termino('EIRP')} de 2 a 10 kW), emite de forma "
-            "continua y está **bien caracterizada**. Eso permite construir un **escenario "
-            "cuantitativo realista** para evaluar la viabilidad del sistema —en lugar de "
-            "quedarse en una estimación vaga— y sirve de referencia para todo el trabajo. "
-            "Sus densidades de potencia en UHF superan en uno o dos órdenes de magnitud "
-            "las de una red Wi-Fi doméstica.",
-            unsafe_allow_html=True,
-        )
-        st.caption(":material/info: Pasa el cursor sobre los términos subrayados "
-                   "(TDT, RF, EIRP) para ver su definición.")
+    st.markdown(
+        "¿Por qué esa fuente? Porque es **potente, permanente y conocida**: emite de forma "
+        "continua y sus características están documentadas, lo que permite apoyar todo el "
+        "estudio sobre un escenario real en lugar de una estimación vaga."
+    )
     _ref("§1.1 Contexto y motivación · §1.3 Alcance y limitaciones del estudio · "
          "Tabla 1 (densidades de potencia RF típicas en entornos urbanos)")
 

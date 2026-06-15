@@ -1,72 +1,70 @@
 """
-Sección 2 · Contexto: el sistema rectena.
-Explica, con un diagrama conceptual y definiciones en hover, qué es una rectena y
-cómo se encadenan sus etapas. La ecuación de eficiencia lleva el desglose de
-términos en un popover (no como bloque). Narrativa derivada de §2.1.
+Sección 2 · Contexto: cómo una onda de radio se convierte en electricidad útil.
+
+La idea principal de la página es la TRANSFORMACIÓN de energía (la rectena es el
+medio, no el tema). Orden narrativo: fenómeno físico primero, formalización después.
+    1. Una rectena = antena + rectificador.
+    2. El recorrido de la energía (alto nivel) → diagrama (detalle visual).
+    3. Por qué no toda la energía llega (fenómeno) → ecuación como evidencia.
+    4. Cierre: pregunta-puente hacia las topologías que se evaluarán.
+
+Sin jerga temprana (IMN, Z₀, LoRa, FR-4, Duroid quedan en niveles posteriores o en
+el popover). Narrativa derivada de §2.1.
 """
 
 import streamlit as st
 import plotly.graph_objects as go
 
-from utils.pagina import encabezado, donde_se_desarrolla as _ref
-from utils.glosario import termino
+from utils.pagina import donde_se_desarrolla as _ref
 
 
 def render():
-    encabezado(
-        ":material/bolt: Contexto: qué es una rectena",
-        "El sistema de recolección de energía RF, bloque por bloque",
-        que_es=("Explica qué es una rectena y cómo se encadenan sus etapas, para tener el "
-                "vocabulario antes de ver los escenarios y los resultados."),
-        para_que_sirve=("Comprender el sistema completo —de la antena a la carga— y por qué "
-                        "la eficiencia total es siempre el producto de varias etapas."),
-        entradas="Ninguna; es una página de lectura.",
-        salidas=("Un diagrama de la cadena de la rectena, la definición de cada etapa y la "
-                 "expresión de la eficiencia total del sistema."),
+    st.title(":material/bolt: ¿Cómo una onda de radio se convierte en electricidad útil?")
+    st.markdown(
+        "*Además de información, las ondas de radio transportan energía electromagnética. "
+        "Esta sección explica cómo un dispositivo llamado rectena la captura y la convierte "
+        "en electricidad capaz de alimentar un sensor.*"
     )
 
-    # ── Qué es + diagrama conceptual de la cadena ────────────────────────────
+    # ── Definición mínima ────────────────────────────────────────────────────
     st.subheader("Una rectena = antena + rectificador")
     st.markdown(
-        f"Una {termino('rectena')} es la unión de dos piezas: una **antena**, que capta las "
-        "ondas de radio presentes en el aire, y un **rectificador**, que convierte esa "
-        "señal en corriente continua aprovechable. Lo hace **directamente**, sin etapas "
-        "intermedias de conversión.\n\n"
-        "Entre la antena y el dispositivo final hay unos bloques de apoyo. Este es el "
-        "recorrido completo de la energía, de izquierda (entra como radio) a derecha (sale "
-        "como corriente continua):",
-        unsafe_allow_html=True,
+        "Una **rectena** es la unión de dos piezas: una **antena**, que capta las ondas de "
+        "radio del aire, y un **rectificador**, que convierte esa señal en corriente "
+        "continua aprovechable. En una sola pieza combina las dos funciones clave: "
+        "**capturar energía y transformarla en electricidad utilizable**."
+    )
+
+    # ── El recorrido de la energía (alto nivel) + diagrama (detalle visual) ───
+    st.subheader("El recorrido de la energía")
+    st.markdown(
+        "Entre captar la onda y alimentar el sensor, la energía hace un recorrido. Empieza "
+        "en el aire como una onda de radio y, para poder usarse, debe atravesar varias "
+        "etapas: ser **capturada**, **acondicionada** para que no se pierda, **convertida** "
+        "en corriente continua y, por fin, **entregada** al dispositivo que la usa. La "
+        "rectena es el sistema que realiza ese recorrido completo, de izquierda (entra como "
+        "radio) a derecha (sale como electricidad):"
     )
     st.plotly_chart(_fig_rectena(), width="stretch")
-    st.markdown(
-        "**El recorrido de la energía, etapa por etapa:**\n\n"
-        f"- 📡 **Antena** — opera en modo recepción: convierte la potencia electromagnética "
-        f"que llega del entorno ({termino('RF')}) en potencia eléctrica en sus terminales.\n"
-        f"- ⚙️ **Red de adaptación ({termino('IMN')})** — acopla la impedancia de la antena "
-        "a la del sistema (**Z₀ = 50 Ω**). Actúa como un **puente**: si las impedancias no "
-        "coinciden, parte de la energía **rebota** (se refleja) y se pierde; la red de "
-        "adaptación minimiza ese rebote.\n"
-        f"- ▷| **{termino('rectificador', 'Rectificador')}** — convierte la señal de radio "
-        "(que oscila) en corriente continua. Es el corazón de la conversión RF→DC.\n"
-        f"- 〜 **{termino('filtro DC', 'Filtro DC')}** — alisa la tensión rectificada para "
-        "entregar una corriente continua estable.\n"
-        f"- 🔋 **{termino('carga', 'Carga')}** — el dispositivo que finalmente usa la "
-        f"energía. Aquí es un **nodo IoT** con radio {termino('LoRa')}, que necesita "
-        "**acumular ≈ 259,3 mJ por ciclo** (despertar, medir y transmitir) para operar.\n\n"
-        ":material/info: *Pasa el cursor sobre los términos subrayados para ver su "
-        "definición.*",
-        unsafe_allow_html=True,
-    )
 
     st.divider()
 
-    # ── Eficiencia total: ecuación + desglose en popover ─────────────────────
-    st.subheader("Por qué la eficiencia total es un producto, no una suma")
+    # ── Por qué no toda la energía llega: fenómeno primero, ecuación después ──
+    st.subheader("Por qué no toda la energía llega")
     st.markdown(
-        "**Ninguna etapa es perfecta:** cada bloque conserva solo una parte de la energía "
-        "que recibe y pierde el resto (como calor, reflexión o conversión incompleta). Por "
-        "eso la **eficiencia total** del sistema es el **producto** de las eficiencias de "
-        "todas las etapas:"
+        "Ese recorrido tiene un precio. **Ninguna etapa es perfecta:** cada bloque conserva "
+        "solo una parte de la energía que recibe y pierde el resto —por reflexión, por "
+        "calor o por conversión incompleta—. Si la antena y el rectificador no están bien "
+        "acoplados, por ejemplo, parte de la energía rebota y se pierde antes de avanzar."
+    )
+    st.markdown(
+        "Y como las etapas están **en cadena**, esas pérdidas se acumulan: la eficiencia "
+        "total depende de todas a la vez, y **la etapa más débil marca el techo** de todo "
+        "el sistema. Basta con que un bloque rinda poco para que caiga el conjunto."
+    )
+    st.markdown(
+        "Matemáticamente, esa idea se expresa como el **producto** de las eficiencias de "
+        "cada etapa:"
     )
     st.latex(
         r"\eta_{total} = \eta_{rad} \cdot \eta_{mm} \cdot \eta_{IMN} \cdot \text{PCE} \cdot \eta_{PMIC}"
@@ -84,24 +82,19 @@ def render():
             "- **η_PMIC** — eficiencia del gestor de energía que entrega la potencia a la carga."
         )
 
-    st.markdown(
-        "**Cómo se lee físicamente:** al multiplicarse, **basta con que una etapa sea baja "
-        "para que toda la eficiencia caiga** —es una cadena, no una suma—. La etapa con "
-        "menor eficiencia es la que **domina las pérdidas** y marca el techo de todo el "
-        "sistema. Por eso conviene que cada bloque rinda lo más alto posible."
-    )
-    st.markdown(
-        "**En este proyecto** la rectena se implementa sobre **FR-4**, un sustrato económico "
-        "y accesible, para el que la eficiencia total esperada se ubica entre el "
-        "**30 % y el 40 %**. En sustratos de baja pérdida (Duroid 5880) puede alcanzar el "
-        "**28–50 % a −10 dBm**, a mayor costo."
-    )
-
     _ref("§2.1 El sistema rectenna: arquitectura y eficiencia · "
          "§2.4 Parámetros fundamentales de antenas y rectenas")
 
+    st.divider()
+
+    # ── Cierre: pregunta-puente hacia las topologías ─────────────────────────
+    st.markdown(
+        "Ya sabemos cómo una rectena transforma energía de radio en electricidad. La "
+        "siguiente pregunta es **qué diseños de antena se evaluarán** para realizar esa "
+        "tarea."
+    )
     st.page_link("pages/topologias.py",
-                 label="Siguiente — las dos topologías evaluadas →",
+                 label="Siguiente — las topologías que se evalúan →",
                  icon=":material/arrow_forward:")
 
 
