@@ -82,7 +82,8 @@ def render():
             "domésticos. Esa disparidad es la que el proyecto explota."
         )
 
-    _ref("§1.1 Contexto y motivación · §1.2 Objetivos · §1.3 Alcance y limitaciones del estudio")
+    _ref("§1.1 Contexto y motivación · §1.3 Alcance y limitaciones del estudio · "
+         "Tabla 1 (densidades de potencia RF típicas en entornos urbanos)")
 
     st.page_link("pages/contexto.py",
                  label="Siguiente — ¿qué es una rectena? →",
