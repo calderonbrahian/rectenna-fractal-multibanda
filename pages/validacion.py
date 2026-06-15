@@ -2,8 +2,11 @@
 Validación cruzada — Modelo analítico vs Wang et al. (2022) IEEE TAP
                   — FLPDA Koch vs Carrel (1961)
 
-Doubler fijo (topología canónica de la tesis). Pin = -10 dBm declarado.
+Doubler fijo (topología canónica del proyecto). Pin = -10 dBm declarado.
 Caveats de sustrato (FR-4 vs Duroid 5880) y de punto de potencia visibles arriba.
+
+Corresponde a §3.7 (Estrategia de validación cruzada) y §4.5 (Validación
+cruzada y análisis del error, RMSE = 15,50 pp) del informe de grado.
 """
 
 import numpy as np
@@ -14,7 +17,7 @@ import plotly.graph_objects as go
 from analysis.sensibilidad import run_validacion_wang
 from core.flpda import FLPDA_Koch
 from core.comparacion import validate_carrel1961, WANG2022, CARREL1961
-from utils.pagina import encabezado, como_interpretar
+from utils.pagina import encabezado, donde_se_desarrolla as _ref
 # (fig_validacion_wang ya no se usa; se reemplazó por _fig_wang_scatter_with_errors)
 
 
@@ -38,8 +41,8 @@ def _fig_wang_scatter_with_errors(res: dict) -> go.Figure:
     fig.add_trace(go.Scatter(
         x=f, y=pce_meas, mode='lines+markers',
         name='Wang (2022) — Duroid 5880',
-        marker=dict(size=10, color='#34D399', symbol='circle'),
-        line=dict(width=2.4, color='#34D399'),
+        marker=dict(size=10, color='#059669', symbol='circle'),
+        line=dict(width=2.4, color='#059669'),
         error_y=dict(type='data', array=yerr_meas, visible=True,
                      color='rgba(52,211,153,0.55)', thickness=1.4, width=4),
         hovertemplate='f=%{x:.2f} GHz<br>PCE medida=%{y:.1f}%<extra></extra>',
@@ -47,8 +50,8 @@ def _fig_wang_scatter_with_errors(res: dict) -> go.Figure:
     fig.add_trace(go.Scatter(
         x=f, y=pce_mod, mode='lines+markers',
         name='Modelo — FR-4 (este trabajo)',
-        marker=dict(size=10, color='#FBBF24', symbol='diamond'),
-        line=dict(width=2.4, color='#FBBF24'),
+        marker=dict(size=10, color='#B45309', symbol='diamond'),
+        line=dict(width=2.4, color='#B45309'),
         error_y=dict(type='data', array=yerr_mod, visible=True,
                      color='rgba(251,191,36,0.55)', thickness=1.4, width=4),
         hovertemplate='f=%{x:.2f} GHz<br>PCE modelo=%{y:.1f}%<extra></extra>',
@@ -78,7 +81,7 @@ def _fig_wang_scatter_with_errors(res: dict) -> go.Figure:
         x=5.8, y=72, xref='x', yref='y',
         text='Δ tan δ: 0,02 (FR-4) vs 0,0009 (Duroid 5880)<br>≈ 22× más pérdidas → ~6 pp de sesgo',
         showarrow=False, align='right',
-        font=dict(size=10, color='#FBBF24'),
+        font=dict(size=10, color='#B45309'),
         bgcolor='rgba(248, 250, 252, 0.9)', bordercolor='rgba(251,191,36,0.4)', borderwidth=1, borderpad=6,
     )
     return fig
@@ -134,6 +137,9 @@ def render():
                 "El modelo asume adaptación perfecta en pequeña señal: "
                 "sobreestima a baja frecuencia, subestima a alta (C_j parásita)."
             )
+
+    _ref("§3.7 Estrategia de validación cruzada · "
+         "§4.5 Validación cruzada y análisis del error (RMSE = 15,50 pp)")
 
     st.divider()
 
@@ -193,8 +199,11 @@ entre diseños sobre el mismo material; léase como **verificación de orden de 
         })
         st.dataframe(df, hide_index=True)
         st.caption(
-            ":material/info: Topología fija: **doubler** (la canónica de la tesis)."
+            ":material/info: Topología fija: **doubler** (la canónica del proyecto)."
         )
+        _ref("§3.7 Estrategia de validación cruzada · "
+             "§4.5 Validación cruzada y análisis del error · "
+             "Referencia: Wang et al. (2022), IEEE TAP")
 
     # ── Carrel (1961) ───────────────────────────────────────────────────────
     with tab_carrel:
@@ -267,6 +276,8 @@ la curva de Koch reduce la dimensión **transversal** de cada dipolo, no la long
 del boom.
 """
             )
+        _ref("§3.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
+             "§4.5 Validación cruzada · Referencia: Carrel (1961)")
 
 
 render()
