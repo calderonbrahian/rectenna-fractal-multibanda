@@ -1,6 +1,11 @@
 """
 Escenario B — FLPDA Koch it.2, 470–900 MHz.
-Tabs: S11 · Ganancia · Geometría · Presupuesto LoRa · PCE UHF · Patrón
+Tabs: S11 · Ganancia · Geometría · Presupuesto LoRa · PCE UHF
+
+Escenario cuantitativo del proyecto: sustenta el resultado de referencia
+(P_DC = 1 637,6 µW). Conserva las visualizaciones de mecanismo (región activa
+del FLPDA, doblador Greinacher por semiciclo, curva I-V del diodo), que
+corresponden a contenidos del informe.
 """
 
 import streamlit as st
@@ -18,7 +23,7 @@ from plots.charts import (
 )
 from utils.exportar import sweep_a_csv
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, badge_exploracion
+from utils.pagina import encabezado, badge_exploracion, donde_se_desarrolla as _ref
 
 
 def render():
@@ -47,8 +52,19 @@ def render():
     )
 
     badge_exploracion("Esta página es **diagnóstico técnico**: muestra el comportamiento "
-                       "del modelo de la antena en toda la banda. El valor oficial defendido "
-                       "(P_DC = 1 637,6 µW) está en **Resultados de Referencia del Proyecto**.")
+                       "del modelo de la antena en toda la banda. El **resultado de "
+                       "referencia** (P_DC = 1 637,6 µW) se presenta en **Resultados de "
+                       "Referencia del Proyecto**.")
+
+    st.markdown(
+        "Esta página examina el **Escenario B** —la antena log-periódica fractal de Koch "
+        "(FLPDA)— frecuencia por frecuencia: cómo se adapta, cuánto gana, cómo está "
+        "construida y cómo convierte la energía captada en potencia continua. Es el "
+        "escenario que sustenta el resultado de referencia del proyecto."
+    )
+    _ref("§3.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
+         "§4.2 Escenario B — FLPDA Koch (470–900 MHz) · "
+         "§2.3.3 Curva de Koch: reducción por iteración")
 
     with st.sidebar:
         st.subheader("Parámetros Esc. B")
@@ -99,6 +115,8 @@ def render():
             "LPDA rizado típico: −10 a −20 dB en banda | "
             "Modelo físico: RLC dipolo — impedancia de entrada iterativa"
         )
+        _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
+             "§4.2.1 Diseño paramétrico y dimensiones calculadas")
 
     with tab_gain:
         fig = fig_gain(sweep['freqs_MHz'], sweep['gain_dBi'],
@@ -115,6 +133,8 @@ def render():
             "Referencia Carrel (1961): 7–9 dBi en banda.",
             icon=":material/info:",
         )
+        _ref("§2.4.4 Directividad, eficiencia de radiación y ganancia · "
+             "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
     with tab_geom:
         col1, col2 = st.columns([1, 1])
@@ -207,7 +227,7 @@ def render():
             "Al variar los dos parámetros de Carrel, el arreglo cambia: "
             "**τ** (razón de escala) controla cuán parecidas son las longitudes de "
             "dipolos consecutivos; **σ** (factor de espaciado relativo) controla "
-            "qué tan separados van. El diseño de la tesis (τ = 0,90, σ = 0,15) es "
+            "qué tan separados van. El diseño del proyecto (τ = 0,90, σ = 0,15) es "
             "el equilibrio entre ganancia, banda y tamaño."
         )
         col_tau, col_sigma = st.columns(2)
@@ -265,6 +285,9 @@ def render():
             "*'¿qué pasaría si τ fuera 0,80?'* (menos dipolos, menos ganancia) "
             "o *'¿por qué no σ = 0,22?'* (boom más largo sin ganancia adicional)."
         )
+        _ref("§3.4.2 FLPDA Koch: método de Carrel · §2.3.3 Curva de Koch: reducción por "
+             "iteración · §2.3.4 Compromisos de la miniaturización Koch · "
+             "§4.2.1 Diseño paramétrico y dimensiones · Apéndice E.4 Mapa de diseño τ–σ")
 
     with tab_budget:
         st.markdown(f"#### Potencia cosechada DC a d = {dist_m} m")
@@ -347,6 +370,8 @@ def render():
             "del modelo; aquella es la conclusión de uso.",
             icon=":material/info:",
         )
+        _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
+             "§2.5 Propagación RF y modelo de Friis · §4.3 Caso de estudio: Cerro Nutibara")
 
     with tab_pce:
         f_mhz_sel = st.select_slider(
@@ -361,7 +386,7 @@ def render():
         )
         # Marca del punto canónico
         fig.add_vline(x=CANONICAL['P_in_dBm'],
-                       line=dict(color='#FBBF24', dash='dash', width=1.4),
+                       line=dict(color='#B45309', dash='dash', width=1.4),
                        annotation_text=f"P_in canónico = {CANONICAL['P_in_dBm']:.2f} dBm",
                        annotation_position='top right',
                        annotation_font_size=10)
@@ -369,13 +394,15 @@ def render():
         st.info(
             f"Modelo Shockley iterativo (SMS7630, R_load=1300 Ω). "
             f"PCE máx. ≈ **{CANONICAL['PCE']*100:.0f}%** en zona de saturación. "
-            "El valor de la tesis usa la cadena completa de cuatro factores sobre P_in.",
+            "El valor del proyecto usa la cadena completa de cuatro factores sobre P_in.",
             icon=":material/info:",
         )
         st.download_button(
             "Descargar CSV", sweep_a_csv(pce_data),
             file_name=f"pce_uhf_{f_mhz_sel}MHz.csv", mime="text/csv",
         )
+        _ref("§2.7.2 Parámetros SPICE del SMS7630 y frecuencia de corte · "
+             "§4.3.1 Cálculo de la cadena de potencia")
 
         st.divider()
         st.markdown("##### ¿En qué punto del UHF conviene operar?")
@@ -393,6 +420,8 @@ def render():
             "escenario de referencia. Esto **no es coincidencia**: la antena se "
             "diseñó para esa banda."
         )
+        _ref("§2.6.2 El espectro UHF colombiano — Escenario B · "
+             "§4.3 Caso de estudio: Cerro Nutibara")
 
         st.divider()
         st.markdown("##### Cómo funciona el doblador Greinacher — *paso a paso*")
@@ -430,6 +459,8 @@ def render():
                 "conducen alternadamente, pero la salida es DC porque C2 actúa "
                 "como reservorio. Esta es la ecuación V_DC = N·(V_oc,pk − V_f) con N=2."
             )
+        _ref("Apéndice E.8 Operación interna del doblador Greinacher · "
+             "§3.5 Módulo 2 — Cadena RF-DC con Python/SciPy")
 
         st.divider()
         st.markdown("##### El diodo Schottky en su curva característica")
@@ -461,6 +492,8 @@ def render():
             "varios órdenes de magnitud; por encima de 250 mV la resistencia serie "
             "R_S = 20 Ω empieza a dominar las pérdidas óhmicas."
         )
+        _ref("§2.7.1 Ecuación de Shockley · §2.7.2 Parámetros SPICE del SMS7630 · "
+             "Apéndice E.5 Caracterización numérica I-V del diodo SMS7630")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -511,7 +544,7 @@ def _fig_diode_iv_curve(V_op: float):
     # Curva I-V
     fig.add_trace(go.Scatter(
         x=V_sweep, y=I_abs_uA, mode='lines',
-        line=dict(color='#60A5FA', width=2.8),
+        line=dict(color='#2563EB', width=2.8),
         name='|I_D(V)|',
         hovertemplate='V_D=%{x:.3f} V<br>|I_D|=%{y:.3g} µA<extra></extra>',
     ))
@@ -520,7 +553,7 @@ def _fig_diode_iv_curve(V_op: float):
     fig.add_trace(go.Scatter(
         x=[V_op], y=[I_op_abs_uA],
         mode='markers',
-        marker=dict(size=18, color='#FBBF24', symbol='star',
+        marker=dict(size=18, color='#B45309', symbol='star',
                     line=dict(color='white', width=2)),
         name='Punto operativo',
         hoverinfo='skip',
@@ -559,7 +592,7 @@ def _fig_diode_iv_curve(V_op: float):
         text=(f"<b>Punto operativo</b><br>"
               f"V_D = {V_op*1000:.1f} mV<br>"
               f"I_D = {_fmt_I(I_op)}<br>"
-              f"<b style='color:#FBBF24'>R_dinámica = {_fmt_R(R_d_op)}</b><br>"
+              f"<b style='color:#B45309'>R_dinámica = {_fmt_R(R_d_op)}</b><br>"
               f"<br><b>SMS7630 (Skyworks AN-4003)</b><br>"
               f"I_S = 5 µA · n = 1,05<br>"
               f"V_T = 25,85 mV (T = 300 K)<br>"
@@ -567,7 +600,7 @@ def _fig_diode_iv_curve(V_op: float):
         showarrow=False, align='left',
         font=dict(size=10, color='#0F172A'),
         bgcolor='rgba(248, 250, 252, 0.95)',
-        bordercolor='#FBBF24', borderwidth=1, borderpad=10,
+        bordercolor='#B45309', borderwidth=1, borderpad=10,
     )
 
     fig.update_layout(
@@ -593,20 +626,20 @@ def _fig_greinacher_doubler(mode: str = "Semiciclo +"):
 
     # Colores: activo = amarillo brillante, inactivo = gris tenue
     if mode == "Semiciclo +":
-        col_d1, col_d2 = "rgba(100,116,139,0.35)", "#FBBF24"
-        col_c1, col_c2 = "rgba(100,116,139,0.35)", "#FBBF24"
-        wire_top_color, wire_bottom_color = "#FBBF24", "rgba(100,116,139,0.35)"
+        col_d1, col_d2 = "rgba(100,116,139,0.35)", "#B45309"
+        col_c1, col_c2 = "rgba(100,116,139,0.35)", "#B45309"
+        wire_top_color, wire_bottom_color = "#B45309", "rgba(100,116,139,0.35)"
     elif mode == "Semiciclo −":
-        col_d1, col_d2 = "#FBBF24", "rgba(100,116,139,0.35)"
-        col_c1, col_c2 = "#FBBF24", "rgba(100,116,139,0.35)"
-        wire_top_color, wire_bottom_color = "rgba(100,116,139,0.35)", "#FBBF24"
+        col_d1, col_d2 = "#B45309", "rgba(100,116,139,0.35)"
+        col_c1, col_c2 = "#B45309", "rgba(100,116,139,0.35)"
+        wire_top_color, wire_bottom_color = "rgba(100,116,139,0.35)", "#B45309"
     else:  # Régimen DC
-        col_d1, col_d2 = "#A78BFA", "#A78BFA"
-        col_c1, col_c2 = "#A78BFA", "#A78BFA"
-        wire_top_color, wire_bottom_color = "#A78BFA", "#A78BFA"
+        col_d1, col_d2 = "#7C3AED", "#7C3AED"
+        col_c1, col_c2 = "#7C3AED", "#7C3AED"
+        wire_top_color, wire_bottom_color = "#7C3AED", "#7C3AED"
 
     wire_neutral = "#94A3B8"
-    label_color = "#F1F5F9"
+    label_color = "#0F172A"
 
     # ── Topología del Greinacher half-wave doubler ──────────────────────────
     #
@@ -670,7 +703,7 @@ def _fig_greinacher_doubler(mode: str = "Semiciclo +"):
                   x0=x_VDC - 0.06, y0=y_top - 0.06, x1=x_VDC + 0.06, y1=y_top + 0.06,
                   fillcolor=label_color, line_color=label_color)
     fig.add_annotation(x=x_VDC, y=y_top + 0.30, text="<b>V_DC</b>",
-                       showarrow=False, font=dict(color="#34D399", size=12))
+                       showarrow=False, font=dict(color="#059669", size=12))
 
     # Cable V_DC → load resistor (a la derecha)
     fig.add_shape(type="line", x0=x_VDC, y0=y_top, x1=x_load, y1=y_top,
@@ -704,7 +737,7 @@ def _fig_greinacher_doubler(mode: str = "Semiciclo +"):
                   line=dict(color=col_d1, width=4))
     # Cable D1 → GND
     fig.add_shape(type="line", x0=x_X, y0=y_top - 1.15, x1=x_X, y1=y_bot,
-                  line=dict(color="rgba(100,116,139,0.35)" if mode != "Semiciclo −" else "#FBBF24",
+                  line=dict(color="rgba(100,116,139,0.35)" if mode != "Semiciclo −" else "#B45309",
                             width=2))
     fig.add_annotation(x=x_X - 0.3, y=y_top - 0.85, xanchor="right",
                        text="<b>D1</b>", showarrow=False,
@@ -751,13 +784,13 @@ def _fig_greinacher_doubler(mode: str = "Semiciclo +"):
     # Etiqueta de modo activo (arriba)
     if mode == "Semiciclo +":
         text_mode = "Semiciclo +: V_in alto → X ≈ 2·V_p → <b>D2 conduce</b> → C2 se carga"
-        col_mode = "#FBBF24"
+        col_mode = "#B45309"
     elif mode == "Semiciclo −":
         text_mode = "Semiciclo −: V_in bajo → X intenta caer → <b>D1 conduce</b> → C1 se carga"
-        col_mode = "#FBBF24"
+        col_mode = "#B45309"
     else:
         text_mode = "Régimen DC permanente: V_DC ≈ 2·(V_pico − V_f) ≈ 1 460 mV (canónico)"
-        col_mode = "#A78BFA"
+        col_mode = "#7C3AED"
 
     fig.add_annotation(
         x=2.0, y=y_top + 1.0, xref="x", yref="y", xanchor="center",
@@ -802,14 +835,14 @@ def _fig_flpda_schematic(geom, freq_active_mhz):
                   line=dict(color="#475569", width=2.5))
     fig.add_shape(type="line",
                   x0=pos[0] - 4, y0=lam_half_cm / 2, x1=pos[-1] + 4, y1=lam_half_cm / 2,
-                  line=dict(color="#34D399", dash="dash", width=1))
+                  line=dict(color="#059669", dash="dash", width=1))
     fig.add_shape(type="line",
                   x0=pos[0] - 4, y0=-lam_half_cm / 2, x1=pos[-1] + 4, y1=-lam_half_cm / 2,
-                  line=dict(color="#34D399", dash="dash", width=1))
+                  line=dict(color="#059669", dash="dash", width=1))
     fig.add_annotation(
         x=pos[0] - 4, y=lam_half_cm / 2 + 2,
         text=f"λ/2 a {freq_active_mhz} MHz = {lam_half_cm:.1f} cm",
-        showarrow=False, font=dict(color="#34D399", size=10),
+        showarrow=False, font=dict(color="#059669", size=10),
         xanchor="left",
     )
 
@@ -834,7 +867,7 @@ def _fig_flpda_schematic(geom, freq_active_mhz):
     fig.add_annotation(
         x=pos[-1] + 2, y=0,
         text="<b>apex</b><br>(feed)",
-        showarrow=False, font=dict(color="#F87171", size=11),
+        showarrow=False, font=dict(color="#DC2626", size=11),
         xanchor="left",
     )
     fig.add_annotation(
@@ -842,12 +875,12 @@ def _fig_flpda_schematic(geom, freq_active_mhz):
         ax=pos[-1] - 5, ay=12,
         xref="x", yref="y", axref="x", ayref="y",
         showarrow=True, arrowhead=3, arrowsize=1.3,
-        arrowwidth=2.5, arrowcolor="#34D399",
+        arrowwidth=2.5, arrowcolor="#059669",
     )
     fig.add_annotation(
         x=pos[-1] + 10, y=15,
         text="<b>radiación endfire</b>",
-        showarrow=False, font=dict(color="#34D399", size=11),
+        showarrow=False, font=dict(color="#059669", size=11),
         xanchor="left",
     )
 
@@ -903,7 +936,7 @@ def _fig_koch_miniaturization(extended: bool = False):
 
     if extended:
         iters = [0, 1, 2, 3, 4]
-        colors = ["#60A5FA", "#FBBF24", "#34D399", "#A78BFA", "#F87171"]
+        colors = ["#2563EB", "#B45309", "#059669", "#7C3AED", "#DC2626"]
         y_offsets = [1.4, 0.7, 0.0, -0.7, -1.4]
         labels = [
             "Iter. 0  ·  rectilínea",
@@ -916,7 +949,7 @@ def _fig_koch_miniaturization(extended: bool = False):
         y_range = [-1.95, 2.05]
     else:
         iters = [0, 1, 2]
-        colors = ["#60A5FA", "#FBBF24", "#34D399"]
+        colors = ["#2563EB", "#B45309", "#059669"]
         y_offsets = [0.6, 0.0, -0.6]
         labels = [
             "Iteración 0  ·  rectilínea",
@@ -956,7 +989,7 @@ def _fig_koch_miniaturization(extended: bool = False):
         x=L_conductor / 2, y=y_range[1] - 0.18,
         text="<b>Todas las curvas tienen la misma longitud de conductor</b><br>"
              "<i>(la que fija la frecuencia de resonancia ≈ λ/2)</i>",
-        showarrow=False, font=dict(color="white", size=12),
+        showarrow=False, font=dict(color="#0F172A", size=12),
         bgcolor="rgba(248, 250, 252, 0.92)", bordercolor="#475569",
         borderwidth=1, borderpad=6,
     )
