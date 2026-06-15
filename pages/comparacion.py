@@ -6,7 +6,7 @@ escenarios) del informe de grado. Página de lectura.
 
 import streamlit as st
 import pandas as pd
-from utils.pagina import encabezado, donde_se_desarrolla as _ref
+from utils.pagina import encabezado, correspondencia, donde_se_desarrolla as _ref
 
 
 def render():
@@ -45,8 +45,11 @@ def render():
                  column_config={
                      "Criterio": st.column_config.TextColumn("Criterio", width="medium"),
                  })
-    st.caption("Tabla 10 del informe — Comparación técnica integral. "
-               "El cap de PCE = 85 % es el límite del rectificador, no de η_total.")
+    correspondencia('directa',
+                    "Reproduce la **Tabla 10** del trabajo (comparación técnica integral "
+                    "A vs B). La comparación de curvas PCE–P_in de ambos escenarios es la "
+                    "**Figura 10**.")
+    st.caption("El cap de PCE = 85 % es el límite del rectificador, no de η_total.")
 
     with st.container(border=True):
         st.markdown(
@@ -57,7 +60,9 @@ def render():
             "energético firme del proyecto proviene del **Escenario B**."
         )
 
-    _ref("§4.4 Análisis comparativo de los dos escenarios · §4.1 Escenario A · §4.2 Escenario B")
+    _ref("§4.4 Análisis comparativo de los dos escenarios · §4.1 Escenario A · "
+         "§4.2 Escenario B · Tabla 10 (comparación técnica integral) · "
+         "Figura 10 (PCE vs P_in, ambos escenarios)")
 
     col1, col2 = st.columns(2)
     with col1:

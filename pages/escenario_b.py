@@ -23,7 +23,8 @@ from plots.charts import (
 )
 from utils.exportar import sweep_a_csv
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, badge_exploracion, donde_se_desarrolla as _ref
+from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+                          control_interactivo, donde_se_desarrolla as _ref)
 
 
 def render():
@@ -100,12 +101,22 @@ def render():
             annotation_font_size=10,
         )
         st.plotly_chart(fig)
+        correspondencia('directa',
+                        "Reproduce la **Figura 3** del trabajo: S₁₁ vs frecuencia de la "
+                        "FLPDA Koch it. 2 (470–900 MHz).")
         st.caption(
             "LPDA rizado típico: −10 a −20 dB en banda | "
             "Modelo físico: RLC dipolo — impedancia de entrada iterativa"
         )
+        st.markdown(
+            ":material/lightbulb: **Qué concluye el trabajo.** A diferencia del Sierpinski, "
+            "la FLPDA mantiene **S₁₁ < −10 dB de forma continua en toda la banda 470–900 "
+            "MHz**: está bien adaptada en todo el rango UHF de interés, lo que la hace apta "
+            "para la fuente TDT."
+        )
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
-             "§4.2.1 Diseño paramétrico y dimensiones calculadas")
+             "§4.2.1 Diseño paramétrico y dimensiones calculadas · "
+             "Figura 3 (S₁₁ FLPDA Koch)")
 
     with tab_gain:
         fig = fig_gain(sweep['freqs_MHz'], sweep['gain_dBi'],
@@ -116,6 +127,9 @@ def render():
             line_color='rgba(96, 165, 250, 0.3)',
         )
         st.plotly_chart(fig)
+        correspondencia('complementaria',
+                        "No es una figura del documento; muestra la ganancia realizada del "
+                        "modelo paramétrico de Carrel (§3.4.2) para ver su valor en banda.")
         st.info(
             f"Ganancia realizada @ 550 MHz: **{CANONICAL['gain_dBi']:.2f} dBi** "
             f"(η_rad = {CANONICAL['eta_rad']:.4f}, modelo paramétrico de {geom['n_elements']} elementos consistente con Carrel 1961). "
@@ -147,6 +161,8 @@ def render():
                 'Pos. [cm]':   [round(p, 1) for p in geom['positions_cm']],
             })
             st.dataframe(df, hide_index=True)
+            st.caption(":material/content_copy: Corresponde a la **Tabla 6** del trabajo "
+                       "(geometría de los dipolos Koch).")
 
         st.divider()
         st.markdown("#### La antena en imágenes — *qué estamos diseñando*")
@@ -168,6 +184,10 @@ def render():
         )
         st.plotly_chart(_fig_flpda_schematic(geom, freq_active), width="stretch",
                          key="flpda_active_region")
+        correspondencia('derivada',
+                        "Construida a partir de la geometría de la **Figura 4** (τ=0,90, "
+                        "σ=0,15, N=8); resalta de forma interactiva la región activa según "
+                        "la frecuencia seleccionada.")
         st.caption(
             ":material/lightbulb: El **dipolo amarillo brillante** es el más activo "
             "(longitud más cercana a λ/2). Los azules tenues están fuera de resonancia. "
@@ -276,7 +296,9 @@ def render():
         )
         _ref("§3.4.2 FLPDA Koch: método de Carrel · §2.3.3 Curva de Koch: reducción por "
              "iteración · §2.3.4 Compromisos de la miniaturización Koch · "
-             "§4.2.1 Diseño paramétrico y dimensiones · Apéndice E.4 Mapa de diseño τ–σ")
+             "§4.2.1 Diseño paramétrico y dimensiones · "
+             "Figura 4 (geometría del arreglo) · Tabla 6 (geometría de dipolos) · "
+             "Apéndice E.4 Mapa de diseño τ–σ")
 
     with tab_budget:
         st.markdown("#### Potencia cosechada DC en el nodo IoT")
@@ -291,6 +313,20 @@ def render():
             with c_dinfo:
                 st.caption("Propagación: FSPL + corrección urbana ITU-R P.1546 +6 dB")
                 st.caption("Antena: FLPDA Koch it.2 · τ = 0,90 · σ = 0,15")
+        control_interactivo(
+            magnitud="**Distancia** entre la antena y la torre TDT del Cerro Nutibara, "
+                     "en metros.",
+            referencia="**100 m** en el escenario de referencia (P_DC = 1 638 µW); el "
+                       "control parte de 500 m.",
+            al_subir="La potencia recibida cae como 1/d² (Friis): más lejos → menos P_DC, "
+                     "períodos entre mensajes más largos y, pasado cierto punto, el PMIC "
+                     "deja de arrancar.",
+            al_bajar="Más cerca → más P_DC y mensajes más frecuentes, hasta saturar el "
+                     "techo de la cadena.",
+            limite="Por debajo de ~50 m la hipótesis de campo lejano y la corrección "
+                   "urbana media dejan de ser fiables; más allá de ~1 000 m el cold-start "
+                   "(V_DC ≥ 130 mV) ya no está asegurado.",
+        )
         with st.spinner(f"Presupuesto a {dist_m} m..."):
             budget = run_budget_lora(dist_m=float(dist_m))
         st.caption(f"Modelo: cadena completa Shockley sobre P_in (4 factores: "
@@ -357,6 +393,9 @@ def render():
             annotation_position='top right', annotation_font_size=10,
         )
         st.plotly_chart(_fig_dist, key="curva_pdc_dist")
+        correspondencia('directa',
+                        "Reproduce la **Figura 6** del trabajo (P_DC vs distancia a la "
+                        "torre TDT); la línea vertical ámbar sigue al control de distancia.")
         st.caption(
             "Modelo: Friis (Pozar eq. 2.6) + ITU-R P.1546 +6 dB | "
             "Shockley cadena completa | PMIC BQ25504 η=85 % | cold-start 130 mV. "
@@ -374,7 +413,9 @@ def render():
             icon=":material/info:",
         )
         _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-             "§2.5 Propagación RF y modelo de Friis · §4.3 Caso de estudio: Cerro Nutibara")
+             "§2.5 Propagación RF y modelo de Friis · §4.3 Caso de estudio: Cerro Nutibara · "
+             "Figura 6 (P_DC vs distancia) · Figura 7 (T_ciclo vs distancia) · "
+             "Tabla 8 (presupuesto de enlace) · Tabla 9 (cadena de potencia completa)")
 
     with tab_pce:
         f_mhz_sel = st.select_slider(
@@ -394,6 +435,10 @@ def render():
                        annotation_position='top right',
                        annotation_font_size=10)
         st.plotly_chart(fig)
+        correspondencia('derivada',
+                        "Construida con el modelo PCE–P_in de la tesis (Tabla 7); la línea "
+                        "vertical marca el P_in canónico. La curva combinada de ambos "
+                        "escenarios es la Figura 10.")
         st.info(
             f"Modelo Shockley iterativo (SMS7630, R_load=1300 Ω). "
             f"PCE máx. ≈ **{CANONICAL['PCE']*100:.0f}%** en zona de saturación. "
@@ -405,7 +450,8 @@ def render():
             file_name=f"pce_uhf_{f_mhz_sel}MHz.csv", mime="text/csv",
         )
         _ref("§2.7.2 Parámetros SPICE del SMS7630 y frecuencia de corte · "
-             "§4.3.1 Cálculo de la cadena de potencia")
+             "§4.3.1 Cálculo de la cadena de potencia · "
+             "Tabla 7 (dependencia PCE–P_in) · Figura 10 (PCE vs P_in, ambos escenarios)")
 
         st.divider()
         st.markdown("##### ¿En qué punto del UHF conviene operar?")
@@ -440,6 +486,9 @@ def render():
             key="modo_doubler",
         ) or "Semiciclo +"
         st.plotly_chart(_fig_greinacher_doubler(modo_rect), width="stretch")
+        correspondencia('complementaria',
+                        "No aparece literal en la tesis; ilustra los semiciclos del doblador "
+                        "Greinacher descritos en el **Apéndice E.8**.")
         if modo_rect == "Semiciclo +":
             st.caption(
                 ":material/bolt: **Durante el semiciclo positivo de la RF**: la tensión "
@@ -472,6 +521,13 @@ def render():
         )
         st.latex(r"I_D = I_S \left( e^{V_D / (n\,V_T)} - 1 \right)")
         st.markdown(
+            "donde **I_D** es la corriente del diodo [A], **V_D** la tensión sobre la unión "
+            "[V], **I_S** la corriente de saturación inversa [A], **n** el factor de "
+            "idealidad (adimensional) y **V_T** el voltaje térmico (≈ 25,85 mV a 300 K). "
+            "La corriente crece **exponencialmente** con V_D: por eso el diodo pasa de "
+            "casi-aislante a conductor en una franja estrecha de tensión."
+        )
+        st.markdown(
             "El punto operativo sobre la curva I-V se sitúa con el control de esta sección, y muestra "
             "la corriente del diodo y su **resistencia dinámica** "
             "R_d = n·V_T / (|I| + I_S). El cambio de R_d con el punto operativo es la "
@@ -484,8 +540,24 @@ def render():
             key="V_op_diode",
             help="Tensión instantánea sobre la unión. V_D = 0 → R_d0 ≈ 5,4 kΩ (pequeña señal).",
         )
+        control_interactivo(
+            magnitud="**V_D**, la tensión instantánea sobre la unión del diodo [mV]; fija "
+                     "el punto de operación sobre la curva I-V.",
+            referencia="**V_D = 0** (sin polarización): R_d0 ≈ 5,4 kΩ, el valor que define "
+                       "la impedancia del diodo a pequeña señal usada en el modelo.",
+            al_subir="El diodo entra en régimen exponencial: la corriente sube rápido y la "
+                     "resistencia dinámica R_d cae varios órdenes de magnitud (conducción).",
+            al_bajar="Hacia V_D negativo el diodo se bloquea: solo circula la pequeña "
+                     "corriente de saturación inversa I_S.",
+            limite="Por encima de ~250 mV la resistencia serie R_S = 20 Ω domina las "
+                   "pérdidas óhmicas; ese extremo ya no es representativo del régimen de "
+                   "cosecha (pequeña señal).",
+        )
         V_op = V_op_mV / 1000.0
         st.plotly_chart(_fig_diode_iv_curve(V_op), width="stretch")
+        correspondencia('complementaria',
+                        "No aparece literal en la tesis; traza la curva I-V de Shockley del "
+                        "SMS7630 (parámetros de la **Tabla 3**) descrita en el Apéndice E.5.")
         st.caption(
             ":material/info: A **V_D = 0** (sin polarización) R_d0 = n·V_T / I_S ≈ "
             "**5,4 kΩ**. Es el valor que define la impedancia del diodo a pequeña "
@@ -496,6 +568,7 @@ def render():
             "R_S = 20 Ω empieza a dominar las pérdidas óhmicas."
         )
         _ref("§2.7.1 Ecuación de Shockley · §2.7.2 Parámetros SPICE del SMS7630 · "
+             "Tabla 3 (parámetros SPICE del SMS7630) · "
              "Apéndice E.5 Caracterización numérica I-V del diodo SMS7630")
 
 
