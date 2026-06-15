@@ -1,11 +1,14 @@
 """
-Viabilidad IoT — la conclusión operativa de la tesis.
+Viabilidad IoT — la conclusión operativa del proyecto.
 Pregunta: ¿Para qué sirve realmente esto?
 
 Cadena:  P_DC  →  E_ciclo  →  T_ciclo  →  mensajes/día
          + cold-start del PMIC
          + dimensionamiento del supercondensador
          + modo autónomo vs asistido
+
+Corresponde a §3.6 (Presupuesto energético del nodo IoT) y §4.3 (caso Cerro
+Nutibara) del informe de grado.
 """
 
 import math
@@ -15,15 +18,15 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, como_interpretar
+from utils.pagina import encabezado, donde_se_desarrolla as _ref
 
 
 # ── Perfiles LoRa (energía por ciclo TX+RX+sleep) ───────────────────────────
 # Valores típicos para mensaje LoRa de ~10 bytes en banda 915 MHz Colombia.
 LORA_SF = {
     "SF7  (rápido, corto alcance)":  {"E_mJ":  47.0,  "ToA_s": 0.051, "color": "#00BFA6"},
-    "SF9  (intermedio)":             {"E_mJ": 110.0,  "ToA_s": 0.226, "color": "#FBBF24"},
-    "SF12 (máximo alcance)":         {"E_mJ": CANONICAL["E_ciclo_mJ"], "ToA_s": 1.155, "color": "#F87171"},
+    "SF9  (intermedio)":             {"E_mJ": 110.0,  "ToA_s": 0.226, "color": "#B45309"},
+    "SF12 (máximo alcance)":         {"E_mJ": CANONICAL["E_ciclo_mJ"], "ToA_s": 1.155, "color": "#DC2626"},
 }
 
 
@@ -73,6 +76,15 @@ def render():
                 "8. Modos de operación (autónomo vs asistido)"
             )
 
+    st.markdown(
+        "Esta página traduce la potencia continua del escenario de referencia "
+        "(P_DC ≈ 1 638 µW) en algo tangible para un nodo IoT: cuánta energía necesita "
+        "cada mensaje, cuánto tarda en acumularla, cuántos mensajes puede enviar al día "
+        "y hasta qué distancia la operación se sostiene por sí sola."
+    )
+    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
+         "§4.3 Caso de estudio: Cerro Nutibara")
+
     # ── KPIs operativos ──────────────────────────────────────────────────────
     P_DC_uW = CANONICAL['P_dc_uW']
     E_ciclo_mJ = CANONICAL['E_ciclo_mJ']
@@ -86,7 +98,7 @@ def render():
         st.metric("Período entre mensajes", f"≈ {T_ciclo_s:.0f} s",
                   help="Tiempo necesario para recolectar la energía de un ciclo.", border=True)
         st.metric("Mensajes / día (SF12)", f"≈ {msg_per_day:.0f}",
-                  delta="modo autónomo, sin batería", delta_color="off", border=True)
+                  delta="modo autónomo (sin batería primaria)", delta_color="off", border=True)
         st.metric("Tensión continua", f"{CANONICAL['V_dc_mV']:.0f} mV",
                   delta=f"+{CANONICAL['V_dc_mV']-CANONICAL['V_cs_mV']:.0f} mV vs cold-start",
                   delta_color="normal", border=True)
@@ -96,6 +108,8 @@ def render():
     # ── Cadena propagación → rectificación → almacenamiento → transmisión ───
     st.subheader("Cadena energética operativa")
     _render_energy_chain(P_DC_uW, T_ciclo_s, E_ciclo_mJ, msg_per_day)
+    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
+         "§4.3.1 Cálculo de la cadena de potencia")
 
     st.divider()
 
@@ -107,6 +121,8 @@ def render():
         "El cruce define el período entre transmisiones."
     )
     _render_t_ciclo_vs_d()
+    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
+         "§2.5 Propagación RF y modelo de Friis")
 
     st.divider()
 
@@ -181,6 +197,8 @@ def render():
         "sostenible; si toca V_min o menos, el supercap es demasiado pequeño y el "
         "nodo se apaga entre transmisiones."
     )
+    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
+         "Apéndice E.9 Caracterización temporal del supercondensador")
 
     st.divider()
 
@@ -194,7 +212,7 @@ def render():
     )
     st.caption(
         ":material/push_pin: **Tabla de referencia fija** — calculada con la fuente "
-        "canónica de la tesis (TDT, EIRP 70 dBm, 550 MHz). *No* depende de los "
+        "canónica del proyecto (TDT, EIRP 70 dBm, 550 MHz). *No* depende de los "
         "controles del supercondensador de arriba: el número de mensajes/día lo fija "
         "la potencia cosechada y la energía por mensaje, no el tamaño del buffer. "
         "Otras fuentes y EIRP se exploran en el **mapa de viabilidad** más abajo."
@@ -218,8 +236,10 @@ def render():
         f"SF7 ≈ {86400*0.01/LORA_SF['SF7  (rápido, corto alcance)']['ToA_s']:.0f} · "
         f"SF9 ≈ {86400*0.01/LORA_SF['SF9  (intermedio)']['ToA_s']:.0f} · "
         f"SF12 ≈ {86400*0.01/LORA_SF['SF12 (máximo alcance)']['ToA_s']:.0f} mensajes/día. "
-        "“—” = cold-start no garantizado."
+        "“—” = cold-start no asegurado."
     )
+    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
+         "§4.3.1 Cálculo de la cadena de potencia")
 
     st.divider()
 
@@ -235,6 +255,8 @@ def render():
         default=list(LORA_SF.keys())[-1],   # SF12 por defecto
     ) or list(LORA_SF.keys())[-1]
     st.plotly_chart(_heatmap_t_ciclo(sf_sel), width="stretch")
+    _ref("Apéndice E.10 Operación fuera del caso canónico — mapa EIRP × distancia · "
+         "§4.3 Caso de estudio: Cerro Nutibara")
 
     st.divider()
 
@@ -247,6 +269,7 @@ def render():
         "del supercondensador."
     )
     st.plotly_chart(_lora_tx_timeline(), width="stretch")
+    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT (perfiles LoRa SX1276)")
 
     st.divider()
 
@@ -284,6 +307,7 @@ def render():
         "urbana (±10–15 dB según ITU-R P.1546); la cadencia operativa debe reevaluarse "
         "por emplazamiento."
     )
+    _ref("§5.1 Conclusiones · §1.3 Alcance y limitaciones del estudio")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -362,7 +386,7 @@ def _render_t_ciclo_vs_d():
         x0=d_cs, x1=2000,
         fillcolor='rgba(204, 51, 17, 0.08)',
         line_width=0,
-        annotation_text=f"Cold-start no garantizado (d > {d_cs:.0f} m)",
+        annotation_text=f"Cold-start no asegurado (d > {d_cs:.0f} m)",
         annotation_position='top right',
         annotation_font_size=11,
     )
@@ -382,11 +406,11 @@ def _render_t_ciclo_vs_d():
     fig.add_trace(go.Scatter(
         x=[100], y=[CANONICAL['T_ciclo_s']],
         mode='markers+text',
-        marker=dict(size=14, color='#FBBF24', symbol='star',
+        marker=dict(size=14, color='#B45309', symbol='star',
                     line=dict(color='white', width=1)),
         text=[f"  Canónico: {CANONICAL['T_ciclo_s']:.0f} s @ 100 m (SF12)"],
         textposition='middle right',
-        textfont=dict(size=11, color='#FBBF24'),
+        textfont=dict(size=11, color='#B45309'),
         showlegend=False,
         hoverinfo='skip',
     ))
@@ -414,7 +438,7 @@ def _render_t_ciclo_vs_d():
     st.plotly_chart(fig)
     st.caption(
         f":material/info: A 100 m el modelo entrega 1 mensaje SF12 cada **{CANONICAL['T_ciclo_s']:.0f} s** "
-        f"(≈ 545/día). Más allá de **{d_cs:.0f} m** el cold-start del PMIC ya no está garantizado "
+        f"(≈ 545/día). Más allá de **{d_cs:.0f} m** el cold-start del PMIC ya no está asegurado "
         f"con la antena de referencia."
     )
 
@@ -527,11 +551,11 @@ def _heatmap_t_ciclo(sf_key: str):
     fig.add_trace(go.Scatter(
         x=[70], y=[100],
         mode='markers+text',
-        marker=dict(size=14, color='#FBBF24', symbol='star',
+        marker=dict(size=14, color='#B45309', symbol='star',
                     line=dict(color='white', width=1)),
         text=[f"  Canónico: {CANONICAL['T_ciclo_s']:.0f} s"],
         textposition='middle right',
-        textfont=dict(color='#FBBF24', size=11),
+        textfont=dict(color='#B45309', size=11),
         showlegend=False,
     ))
     fig.update_layout(
@@ -552,12 +576,12 @@ def _lora_tx_timeline():
     se distinga el reposo (~5 µA) del consumo activo (15–120 mA)."""
     fases = [
         ("Reposo",       6.0,   0.005, '#475569'),
-        ("Wake/Boot",    0.05,  15.0,  '#FBBF24'),
-        ("TX SF12",      1.15,  120.0, '#F87171'),
+        ("Wake/Boot",    0.05,  15.0,  '#B45309'),
+        ("TX SF12",      1.15,  120.0, '#DC2626'),
         ("Reposo TX→RX", 1.0,   0.005, '#475569'),
-        ("RX1 window",   0.25,  12.0,  '#34D399'),
+        ("RX1 window",   0.25,  12.0,  '#059669'),
         ("Reposo RX",    1.0,   0.005, '#475569'),
-        ("RX2 window",   0.25,  12.0,  '#34D399'),
+        ("RX2 window",   0.25,  12.0,  '#059669'),
         ("Reposo final", 5.0,   0.005, '#475569'),
     ]
     fig = go.Figure()
@@ -585,7 +609,7 @@ def _lora_tx_timeline():
         x=6.6, y=120, xref='x', yref='y',
         text=f"TX SF12 concentra {pct_tx:.0f}% de la energía<br>en {1.15:.2f}s",
         showarrow=True, arrowhead=2, ax=80, ay=-10,
-        font=dict(size=10, color='#F87171'),
+        font=dict(size=10, color='#DC2626'),
         bgcolor='rgba(248, 250, 252, 0.9)', bordercolor='rgba(248,113,113,0.6)',
         borderwidth=1, borderpad=5,
     )
@@ -647,17 +671,17 @@ def _fig_supercap_temporal(P_DC_uW, E_ciclo_mJ, C_mF, V_max, V_min, T_show_min):
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=times, y=voltages, mode='lines',
-        line=dict(color='#FBBF24' if feasible else '#F87171', width=2.2),
+        line=dict(color='#B45309' if feasible else '#DC2626', width=2.2),
         name='V_supercap(t)',
         hovertemplate='t=%{x:.1f} s<br>V=%{y:.3f} V<extra></extra>',
         fill='tozeroy', fillcolor='rgba(251,191,36,0.08)' if feasible else 'rgba(248,113,113,0.08)',
     ))
 
     # Líneas horizontales de referencia
-    fig.add_hline(y=V_max, line=dict(color='#34D399', dash='dot', width=1.2),
+    fig.add_hline(y=V_max, line=dict(color='#059669', dash='dot', width=1.2),
                   annotation_text=f'V_max = {V_max:.2f} V',
                   annotation_position='top right', annotation_font_size=10)
-    fig.add_hline(y=V_min, line=dict(color='#F87171', dash='dash', width=1.2),
+    fig.add_hline(y=V_min, line=dict(color='#DC2626', dash='dash', width=1.2),
                   annotation_text=f'V_min = {V_min:.2f} V (cut-off)',
                   annotation_position='bottom right', annotation_font_size=10)
     fig.add_hline(y=0.130, line=dict(color='rgba(248,113,113,0.40)', dash='dot', width=1),
@@ -670,7 +694,7 @@ def _fig_supercap_temporal(P_DC_uW, E_ciclo_mJ, C_mF, V_max, V_min, T_show_min):
             x=times[1], y=voltages[1],
             text=f"  TX consume E = {E_ciclo_mJ:.0f} mJ",
             showarrow=True, arrowhead=2, ax=80, ay=-30,
-            font=dict(size=10, color='#F87171'),
+            font=dict(size=10, color='#DC2626'),
         )
 
     # Caja informativa
@@ -679,13 +703,13 @@ def _fig_supercap_temporal(P_DC_uW, E_ciclo_mJ, C_mF, V_max, V_min, T_show_min):
         info_text = (f"<b>Operación sostenible</b><br>"
                      f"V oscila entre {V_bot:.2f} V y {V_max:.2f} V<br>"
                      f"T_ciclo ≈ {T_cycle:.0f} s · {n_tx_window} TX en {T_show_min} min")
-        info_color = '#34D399'; info_bg = 'rgba(52,211,153,0.10)'
+        info_color = '#059669'; info_bg = 'rgba(52,211,153,0.10)'
     else:
         C_min = 2 * E_TX / max(V_max ** 2 - V_min ** 2, 1e-9) * 1000  # mF
         info_text = (f"<b>⚠ Capacitancia insuficiente</b><br>"
                      f"{reason}.<br>"
                      f"Mínimo necesario: C ≥ {C_min:.0f} mF")
-        info_color = '#F87171'; info_bg = 'rgba(248,113,113,0.10)'
+        info_color = '#DC2626'; info_bg = 'rgba(248,113,113,0.10)'
 
     fig.add_annotation(
         x=0.02, y=0.97, xref='paper', yref='paper', xanchor='left', yanchor='top',
