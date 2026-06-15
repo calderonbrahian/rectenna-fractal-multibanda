@@ -22,6 +22,7 @@ from core.antenna import FractalAntenna
 from utils.exportar import resultados_a_csv, sweep_a_csv
 from utils.pagina import (encabezado, badge_exploracion, correspondencia,
                           control_interactivo, donde_se_desarrolla as _ref)
+from utils.glosario import ficha_grafica, glosario_pagina
 from configs.parametros import BANDS_A
 
 
@@ -124,17 +125,17 @@ def render():
         correspondencia('directa',
                         "Reproduce la **Figura 1** del trabajo: S₁₁ vs frecuencia del "
                         "Sierpinski it. 3 sobre FR-4.")
-        st.info(
-            "**Nota:** S11 corresponde a la antena **sin** red de adaptación. "
-            "La métrica de sistema relevante es la PCE con IMN (ver pestaña PCE).",
-            icon=":material/info:",
+        ficha_grafica(
+            evalua="la **adaptación** de la antena (S₁₁), banda por banda y sin red de "
+                   "adaptación; mide reflexión, **no** potencia útil.",
+            criterio="−10 dB",
+            concluye="el Sierpinski solo baja de −10 dB en **1 de las 7 bandas objetivo** "
+                     "(5G-3,5 GHz, S₁₁ = −16,4 dB), lo que limita el fractal puro para "
+                     "recolección multibanda (§5.1).",
+            contribuye="mejor adaptación → mayor η_mm → más potencia útil; fuera de "
+                       "resonancia η_mm cae y reduciría P_DC.",
         )
-        st.markdown(
-            ":material/lightbulb: **Qué concluye el trabajo.** El Sierpinski it. 3 sobre "
-            "FR-4 solo cae por debajo de −10 dB en **1 de las 7 bandas objetivo** "
-            "(5G-3,5 GHz, S₁₁ = −16,4 dB). Por eso el informe cuestiona el valor del "
-            "fractal puro —sin elementos adicionales— para recolección multibanda (§5.1)."
-        )
+        glosario_pagina("S11", "adaptación", "ganancia")
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
              "§4.1.1 Resultados del modelo computacional · "
              "Figura 1 (S₁₁ Sierpinski) · Tabla 2 (bandas del Escenario A)")

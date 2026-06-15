@@ -37,7 +37,10 @@ def render():
                 "- Aprovecha la **autosimilitud** para resonar en varias bandas a la vez.\n"
                 "- Pregunta que aborda: *¿puede una sola antena captar energía de varias "
                 "fuentes urbanas (WiFi, LTE, 5G) a la vez?*\n"
-                "- Es **exploratorio**: no fija una cifra de energía final."
+                "- Es **exploratorio**: no fija una cifra de energía final.\n"
+                "- **Ventaja:** una sola antena multibanda y muy compacta. "
+                "**Limitación:** sobre FR-4 solo resuena bien en 1 de 7 bandas, por lo que "
+                "no aporta energía firme."
             )
             st.page_link("pages/escenario_a.py",
                          label="Ver el Escenario A →", icon=":material/cell_tower:")
@@ -50,7 +53,10 @@ def render():
                 "log-periódico.\n"
                 "- Pregunta que aborda: *¿cuánta energía útil entrega ante una fuente "
                 "concreta y bien caracterizada (la TDT del Cerro Nutibara)?*\n"
-                "- Es el escenario **cuantitativo** del proyecto."
+                "- Es el escenario **cuantitativo** del proyecto.\n"
+                "- **Ventaja:** adaptada en toda la banda UHF y de mayor ganancia → "
+                "cuantifica energía útil. **Limitación:** directiva y de mayor tamaño "
+                "(boom ~50 cm); requiere apuntar a la fuente."
             )
             st.page_link("pages/escenario_b.py",
                          label="Ver el Escenario B →", icon=":material/radio:")

@@ -18,6 +18,7 @@ import plotly.graph_objects as go
 from configs.parametros import CANONICAL
 from utils.pagina import (encabezado, badge_oficial, correspondencia,
                           donde_se_desarrolla as _ref)
+from utils.glosario import metrica, glosario_pagina
 
 
 def render():
@@ -94,32 +95,28 @@ def render():
 
     msg_dia = 86400.0 / CANONICAL['T_ciclo_s']
     with st.container(horizontal=True):
-        st.metric(
+        metrica(
             "Potencia DC útil",
             f"{CANONICAL['P_dc_uW']:.1f} µW",
-            delta="opera en el techo del modelo (PCE)",
-            delta_color="off",
-            help="Potencia continua disponible para el nodo IoT tras toda la cadena RF→DC.",
-            border=True,
+            interpretacion="suficiente para el nodo IoT de referencia",
+            ayuda="Potencia continua disponible para el nodo IoT tras toda la cadena RF→DC. "
+                  "Opera con la PCE en el techo del modelo.",
         )
-        st.metric(
+        metrica(
             "Mensajes LoRa SF12 / día",
             f"≈ {msg_dia:.0f}",
-            delta=f"un mensaje cada ≈ {CANONICAL['T_ciclo_s']:.0f} s",
-            delta_color="off",
-            help="Cuántos mensajes podría transmitir el nodo en 24 h en operación "
-                 "autónoma (recolección continua a 100 m del transmisor TDT).",
-            border=True,
+            interpretacion="viable para monitoreo periódico (no baja latencia)",
+            ayuda=f"Un mensaje cada ≈ {CANONICAL['T_ciclo_s']:.0f} s en operación autónoma "
+                  "(recolección continua a 100 m del transmisor TDT).",
         )
-        st.metric(
+        metrica(
             "Eficiencia total η_total",
             f"{CANONICAL['eta_total']*100:.2f} %",
-            delta="figura de mérito (5 factores)",
-            delta_color="off",
-            help="η_rad · η_mm · η_IMN · PCE · η_PMIC. Es una figura de mérito de reporte; "
-                 "NO se multiplica por P_in para obtener P_DC.",
-            border=True,
+            interpretacion="alta: el escenario opera con la PCE en su techo",
+            ayuda="η_rad · η_mm · η_IMN · PCE · η_PMIC. Figura de mérito de reporte; NO se "
+                  "multiplica por P_in para obtener P_DC.",
         )
+    glosario_pagina("P_DC", "η_total", "PCE", "ganancia")
     _ref("Potencia y eficiencia: §4.3.1 y Apéndice E.2 (identidades de cadena, 4 vs 5 "
          "factores) · Mensajes LoRa por día: §3.6 Presupuesto energético del nodo IoT")
 

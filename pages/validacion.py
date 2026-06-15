@@ -18,6 +18,7 @@ from analysis.sensibilidad import run_validacion_wang
 from core.flpda import FLPDA_Koch
 from core.comparacion import validate_carrel1961, WANG2022, CARREL1961
 from utils.pagina import encabezado, correspondencia, donde_se_desarrolla as _ref
+from utils.glosario import metrica, glosario_pagina
 # (fig_validacion_wang ya no se usa; se reemplazó por _fig_wang_scatter_with_errors)
 
 
@@ -154,20 +155,22 @@ def render():
             res = _cached_wang_validation(topology='doubler')
 
         with st.container(horizontal=True):
-            st.metric(
+            metrica(
                 "RMSE", f"{res['RMSE']:.2f} pp",
-                help="Raíz del error cuadrático medio del modelo respecto a las medidas de Wang.",
-                border=True,
+                interpretacion="moderado: verificación de orden de magnitud, no punto a punto",
+                ayuda="Raíz del error cuadrático medio frente a las medidas de Wang (2022). "
+                      "El grueso se explica por la diferencia de sustrato (FR-4 vs Duroid).",
             )
-            st.metric(
+            metrica(
                 "Sesgo (error medio)", f"{res['mean_error_abs']:.2f} pp",
-                help="Si > 0, el modelo sobreestima en promedio.",
-                border=True,
+                interpretacion="el modelo sobreestima a baja f, subestima a alta",
+                ayuda="Error medio con signo: si > 0, el modelo sobreestima en promedio.",
             )
             st.metric(
                 "Error máx. absoluto", f"{res['max_error_abs']:.2f} pp",
                 border=True,
             )
+        glosario_pagina("RMSE", "sesgo", "incertidumbre", "PCE")
 
         # Visualización principal con barras de error sistemático
         st.plotly_chart(_fig_wang_scatter_with_errors(res), width="stretch")

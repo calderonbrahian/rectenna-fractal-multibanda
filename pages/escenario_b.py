@@ -25,6 +25,7 @@ from utils.exportar import sweep_a_csv
 from configs.parametros import CANONICAL
 from utils.pagina import (encabezado, badge_exploracion, correspondencia,
                           control_interactivo, donde_se_desarrolla as _ref)
+from utils.glosario import ficha_grafica, glosario_pagina, metrica
 
 
 def render():
@@ -77,7 +78,15 @@ def render():
         st.metric("Boom físico",       f"{geom['boom_cm']} cm",        border=True)
         st.metric("L_máx física",      f"{geom['L_max_phys_cm']} cm",  border=True)
         st.metric("Reducción Koch",    f"−{geom['reduccion_pct']}%",   border=True)
-        st.metric("Ganancia @ 550 MHz", f"{CANONICAL['gain_dBi']:.2f} dBi", border=True)
+        metrica("Ganancia @ 550 MHz", f"{CANONICAL['gain_dBi']:.2f} dBi",
+                interpretacion="alta para el objetivo (7–9 dBi es lo esperado en una LPDA)",
+                ayuda="Ganancia realizada; concentra la energía hacia la torre TDT. Más "
+                      "ganancia → más P_in → mayor P_DC.")
+    st.caption(
+        ":material/lightbulb: **Geometría:** 8 dipolos sobre un boom de ~50 cm; la curva de "
+        "Koch **reduce −43 % la dimensión** del dipolo sin cambiar su frecuencia → antena "
+        "más compacta para el mismo rango de operación."
+    )
 
     st.divider()
 
@@ -104,16 +113,17 @@ def render():
         correspondencia('directa',
                         "Reproduce la **Figura 3** del trabajo: S₁₁ vs frecuencia de la "
                         "FLPDA Koch it. 2 (470–900 MHz).")
-        st.caption(
-            "LPDA rizado típico: −10 a −20 dB en banda | "
-            "Modelo físico: RLC dipolo — impedancia de entrada iterativa"
+        ficha_grafica(
+            evalua="la **adaptación** de la FLPDA (S₁₁) en toda la banda UHF; la zona "
+                   "sombreada es la **banda de diseño** (470–900 MHz).",
+            criterio="−10 dB",
+            concluye="la FLPDA mantiene **S₁₁ < −10 dB de forma continua** en toda la banda "
+                     "(a diferencia del Sierpinski): bien adaptada en todo el UHF, lo que la "
+                     "hace apta para la fuente TDT.",
+            contribuye="buena adaptación en banda → η_mm alto → sostiene el P_DC del "
+                       "escenario de referencia.",
         )
-        st.markdown(
-            ":material/lightbulb: **Qué concluye el trabajo.** A diferencia del Sierpinski, "
-            "la FLPDA mantiene **S₁₁ < −10 dB de forma continua en toda la banda 470–900 "
-            "MHz**: está bien adaptada en todo el rango UHF de interés, lo que la hace apta "
-            "para la fuente TDT."
-        )
+        glosario_pagina("S11", "adaptación", "ganancia")
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
              "§4.2.1 Diseño paramétrico y dimensiones calculadas · "
              "Figura 3 (S₁₁ FLPDA Koch)")

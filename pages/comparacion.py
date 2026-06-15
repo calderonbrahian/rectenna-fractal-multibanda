@@ -7,6 +7,7 @@ escenarios) del informe de grado. Página de lectura.
 import streamlit as st
 import pandas as pd
 from utils.pagina import encabezado, correspondencia, donde_se_desarrolla as _ref
+from utils.glosario import glosario_pagina
 
 
 def render():
@@ -50,14 +51,28 @@ def render():
                     "A vs B). La comparación de curvas PCE–P_in de ambos escenarios es la "
                     "**Figura 10**.")
     st.caption("El cap de PCE = 85 % es el límite del rectificador, no de η_total.")
+    st.caption(
+        ":material/lightbulb: **Filas decisivas:** la **ganancia** (B concentra más energía "
+        "hacia la fuente), el **S₁₁** (B está adaptada en toda la banda; A solo en 1 de 7) y "
+        "la **P_DC** (solo B la cuantifica) son las que inclinan la elección hacia B para una "
+        "estación fija."
+    )
+    glosario_pagina("ganancia", "S11", "η_total", "P_DC")
 
     with st.container(border=True):
+        st.markdown("#### :material/flag: Conclusión del trabajo de grado")
         st.markdown(
-            "**Lectura.** El Sierpinski es **omnidireccional y compacto**: encaja en un nodo "
-            "IoT interior o portátil que capta de varias fuentes débiles. La FLPDA es "
-            "**directiva y de mayor ganancia**: encaja en una estación exterior fija "
-            "apuntando a una fuente potente y conocida (la TDT). Por eso el resultado "
-            "energético firme del proyecto proviene del **Escenario B**."
+            "- **Qué aporta el Escenario A (Sierpinski).** Muestra el comportamiento "
+            "multibanda del fractal y explora si fuentes urbanas (WiFi/LTE/5G) podrían "
+            "sumar energía; **no fija una cifra** (sus resultados son cotas superiores).\n"
+            "- **Qué aporta el Escenario B (FLPDA Koch).** Ante una fuente concreta y bien "
+            "caracterizada —la TDT del Cerro Nutibara—, **cuantifica la potencia útil**: "
+            "P_DC = 1 638 µW, suficiente para un nodo LoRa SF12.\n"
+            "- **Por qué el resultado principal se construye sobre B.** Es el **único "
+            "escenario con la fuente bien definida**; su mayor ganancia (7,17 frente a "
+            "2,5–3,5 dBi) y su adaptación continua en toda la banda hacen que **B sostenga "
+            "el resultado energético firme** del proyecto, mientras A queda como exploración "
+            "complementaria."
         )
 
     _ref("§4.4 Análisis comparativo de los dos escenarios · §4.1 Escenario A · "

@@ -25,8 +25,12 @@ def render():
         "El proyecto modela cada etapa del sistema con **ecuaciones analíticas y de circuito "
         "equivalente** implementadas en Python (NumPy/SciPy), no con simulación "
         "electromagnética de onda completa (HFSS, CST) ni con mediciones de laboratorio. "
-        "Es un alcance **exploratorio-comparativo**: evalúa la viabilidad de dos topologías "
-        "en un contexto espectral específico, no diseña un producto físico."
+        "**¿Por qué este enfoque?** Porque el objetivo es metodológico y **reproducible sin "
+        "herramientas EM propietarias ni instrumentación RF**, accesible a cualquier "
+        "estudiante. Es un alcance **exploratorio-comparativo**: evalúa la viabilidad de dos "
+        "topologías en un contexto espectral específico, no diseña un producto físico.\n\n"
+        "**La contrapartida** es una incertidumbre no medida en patrones y eficiencias "
+        "(±1,5 dBi en ganancia), que el trabajo declara como limitación."
     )
     st.markdown(
         "El modelo encadena referencias primarias: **Carrel (1961)** para el arreglo "
