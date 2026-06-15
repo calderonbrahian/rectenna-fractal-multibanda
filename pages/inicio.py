@@ -16,7 +16,8 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from configs.parametros import CANONICAL
-from utils.pagina import encabezado, badge_oficial, donde_se_desarrolla as _ref
+from utils.pagina import (encabezado, badge_oficial, correspondencia,
+                          donde_se_desarrolla as _ref)
 
 
 def render():
@@ -68,7 +69,8 @@ def render():
         "radiofrecuencia del entorno podría sostener la operación periódica de un sensor "
         "inalámbrico**."
     )
-    _ref("§4.3 Caso de estudio: Cerro Nutibara · §4.3.1 Cálculo de la cadena de potencia")
+    _ref("§4.3 Caso de estudio: Cerro Nutibara · §4.3.1 Cálculo de la cadena de potencia · "
+         "Tabla 8 (presupuesto de enlace) · Tabla 9 (cadena de potencia completa)")
 
     # ── Indicadores: qué pregunta responde cada uno, antes de la cifra ───────
     st.markdown("##### Los tres indicadores que resumen ese resultado")
@@ -135,6 +137,10 @@ def render():
         "**Introducción → Qué es una rectena**.)*"
     )
     st.plotly_chart(_render_block_diagram(), width="stretch")
+    correspondencia('complementaria',
+                    "No es una figura del documento; ilustra con iconos la **cascada de la "
+                    "cadena RF→DC** de la **Figura 5**, añadiendo los valores de cada "
+                    "interfaz para el escenario de referencia.")
 
     st.markdown(
         "**Leyendo el diagrama de izquierda a derecha:**\n\n"
@@ -156,7 +162,7 @@ def render():
     )
     _ref("Propagación y la pérdida de 67,25 dB: §2.5 Propagación RF y modelo de Friis · "
          "Parámetros de la antena: §2.4 · FLPDA Koch: §3.4.2 y §4.2 · "
-         "Cálculo de la cadena: §4.3.1")
+         "Cálculo de la cadena: §4.3.1 · Figura 5 (cascada de eslabones de la cadena RF→DC)")
 
     with st.expander(":material/straighten:  ¿Qué tan grande es la antena? (comparativa de tamaño)",
                       expanded=False):
@@ -235,6 +241,10 @@ def render():
     )
 
     _render_sankey()
+    correspondencia('complementaria',
+                    "No aparece literal en la tesis; descompone la cadena de potencia en un "
+                    "Sankey, según el análisis del **Apéndice E.12** (relacionado con la "
+                    "Figura 5).")
 
     with st.container(border=True):
         st.markdown(
@@ -305,6 +315,9 @@ def render():
                       "Valor": st.column_config.TextColumn("Valor", width="small"),
                       "Qué representa": st.column_config.TextColumn("Qué representa", width="large"),
                   })
+    correspondencia('derivada',
+                    "Resume los valores canónicos del **Apéndice E.1** (reporte de "
+                    "magnitudes del escenario de referencia).")
 
     with st.expander(":material/menu_book:  ¿Qué significan las variables principales?",
                       expanded=False):
