@@ -90,6 +90,7 @@ def render():
 
     st.divider()
 
+    glosario_pagina("S11", "adaptación", "ganancia", "impedancia", "PCE", "P_DC")
     tab_s11, tab_gain, tab_geom, tab_budget, tab_pce = st.tabs([
         ":material/show_chart: S11",
         ":material/trending_up: Ganancia",
@@ -123,7 +124,6 @@ def render():
             contribuye="buena adaptación en banda → η_mm alto → sostiene el P_DC del "
                        "escenario de referencia.",
         )
-        glosario_pagina("S11", "adaptación", "ganancia")
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
              "§4.2.1 Diseño paramétrico y dimensiones calculadas · "
              "Figura 3 (S₁₁ FLPDA Koch)")
@@ -432,6 +432,8 @@ def render():
     with tab_pce:
         f_mhz_sel = st.select_slider(
             "Frecuencia [MHz]", options=[470, 550, 700, 800, 900, 915], value=550,
+            help="Frecuencia a la que se traza la curva PCE-vs-Pin. Es una vista; el "
+                 "escenario de referencia es 550 MHz (canal 30 TDT).",
         )
         with st.spinner(f"Curva PCE @ {f_mhz_sel} MHz..."):
             pce_data = run_pce_uhf_curve(f_hz=float(f_mhz_sel) * 1e6)

@@ -283,6 +283,8 @@ def render():
     sf_sel = st.segmented_control(
         "Factor de ensanchamiento (SF)", options=list(LORA_SF.keys()),
         default=list(LORA_SF.keys())[-1],   # SF12 por defecto
+        help="Perfil LoRa: un SF mayor da más alcance pero gasta más energía por mensaje. "
+             "Cambia qué se muestra en el mapa.",
     ) or list(LORA_SF.keys())[-1]
     st.plotly_chart(_heatmap_t_ciclo(sf_sel), width="stretch")
     correspondencia('complementaria',

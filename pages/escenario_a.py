@@ -107,8 +107,17 @@ def render():
         st.metric("Vdc máx. [mV]",      f"{max(vdc_vals):.0f}",                      border=True)
         st.metric("Pout máx. [µW]",     f"{max(pout_vals):.2f}",                     border=True)
 
+    st.caption(
+        ":material/lightbulb: **Cómo leer estos números:** son las 7 bandas del Sierpinski "
+        "al Pin elegido. La PCE media y máxima son **bajas frente al techo del modelo "
+        "(85 %)** y la potencia de salida es de microvatios: coherente con que el "
+        "Escenario A opera lejos de saturación y entrega **cotas superiores**, no un "
+        "resultado firme."
+    )
+
     st.divider()
 
+    glosario_pagina("S11", "adaptación", "ganancia", "impedancia", "PCE")
     tab_s11, tab_imp, tab_pce, tab_geom, tab_tabla = st.tabs([
         ":material/show_chart: S11",
         ":material/electrical_services: Impedancia",
@@ -135,7 +144,6 @@ def render():
             contribuye="mejor adaptación → mayor η_mm → más potencia útil; fuera de "
                        "resonancia η_mm cae y reduciría P_DC.",
         )
-        glosario_pagina("S11", "adaptación", "ganancia")
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
              "§4.1.1 Resultados del modelo computacional · "
              "Figura 1 (S₁₁ Sierpinski) · Tabla 2 (bandas del Escenario A)")
@@ -180,7 +188,9 @@ def render():
     with tab_pce:
         col_f, _ = st.columns(2)
         with col_f:
-            f_sel = st.selectbox("Banda de análisis", [b['banda'] for b in bandas], index=2)
+            f_sel = st.selectbox("Banda de análisis", [b['banda'] for b in bandas], index=2,
+                                 help="Elige en qué banda ver la curva PCE-vs-Pin. Es una "
+                                      "vista; no cambia el modelo ni el resultado.")
         banda_data = next(b for b in bandas if b['banda'] == f_sel)
         f_GHz = banda_data['f_GHz']
         with st.spinner(f"Calculando PCE @ {f_GHz} GHz..."):
@@ -217,7 +227,9 @@ def render():
              "Figura 2 (η_total por banda) · Tabla 2 · Tabla 7 (PCE–P_in)")
 
     with tab_geom:
-        it_geom = st.slider("Iteraciones a mostrar", 0, 4, 3, key='it_sierp')
+        it_geom = st.slider("Iteraciones a mostrar", 0, 4, 3, key='it_sierp',
+                            help="Nivel de detalle del fractal a dibujar. Es una vista "
+                                 "geométrica; no afecta los resultados.")
         with st.spinner("Generando geometría..."):
             triangulos = run_geometry(iterations=it_geom)
         st.plotly_chart(fig_sierpinski(triangulos, it_geom))
