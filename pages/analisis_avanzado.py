@@ -198,6 +198,19 @@ cap de PCE = 0,85.
             span_mhz = st.select_slider("Span [MHz]",
                                          options=[500, 800, 1000, 1500, 2000],
                                          value=1000, key='span_bw')
+        control_interactivo(
+            magnitud="**Pin** (potencia de entrada, dBm), **Centro** (frecuencia central "
+                     "del barrido, MHz) y **Span** (anchura del barrido, MHz). Definen "
+                     "sobre qué tramo se mide el ancho de banda a −3 dB de PCE.",
+            referencia="Pin = −10 dBm, centro = 550 MHz (banda del Escenario B).",
+            al_subir="Más Pin → la PCE sube hacia su techo y la curva se ensancha; más "
+                     "Span muestra un tramo de frecuencia mayor.",
+            al_bajar="Menos Pin → la PCE cae y el pico se estrecha; Span pequeño hace zoom "
+                     "alrededor del centro.",
+            limite="Es una propiedad **exploratoria** del modelo, no un resultado del "
+                   "informe; fuera del régimen de cosecha (Pin > 0 dBm) deja de ser "
+                   "representativa.",
+        )
         with st.spinner("Calculando BW..."):
             bw = run_rectifier_bw(Pin_dBm=pin_bw,
                                    freq_center_mhz=float(fc_mhz),
@@ -212,6 +225,10 @@ cap de PCE = 0,85.
             st.metric("BW fraccional", f"{bw['fractional_bw']*100:.0f}%",   border=True)
 
         st.plotly_chart(fig_rectifier_bw(bw))
+        correspondencia('complementaria',
+                        "No es una figura del documento; es una propiedad derivada del "
+                        "modelo del rectificador (ancho de banda a −3 dB de PCE), "
+                        "relacionada con §2.7.2.")
         _ref("§2.7 Física del diodo Schottky · §2.7.2 Frecuencia de corte del SMS7630")
 
     # ── Presupuesto de enlace ─────────────────────────────────────────────────
@@ -230,6 +247,9 @@ cap de PCE = 0,85.
             'cumulative_dBm': 'Acumulado [dBm]',
         })
         st.dataframe(df_lb, hide_index=True)
+        correspondencia('derivada',
+                        "Reconstruye el **presupuesto de enlace** de la **Tabla 8** del "
+                        "trabajo, recalculado para los parámetros seleccionados arriba.")
 
         # Waterfall chart
         params   = [r['parameter'] for r in lb]
@@ -252,6 +272,9 @@ cap de PCE = 0,85.
             margin=dict(l=60, r=20, t=45, b=120),
         )
         st.plotly_chart(fig_wf)
+        correspondencia('complementaria',
+                        "No es una figura del documento; representa como cascada la "
+                        "potencia acumulada de la **Tabla 8** a lo largo de la cadena.")
         st.caption(
             f"Ganancia: {CANONICAL['gain_dBi']:.2f} dBi · "
             f"η_mm: {CANONICAL['eta_mm']:.4f} · "
@@ -260,7 +283,8 @@ cap de PCE = 0,85.
             f"η_PMIC: {CANONICAL['eta_pmic']*100:.0f}%"
         )
         _ref("§2.5 Propagación RF y modelo de Friis · "
-             "§4.3.1 Cálculo de la cadena de potencia")
+             "§4.3.1 Cálculo de la cadena de potencia · "
+             "Tabla 8 (presupuesto de enlace RF→DC)")
 
     # ── Supercondensador ──────────────────────────────────────────────────────
     with tab_sc:
