@@ -180,6 +180,7 @@ def render():
     )
     _ref("§3.2 Justificación del entorno Python de código abierto · "
          "§3.3 Arquitectura del pipeline de simulación · "
+         "Tabla 4 (arquitectura del pipeline de simulación) · "
          "Apéndice A Arquitectura de la plataforma de simulación")
 
     st.divider()

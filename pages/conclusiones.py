@@ -6,7 +6,7 @@ informe de grado. Página de lectura.
 
 import streamlit as st
 import pandas as pd
-from utils.pagina import encabezado, donde_se_desarrolla as _ref
+from utils.pagina import encabezado, correspondencia, donde_se_desarrolla as _ref
 
 
 def render():
@@ -65,6 +65,9 @@ def render():
                      "Impacto cuantificado": st.column_config.TextColumn("Impacto cuantificado", width="medium"),
                      "Solución propuesta": st.column_config.TextColumn("Solución propuesta", width="medium"),
                  })
+    correspondencia('directa',
+                    "Reproduce la **Tabla 13** del trabajo (resumen de limitaciones y "
+                    "soluciones propuestas).")
     st.caption(
         "Todos los modelos son circuitales y analíticos; no se realizaron simulaciones "
         "full-wave ni mediciones experimentales. La interpretación adecuada de los "
@@ -72,6 +75,7 @@ def render():
     )
 
     _ref("§5.3 Limitaciones del estudio · §5.4 Trabajo futuro · "
+         "Tabla 13 (limitaciones y soluciones) · Tabla 14 (resumen estructural) · "
          "Apéndice E.11 Tabla canónica de limitaciones (L1–L8)")
 
 
