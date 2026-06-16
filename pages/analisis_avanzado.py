@@ -13,9 +13,8 @@ from analysis.avanzado import (
 )
 from plots.charts import fig_tornado, fig_mc_histogram, fig_rectifier_bw, COLORS
 from configs.parametros import CANONICAL
-from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+from utils.pagina import (encabezado, badge_exploracion,
                           control_interactivo, donde_se_desarrolla as _ref)
-from utils.glosario import aporta
 
 
 def render():
@@ -69,8 +68,8 @@ def render():
                                       value=1300)
         with cc5:
             n_mc = st.select_slider("N muestras MC",
-                                    options=[500, 1000, 2000, 5000],
-                                    value=2000)
+                                    options=[500, 1000, 2000, 5000, 10000],
+                                    value=10000)
     control_interactivo(
         magnitud="**EIRP** (potencia de la fuente, dBm), **distancia** (m), **frecuencia** "
                  "(GHz), **R_load** (carga del rectificador, Ω) y **N** (muestras del Monte "
@@ -113,11 +112,6 @@ def render():
                           f"{sens['results'][0]['pct_change']:.0f}%", border=True)
 
         st.plotly_chart(fig_tornado(sens))
-        correspondencia('directa',
-                        "Reproduce la **Figura 8** del trabajo (análisis de sensibilidad "
-                        "tipo tornado sobre P_DC).")
-        aporta("identifica qué parámetro mueve más P_DC; orienta dónde conviene ser "
-               "preciso al estimar el resultado final.")
 
         st.markdown("#### Tabla de sensibilidad")
         df_s = pd.DataFrame([{
@@ -170,11 +164,6 @@ cap de PCE = 0,85.
                       f"[{mc['p5']:.0f}, {mc['p95']:.0f}] µW", border=True)
 
         st.plotly_chart(fig_mc_histogram(mc))
-        correspondencia('directa',
-                        "Reproduce la **Figura 9** del trabajo (distribución Monte Carlo de "
-                        "P_DC, n = 2 000).")
-        aporta("acota el rango en que cae P_DC ante la variabilidad del entorno (mide la "
-               "robustez del resultado, no el error del modelo).")
         st.caption(f"Muestras válidas (P_DC > 0): {mc['n_valid']}/{mc['n_total']}")
         _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
              "§5.3 Limitaciones del estudio (L1–L8) · Figura 9 (Monte Carlo de P_DC)")
@@ -230,10 +219,6 @@ cap de PCE = 0,85.
             st.metric("BW fraccional", f"{bw['fractional_bw']*100:.0f}%",   border=True)
 
         st.plotly_chart(fig_rectifier_bw(bw))
-        correspondencia('complementaria',
-                        "No es una figura del documento; es una propiedad derivada del "
-                        "modelo del rectificador (ancho de banda a −3 dB de PCE), "
-                        "relacionada con §2.7.2.")
         _ref("§2.7 Física del diodo Schottky · §2.7.2 Frecuencia de corte del SMS7630")
 
     # ── Presupuesto de enlace ─────────────────────────────────────────────────
@@ -252,9 +237,6 @@ cap de PCE = 0,85.
             'cumulative_dBm': 'Acumulado [dBm]',
         })
         st.dataframe(df_lb, hide_index=True)
-        correspondencia('derivada',
-                        "Reconstruye el **presupuesto de enlace** de la **Tabla 8** del "
-                        "trabajo, recalculado para los parámetros seleccionados arriba.")
 
         # Waterfall chart
         params   = [r['parameter'] for r in lb]
@@ -277,9 +259,6 @@ cap de PCE = 0,85.
             margin=dict(l=60, r=20, t=45, b=120),
         )
         st.plotly_chart(fig_wf)
-        correspondencia('complementaria',
-                        "No es una figura del documento; representa como cascada la "
-                        "potencia acumulada de la **Tabla 8** a lo largo de la cadena.")
         st.caption(
             f"Ganancia: {CANONICAL['gain_dBi']:.2f} dBi · "
             f"η_mm: {CANONICAL['eta_mm']:.4f} · "
@@ -400,9 +379,6 @@ cap de PCE = 0,85.
                 margin=dict(l=60, r=20, t=45, b=120),
             )
             st.plotly_chart(fig_cmp)
-            correspondencia('complementaria',
-                            "No es una figura del documento; compara la PCE máxima de este "
-                            "trabajo con la literatura (estado del arte, §2.2).")
             st.caption(":material/star: Este trabajo destacado en amarillo")
 
         _ref("§2.2 Estado del arte en rectenas fractales · "

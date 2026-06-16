@@ -1,0 +1,22 @@
+{
+  "S11_@550MHz_dB": {
+    "modelo": -18.158,
+    "canonico": -18.16,
+    "delta": 0.002
+  },
+  "gain_@550MHz_dBi": {
+    "modelo": 7.0997,
+    "canonico": 7.1,
+    "delta": -0.0003
+  },
+  "eta_total_FOM": {
+    "modelo": 0.6715,
+    "canonico": 0.6715,
+    "delta": -0.0
+  },
+  "P_DC_identidad_uW": {
+    "modelo": 1637.5822,
+    "canonico": 1637.6,
+    "delta": -0.0178
+  }
+}

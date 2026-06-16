@@ -38,17 +38,24 @@ def run_tornado(eirp_dbm: float = 70.0, dist_m: float = 100.0,
     return sensitivity_tornado(base, deltas, _compute_pdc, 'P_DC [µW]')
 
 
+# Semilla fija: el Monte Carlo es la ÚNICA fuente de verdad de sus estadísticos.
+# Sin ella, figura, texto del documento y app mostraban realizaciones distintas.
+# Determinista y reproducible (figura = documento = aplicación).
+MC_SEED = 42
+
+
 @st.cache_data(show_spinner=False)
 def run_monte_carlo(eirp_dbm: float = 70.0, dist_m: float = 100.0,
                     freq_ghz: float = 0.55, R_load: float = 1300.0,
                     n_samples: int = 2000) -> dict:
-    """Propagación de incertidumbre Monte Carlo sobre P_DC."""
+    """Propagación de incertidumbre Monte Carlo sobre P_DC (determinista, MC_SEED)."""
     base = {'eirp_dbm': eirp_dbm, 'dist_m': dist_m, 'freq_ghz': freq_ghz, 'R_load': R_load}
     uncertainties = {
         'eirp_dbm': {'type': 'normal',  'std': 2.0},
         'dist_m':   {'type': 'uniform', 'half_range': 15.0},
         'freq_ghz': {'type': 'normal',  'std': 0.01},
     }
+    np.random.seed(MC_SEED)
     result = monte_carlo_pdc(base, uncertainties, _compute_pdc, n_samples=n_samples)
     # Convert ndarray to list for caching
     result['samples'] = result['samples'].tolist()

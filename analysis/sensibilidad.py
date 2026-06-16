@@ -83,7 +83,13 @@ def sweep_tau_sigma(tau_range: tuple = (0.80, 0.95), sigma_range: tuple = (0.10,
 
 @st.cache_data(show_spinner=False)
 def run_validacion_wang(topology: str = 'doubler') -> dict:
-    """Validación PCE modelo vs Wang et al. (2022) IEEE TAP."""
+    """Validación PCE modelo vs Wang et al. (2022) IEEE TAP.
+
+    Metodología canónica del documento (§4.5): comparación en régimen de
+    **adaptación ideal** (matching_net=None) → RMSE = 15,50 pp, consistente con
+    CANONICAL['RMSE_wang'], la Tabla 11, la Figura 11 y el test de regresión.
+    (Antes pasaba una red L real, lo que daba 22,68 pp y contradecía el texto
+    de la propia página.)
+    """
     rec = RectifierCircuit(topology=topology)
-    imn = LMatchNetwork(Z_src=50.0)
-    return validate_wang2022(rec, matching_net=imn)
+    return validate_wang2022(rec, matching_net=None)

@@ -20,9 +20,9 @@ from plots.charts import (
 )
 from core.antenna import FractalAntenna
 from utils.exportar import resultados_a_csv, sweep_a_csv
-from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+from utils.pagina import (encabezado, badge_exploracion,
                           control_interactivo, donde_se_desarrolla as _ref)
-from utils.glosario import ficha_grafica, glosario_pagina, aporta
+from utils.glosario import glosario_pagina
 from configs.parametros import BANDS_A
 
 
@@ -49,15 +49,27 @@ def render():
                    "porque los EIRP urbanos son variables; lee las cifras como cotas superiores."),
     )
 
-    badge_exploracion("Las cifras del Escenario A son **cotas superiores**, no el "
-                       "resultado cuantitativo del proyecto. El resultado energético firme "
-                       "lo aporta el **Escenario B** (TDT, 550 MHz, P_DC = 1 637,6 µW).")
+    badge_exploracion("El Escenario A es **exploratorio**: su propósito es **mapear en qué "
+                       "bandas urbanas** una antena fractal podría captar energía, no fijar "
+                       "una cifra final. Por eso sus valores se leen como **cotas "
+                       "superiores** (el resultado energético firme lo aporta el "
+                       "**Escenario B**: TDT, 550 MHz, P_DC = 1 637,6 µW).")
 
     st.markdown(
-        "Esta página explora el **Escenario A**: una antena fractal de Sierpinski que, "
-        "por su autoafinidad, resuena en tres bandas (1,84 · 3,68 · 7,36 GHz). Aborda si "
-        "distintas fuentes de RF del entorno urbano podrían representar oportunidades de "
-        "recolección; no fija una cifra de energía final."
+        "Este escenario pone a prueba la pregunta que dejó abierta **Topologías**:"
+    )
+    st.info(
+        "**¿Puede una sola antena fractal captar energía útil en varias bandas urbanas "
+        "al mismo tiempo?**",
+        icon=":material/help:",
+    )
+    st.markdown(
+        "Para responderla se estudia una antena de Sierpinski que, por su autoafinidad, "
+        "resuena en tres bandas (1,84 · 3,68 · 7,36 GHz). **Si la hipótesis fuera cierta**, "
+        "deberíamos ver tres cosas a la vez: la antena adaptada (S₁₁ < −10 dB) en varias "
+        "bandas, una impedancia cercana a 50 Ω en cada una y una conversión (PCE) "
+        "apreciable en todas. Las pestañas siguientes comprueban, una a una, cuáles de esas "
+        "condiciones se cumplen."
     )
     _ref("§2.3 Geometría fractal aplicada a antenas · §3.4.1 Sierpinski: modelo RLC y "
          "resonancias · §4.1 Escenario A — Sierpinski (1,8–5,8 GHz)")
@@ -100,6 +112,11 @@ def render():
     vdc_vals  = [b['Vdc_mV']  for b in bandas]
     pout_vals = [b['Pout_uW'] for b in bandas]
 
+    st.markdown(
+        "**Primera señal, antes del detalle.** Si la antena recolectara bien en varias "
+        "bandas, esperaríamos una PCE **alta y pareja** entre ellas. Conviene mirar la "
+        "media, la máxima y cuánto se separan:"
+    )
     with st.container(horizontal=True):
         st.metric("Bandas analizadas",  len(bandas),                                border=True)
         st.metric("PCE media [%]",      f"{sum(pce_vals)/len(pce_vals):.1f}",        border=True)
@@ -108,10 +125,10 @@ def render():
         st.metric("Pout máx. [µW]",     f"{max(pout_vals):.2f}",                     border=True)
 
     st.caption(
-        ":material/lightbulb: **Cómo leer estos números:** son las 7 bandas del Sierpinski "
-        "al Pin elegido. La PCE media y máxima son **bajas frente al techo del modelo "
-        "(85 %)** y la potencia de salida es de microvatios: coherente con que el "
-        "Escenario A opera lejos de saturación y entrega **cotas superiores**, no un "
+        ":material/lightbulb: Los valores son **bajos y desiguales**: la PCE media queda "
+        "muy por debajo del techo del modelo (85 %) y la salida es de microvatios. Es la "
+        "primera señal de que la multibanda no se está cumpliendo por igual —el **porqué** "
+        "está en las pestañas siguientes—. Léelos como **cotas superiores**, no como "
         "resultado firme."
     )
 
@@ -127,36 +144,51 @@ def render():
     ])
 
     with tab_s11:
+        st.markdown(
+            "**La geometría multibanda existe, pero eso no asegura que la energía entre.** "
+            "S₁₁ mide la **puerta de entrada** de la antena: qué fracción de la energía pasa "
+            "y qué fracción rebota. La línea de **−10 dB** es el aprobado —por debajo, la "
+            "energía entra; por encima, se refleja—. Si el fractal fuera multibanda "
+            "*aprovechable*, la curva debería cruzar esa línea en cada una de sus "
+            "resonancias. La prueba es contar en cuántas lo hace:"
+        )
         bandas_dict = {b: f / 1e9 for b, f in BANDS_A.items()}
         fig = fig_s11(sweep['freqs_GHz'], sweep['s11_dB'],
                       'S11 — Sierpinski Gasket it.3 (sin IMN)', xunit='GHz', bandas=bandas_dict)
         st.plotly_chart(fig)
-        correspondencia('directa',
-                        "Reproduce la **Figura 1** del trabajo: S₁₁ vs frecuencia del "
-                        "Sierpinski it. 3 sobre FR-4.")
-        ficha_grafica(
-            evalua="la **adaptación** de la antena (S₁₁), banda por banda y sin red de "
-                   "adaptación; mide reflexión, **no** potencia útil.",
-            criterio="−10 dB",
-            concluye="el Sierpinski solo baja de −10 dB en **1 de las 7 bandas objetivo** "
-                     "(5G-3,5 GHz, S₁₁ = −16,4 dB), lo que limita el fractal puro para "
-                     "recolección multibanda (§5.1).",
-            contribuye="mejor adaptación → mayor η_mm → más potencia útil; fuera de "
-                       "resonancia η_mm cae y reduciría P_DC.",
+        st.markdown(
+            "**¿Qué nos muestra esta evidencia?**\n\n"
+            "El Sierpinski genera varias resonancias, pero **solo una de las siete bandas "
+            "objetivo** —la de 5G en 3,5 GHz— cae con holgura por debajo de −10 dB "
+            "(S₁₁ = −16,4 dB). En las demás, buena parte de la energía se refleja antes de "
+            "entrar a la antena.\n\n"
+            "Importa porque S₁₁ es la **primera condición de toda la cadena**: si la energía "
+            "no entra, ninguna etapa posterior puede recuperarla. La multibanda *geométrica* "
+            "no se está convirtiendo, al menos aquí, en multibanda *aprovechable*.\n\n"
+            "Pero esto abre dos preguntas que S₁₁ por sí solo no responde: **¿por qué la "
+            "antena se adapta justo en esas frecuencias y no en otras?** y **¿basta con que "
+            "la energía entre para que se aproveche?** La primera se ve en *Impedancia*; la "
+            "segunda, en *PCE vs Pin*."
         )
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
              "§4.1.1 Resultados del modelo computacional · "
              "Figura 1 (S₁₁ Sierpinski) · Tabla 2 (bandas del Escenario A)")
 
     with tab_imp:
+        st.markdown(
+            "S₁₁ mostró *que* la energía solo entra limpiamente en una banda. La impedancia "
+            "de la antena explica **por qué**:"
+        )
         fig = fig_impedancia(
             sweep['freqs_GHz'], sweep['Za_real'], sweep['Za_imag'],
             'Impedancia Zₐ(f) — Sierpinski (modelo RLC multimodo)'
         )
         st.plotly_chart(fig)
-        correspondencia('complementaria',
-                        "No aparece literal en la tesis; visualiza la impedancia Zₐ(f) "
-                        "del modelo RLC de §3.4.1 para ver dónde la antena entrega potencia.")
+        st.markdown(
+            "**Explóralo tú:** cambia entre GSM1800, WiFi 2,4 GHz y WiFi 5,8 GHz y observa "
+            "cómo varían la resistencia (Re) y la parte reactiva (Im) con la frecuencia. "
+            "¿Qué banda se acerca más al ideal de 50 Ω reales con reactancia casi nula?"
+        )
         banda_z_sel = st.selectbox(
             "Leer impedancia en la banda:",
             [b['banda'] for b in bandas], index=2, key="banda_imp",
@@ -174,15 +206,16 @@ def render():
         with col3:
             st.metric("PCE en esa banda", f"{_bz['PCE_pct']:.1f} %",
                       delta="con red L adaptada", delta_color="off")
-        st.caption(
-            ":material/visibility: **Qué observar físicamente:** en las resonancias "
-            "(1,84 / 3,68 / 7,36 GHz) la parte imaginaria cruza por cero y la real se "
-            "acerca a valores manejables — ahí la antena entrega potencia. Entre "
-            "resonancias, |Im(Zₐ)| crece y la antena refleja casi todo. Cambia la banda "
-            "del selector y compara los tres números."
+        st.markdown(
+            "**Lo que vas viendo:** la impedancia solo se acerca a 50 Ω con reactancia nula "
+            "**en las resonancias**; entre ellas, la parte reactiva crece y la antena "
+            "refleja casi todo. Por eso la energía entra en puntos aislados y no en una "
+            "banda ancha: es el mecanismo detrás de lo que mostró S₁₁.\n\n"
+            "¿Y por qué las resonancias caen exactamente en 1,84, 3,68 y 7,36 GHz? La "
+            "deducción a partir del modelo RLC multimodo y de la autoafinidad del fractal se "
+            "desarrolla en **§3.4.1** del documento. Aquí se ve el resultado; la "
+            "demostración está allí."
         )
-        aporta("la impedancia decide cuánta potencia entra al rectificador; en resonancia "
-               "η_mm sube y, con ello, P_DC.")
         _ref("§2.4.2 Impedancia de entrada Zₐ · §3.4.1 Sierpinski: modelo RLC y resonancias")
 
     with tab_pce:
@@ -195,28 +228,37 @@ def render():
         f_GHz = banda_data['f_GHz']
         with st.spinner(f"Calculando PCE @ {f_GHz} GHz..."):
             sweep_pce = run_pce_vs_pin(f_GHz=f_GHz, topology=topology)
+        st.markdown(
+            "Supongamos que la energía sí entró en una banda. Queda la otra mitad de la "
+            "pregunta: **¿cuánta de esa energía se convierte** en corriente continua? Esa es "
+            "la eficiencia del rectificador (PCE).\n\n"
+            "**Explóralo tú:** la forma de la curva es parecida en todas las bandas, pero la "
+            "eficiencia que alcanzan no. Cambia la banda en el selector de arriba y compara "
+            "la PCE para una misma potencia de entrada. ¿Convierten todas con la misma "
+            "eficacia?"
+        )
         fig = fig_pce_pin(
             sweep_pce['Pin_dBm'],
             {'PCE [%]': sweep_pce['PCE_pct']},
             f'PCE vs Pin — {f_sel} ({f_GHz} GHz) · {topology}'
         )
         st.plotly_chart(fig)
-        correspondencia('derivada',
-                        "Construida con el modelo PCE–P_in de la tesis (Tabla 7), evaluado "
-                        "banda por banda del Escenario A (η por banda en la Figura 2).")
         col1, col2 = st.columns(2)
         with col1:
             st.metric("IL red L", f"{sweep_pce['IL_dB']:.2f} dB")
         with col2:
             st.metric(f"PCE @ {Pin_dBm} dBm", f"{banda_data['PCE_pct']:.1f}%")
-        st.caption(
-            ":material/lightbulb: **Cómo se interpreta.** La PCE crece con Pin hasta "
-            "saturar en el techo del modelo (~85 %). A la potencia de cosecha real "
-            "(Pin ≤ −10 dBm) opera lejos de ese techo: por eso las cifras del Escenario A "
-            "son **cotas superiores**, no el resultado firme."
+        st.markdown(
+            "**Lo que se observa:** la PCE sube con Pin hasta el techo del modelo (~85 %), "
+            "pero la energía ambiental llega débil (Pin ≤ −10 dBm) y el rectificador trabaja "
+            "**muy por debajo** de ese techo. Y al comparar bandas, la conversión **no es la "
+            "misma** en todas: ni siquiera la banda que mejor se adaptaba tiene por qué ser "
+            "la que mejor convierte.\n\n"
+            "Eso deja una pregunta para el final: **¿coinciden la banda mejor adaptada y la "
+            "que más convierte?** Si no coinciden, ninguna banda reúne las dos virtudes a la "
+            "vez —y eso se comprueba en la *Tabla*—. *(Curva derivada del modelo PCE–P_in "
+            "del trabajo, Tabla 7.)*"
         )
-        aporta("la PCE es el factor de la cadena que más recorta P_DC; aquí, a potencia "
-               "ambiental baja, opera lejos de su techo.")
         st.download_button(
             "Descargar CSV",
             sweep_a_csv(sweep_pce, ['Pin_dBm', 'PCE_pct', 'Vdc_mV']),
@@ -227,15 +269,17 @@ def render():
              "Figura 2 (η_total por banda) · Tabla 2 · Tabla 7 (PCE–P_in)")
 
     with tab_geom:
+        st.markdown(
+            "Las pestañas anteriores mostraron que la energía no entra ni se convierte por "
+            "igual en todas las bandas. Conviene entonces ver **por qué la antena es "
+            "multibanda en primer lugar**: la respuesta está en su geometría."
+        )
         it_geom = st.slider("Iteraciones a mostrar", 0, 4, 3, key='it_sierp',
                             help="Nivel de detalle del fractal a dibujar. Es una vista "
                                  "geométrica; no afecta los resultados.")
         with st.spinner("Generando geometría..."):
             triangulos = run_geometry(iterations=it_geom)
         st.plotly_chart(fig_sierpinski(triangulos, it_geom))
-        correspondencia('complementaria',
-                        "No aparece literal en la tesis; dibuja la geometría del Sierpinski "
-                        "(it. 0–4) para ilustrar la autosimilitud descrita en §2.3.2.")
         ant_info = {
             'Tipo': 'Sierpinski Gasket', 'Iteraciones': 3, 'Sustrato': 'FR-4',
             'εᵣ @ f₀': '4.28 (interpolado)', 'h': '1.6 mm', 'tan δ': '0.02',
@@ -246,11 +290,9 @@ def render():
         st.divider()
         st.markdown("##### La antena en imágenes — *banda activa por escala fractal*")
         st.markdown(
-            "La propiedad multibanda del Sierpinski viene de su **autoafinidad**: a cada "
-            "frecuencia $f_k = f_0 \\cdot 2^k$, los triángulos cuya escala es "
-            "$L_0 / 2^k$ son los que radian. Al duplicar la frecuencia, los triángulos "
-            "activos se reducen a la mitad y aparecen tres copias en lugar de una. "
-            "Esto es lo que la antena *hace* en cada banda."
+            "**Antes de mover el control, predice:** al **duplicar** la frecuencia, ¿se "
+            "activará una estructura más **grande** o más **pequeña**? ¿Una sola región o "
+            "varias? Elige una resonancia y compruébalo en la visualización."
         )
 
         modo_sierp = st.segmented_control(
@@ -284,11 +326,17 @@ def render():
                     st.plotly_chart(_fig_sierpinski_active(f, compact=True),
                                     width="stretch", key=f"sierp_cmp_{f}")
 
-        st.caption(
-            ":material/lightbulb: Los triángulos **amarillos brillantes** son los radiadores "
-            "activos (perímetros ≈ λ/2 a la f seleccionada). El fondo azul tenue es la "
-            "estructura fractal completa. **Lectura clave:** la antena no es una banda, "
-            "son tres antenas geométricamente anidadas, una por cada escala."
+        st.markdown(
+            "**Lo que acabas de ver:** al subir de banda, los triángulos activos se hacen "
+            "más **pequeños** y más **numerosos** (1 → 3 → 9). A cada frecuencia "
+            "$f_k = f_0 \\cdot 2^k$ radia la escala $L_0/2^k$: eso es la **autoafinidad**. "
+            "La antena no es una banda, son tres antenas anidadas, una por escala — la "
+            "multibanda **es real y nace de la geometría**.\n\n"
+            "Lo que la geometría no garantiza es que esas bandas sean *aprovechables*: eso "
+            "es lo que miden S₁₁, la impedancia y la PCE. El desarrollo formal de la "
+            "autosimilitud y su dimensión de Hausdorff está en **§2.3.1–§2.3.2**, y la "
+            "verificación de las resonancias frente a Puente-Baliarda (1998), en la "
+            "**Tabla 12**."
         )
         _ref("§2.3.1 Dimensión de Hausdorff y autosimilitud · "
              "§2.3.2 Triángulo de Sierpinski: propiedades y dimensionado · "
@@ -305,12 +353,28 @@ def render():
         })
         cols_show = ['Banda', 'f [GHz]', 'S11 [dB]', 'IL [dB]',
                      'PCE [%]', 'Vdc [mV]', 'Pout [µW]', 'L [nH]', 'C [pF]', 'IMN']
+        st.markdown(
+            "Esta tabla reúne, banda por banda, S₁₁, pérdidas, PCE y potencia de salida. En "
+            "lugar de leerla entera, hazle una pregunta: **busca la banda con mejor S₁₁ (el "
+            "más negativo) y la banda con mayor PCE. ¿Son la misma?**"
+        )
         st.dataframe(df[cols_show], hide_index=True)
         st.download_button(
             "Descargar tabla CSV", resultados_a_csv(bandas),
             file_name=f"escenario_a_{topology}.csv", mime="text/csv",
         )
         st.caption(f"Pin = {Pin_dBm} dBm · Rectificación: doblador Greinacher · R_load = 1300 Ω (BQ25504)")
+        st.markdown(
+            "Si la mejor adaptación y la mejor conversión **no caen en la misma banda**, "
+            "ninguna reúne a la vez las dos virtudes que la recolección necesita. Esa es, "
+            "reunida, la respuesta del Escenario A a su pregunta: **una antena fractal "
+            "multibanda, sin una red de adaptación dedicada por banda, no capta energía útil "
+            "en varias bandas a la vez**. Es un hallazgo de exploración —cotas superiores—, "
+            "no la cifra final del proyecto.\n\n"
+            "El análisis completo de estas limitaciones, banda por banda, se desarrolla en "
+            "**§5.1** y en la tabla de limitaciones **L1–L8** (Apéndice E). El resultado "
+            "energético firme llega en el **Escenario B**."
+        )
         _ref("§4.1 Escenario A — Sierpinski · §4.1.1 Resultados del modelo computacional · "
              "Tabla 2 (bandas del Escenario A y resultados del modelo)")
 

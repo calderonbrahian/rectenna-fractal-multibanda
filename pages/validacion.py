@@ -17,7 +17,7 @@ import plotly.graph_objects as go
 from analysis.sensibilidad import run_validacion_wang
 from core.flpda import FLPDA_Koch
 from core.comparacion import validate_carrel1961, WANG2022, CARREL1961
-from utils.pagina import encabezado, correspondencia, donde_se_desarrolla as _ref
+from utils.pagina import encabezado, donde_se_desarrolla as _ref
 from utils.glosario import metrica, glosario_pagina
 # (fig_validacion_wang ya no se usa; se reemplazó por _fig_wang_scatter_with_errors)
 
@@ -174,9 +174,6 @@ def render():
 
         # Visualización principal con barras de error sistemático
         st.plotly_chart(_fig_wang_scatter_with_errors(res), width="stretch")
-        correspondencia('directa',
-                        "Reproduce la **Figura 11** del trabajo (comparación punto a punto "
-                        "modelo vs Wang 2022); se añaden barras de incertidumbre por sustrato.")
 
         # ── Causas del error (3 ítems claros, ya NO en expander) ─────────────
         st.markdown("#### :material/biotech: Causas del error sistemático")
@@ -204,9 +201,6 @@ entre diseños sobre el mismo material; léase como **verificación de orden de 
             'Error rel [%]':        res['error_rel_pct'],
         })
         st.dataframe(df, hide_index=True)
-        correspondencia('directa',
-                        "Corresponde a la **Tabla 11** del trabajo (comparación banda a "
-                        "banda: η_total del modelo vs PCE estimada de Wang 2022).")
         st.caption(
             ":material/info: Topología fija: **doubler** (la canónica del proyecto)."
         )

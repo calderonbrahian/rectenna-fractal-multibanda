@@ -18,7 +18,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from configs.parametros import CANONICAL
-from utils.pagina import (encabezado, correspondencia, control_interactivo,
+from utils.pagina import (encabezado, control_interactivo,
                           donde_se_desarrolla as _ref)
 from utils.glosario import criterio
 
@@ -123,9 +123,6 @@ def render():
         "El cruce define el período entre transmisiones."
     )
     _render_t_ciclo_vs_d()
-    correspondencia('directa',
-                    "Reproduce la **Figura 7** del trabajo (intervalo entre transmisiones "
-                    "T_ciclo vs distancia, LoRa SF12).")
     _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
          "§2.5 Propagación RF y modelo de Friis · "
          "Figura 6 (P_DC vs distancia) · Figura 7 (T_ciclo vs distancia)")
@@ -210,9 +207,6 @@ def render():
         _fig_supercap_temporal(P_DC_uW, E_ciclo_temporal_mJ, C_mF, V_max, V_min, duracion_min),
         width="stretch",
     )
-    correspondencia('complementaria',
-                    "No aparece literal en la tesis; modela el diente de sierra del "
-                    "supercondensador descrito en el **Apéndice E.9**.")
     st.caption(
         ":material/info: Esta es la **firma temporal** del nodo IoT alimentado por "
         "recolección RF: una rampa lenta de carga (decenas de segundos a minutos) "
@@ -264,9 +258,6 @@ def render():
         f"SF12 ≈ {86400*0.01/LORA_SF['SF12 (máximo alcance)']['ToA_s']:.0f} mensajes/día. "
         "“—” = cold-start no asegurado."
     )
-    correspondencia('derivada',
-                    "Tabla calculada con el modelo de la cadena RF→DC; el desglose "
-                    "energético por ciclo del nodo es la **Tabla 5**.")
     _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
          "§4.3.1 Cálculo de la cadena de potencia · "
          "Tabla 5 (desglose energético por ciclo del nodo IoT)")
@@ -287,9 +278,6 @@ def render():
              "Cambia qué se muestra en el mapa.",
     ) or list(LORA_SF.keys())[-1]
     st.plotly_chart(_heatmap_t_ciclo(sf_sel), width="stretch")
-    correspondencia('complementaria',
-                    "No aparece literal en la tesis; generaliza el caso a una rejilla "
-                    "EIRP × distancia, según el **Apéndice E.10**.")
     _ref("Apéndice E.10 Operación fuera del caso canónico — mapa EIRP × distancia · "
          "§4.3 Caso de estudio: Cerro Nutibara")
 
@@ -304,9 +292,6 @@ def render():
         "del supercondensador."
     )
     st.plotly_chart(_lora_tx_timeline(), width="stretch")
-    correspondencia('derivada',
-                    "Construida a partir del desglose energético por ciclo del nodo "
-                    "(**Tabla 5**, perfiles LoRa SX1276).")
     _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT (perfiles LoRa SX1276) · "
          "Tabla 5 (desglose energético por ciclo)")
 

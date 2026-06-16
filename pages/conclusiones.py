@@ -6,7 +6,7 @@ informe de grado. Página de lectura.
 
 import streamlit as st
 import pandas as pd
-from utils.pagina import encabezado, correspondencia, donde_se_desarrolla as _ref
+from utils.pagina import encabezado, donde_se_desarrolla as _ref
 
 
 def render():
@@ -45,6 +45,30 @@ def render():
 
     st.divider()
 
+    st.subheader("Bajo qué condiciones se sostiene la conclusión")
+    st.markdown(
+        "El resultado positivo del trabajo es **acotado**, y conviene leerlo con sus "
+        "condiciones explícitas:\n\n"
+        "- **Depende de una fuente potente y cercana.** La operación autónoma se sostiene a "
+        "≤ 100–200 m de un transmisor de alta potencia como la TDT del Cerro Nutibara. Lejos "
+        "de una fuente así, las densidades de potencia ambientales (Wi-Fi, celular por "
+        "encima de 1,8 GHz) son demasiado bajas: el nicho realista es el despliegue "
+        "**próximo a infraestructura de radiodifusión**, no la recolección urbana genérica.\n"
+        "- **El valor de referencia es una cota optimista.** P_DC = 1 638 µW se obtiene con "
+        "la PCE en el **techo del modelo (0,85)**; es un mejor caso, no un valor esperado en "
+        "operación real.\n"
+        "- **El Escenario A aporta un resultado en parte negativo, y honesto.** El fractal de "
+        "Sierpinski, por sí solo y sobre FR-4, no logra una adaptación multibanda "
+        "aprovechable: es evidencia de un límite, no una cifra de energía.\n"
+        "- **El contraste con Wang (2022) es una verificación de orden de magnitud**, no una "
+        "validación experimental: difiere de sustrato (FR-4 vs Duroid 5880) y arroja un RMSE "
+        "de 15,50 pp. El trabajo es de modelado; no incluye un prototipo medido."
+    )
+    _ref("§1.3 Alcance y limitaciones del estudio · §4.5 Validación cruzada · "
+         "§5.1 Conclusiones")
+
+    st.divider()
+
     st.subheader("Limitaciones del estudio (Tabla 13)")
     st.markdown(
         "Los resultados deben leerse junto con sus limitaciones declaradas. El trabajo es "
@@ -65,9 +89,6 @@ def render():
                      "Impacto cuantificado": st.column_config.TextColumn("Impacto cuantificado", width="medium"),
                      "Solución propuesta": st.column_config.TextColumn("Solución propuesta", width="medium"),
                  })
-    correspondencia('directa',
-                    "Reproduce la **Tabla 13** del trabajo (resumen de limitaciones y "
-                    "soluciones propuestas).")
     st.caption(
         "Todos los modelos son circuitales y analíticos; no se realizaron simulaciones "
         "full-wave ni mediciones experimentales. La interpretación adecuada de los "

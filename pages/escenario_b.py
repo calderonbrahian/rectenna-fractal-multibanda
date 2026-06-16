@@ -23,9 +23,9 @@ from plots.charts import (
 )
 from utils.exportar import sweep_a_csv
 from configs.parametros import CANONICAL
-from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+from utils.pagina import (encabezado, badge_exploracion,
                           control_interactivo, donde_se_desarrolla as _ref)
-from utils.glosario import ficha_grafica, glosario_pagina, metrica, criterio, aporta
+from utils.glosario import glosario_pagina, metrica
 
 
 def render():
@@ -59,10 +59,15 @@ def render():
                        "Referencia del Proyecto**.")
 
     st.markdown(
-        "Esta página examina el **Escenario B** —la antena log-periódica fractal de Koch "
-        "(FLPDA)— frecuencia por frecuencia: cómo se adapta, cuánto gana, cómo está "
-        "construida y cómo convierte la energía captada en potencia continua. Es el "
-        "escenario que sustenta el resultado de referencia del proyecto."
+        "**Topologías** presentó la FLPDA como la apuesta *cuantitativa*: una antena "
+        "**dirigida** que apunta a una fuente real y bien caracterizada —el transmisor de "
+        "TDT del Cerro Nutibara—. La pregunta que pone a prueba este escenario es **cuánta "
+        "energía útil puede entregar**.\n\n"
+        "**Si la antena cumpliera su papel**, deberíamos ver cuatro cosas: adaptación "
+        "**continua** en toda la banda UHF (no en puntos sueltos como el Sierpinski), una "
+        "**ganancia** que concentre la energía hacia la torre, una geometría **compacta** "
+        "pese a operar en UHF, y una potencia continua que **baste para arrancar y "
+        "sostener** un nodo IoT a distancias realistas. Las pestañas lo comprueban una a una."
     )
     _ref("§3.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
          "§4.2 Escenario B — FLPDA Koch (470–900 MHz) · "
@@ -73,6 +78,11 @@ def render():
     with st.spinner("Calculando geometría..."):
         geom  = run_geometry_b()
 
+    st.markdown(
+        "**Primera comprobación: ¿es una antena viable para UHF?** Una antena dirigida para "
+        "esta banda debería ser razonablemente compacta y rondar 7–9 dBi de ganancia. Estos "
+        "son sus números de partida:"
+    )
     with st.container(horizontal=True):
         st.metric("Elementos FLPDA",  geom['n_elements'],             border=True)
         st.metric("Boom físico",       f"{geom['boom_cm']} cm",        border=True)
@@ -100,6 +110,13 @@ def render():
     ])
 
     with tab_s11:
+        st.markdown(
+            "Lo primero que debe cumplir la antena es **dejar entrar la energía** en toda la "
+            "banda de la fuente. La línea de **−10 dB** es el aprobado; la zona sombreada es "
+            "la banda de diseño (470–900 MHz). A diferencia del Sierpinski, aquí "
+            "esperaríamos ver la curva **por debajo del umbral en toda la banda**, no solo "
+            "en un punto:"
+        )
         fig = fig_s11(sweep['freqs_MHz'], sweep['s11_dB'],
                       'S11 — FLPDA Koch it.2 (470–900 MHz)', xunit='MHz')
         fig.add_vrect(
@@ -111,24 +128,26 @@ def render():
             annotation_font_size=10,
         )
         st.plotly_chart(fig)
-        correspondencia('directa',
-                        "Reproduce la **Figura 3** del trabajo: S₁₁ vs frecuencia de la "
-                        "FLPDA Koch it. 2 (470–900 MHz).")
-        ficha_grafica(
-            evalua="la **adaptación** de la FLPDA (S₁₁) en toda la banda UHF; la zona "
-                   "sombreada es la **banda de diseño** (470–900 MHz).",
-            criterio="−10 dB",
-            concluye="la FLPDA mantiene **S₁₁ < −10 dB de forma continua** en toda la banda "
-                     "(a diferencia del Sierpinski): bien adaptada en todo el UHF, lo que la "
-                     "hace apta para la fuente TDT.",
-            contribuye="buena adaptación en banda → η_mm alto → sostiene el P_DC del "
-                       "escenario de referencia.",
+        st.markdown(
+            "**¿Qué nos muestra esta evidencia?**\n\n"
+            "La FLPDA mantiene **S₁₁ < −10 dB de forma continua** en toda la banda UHF. Es "
+            "el contraste directo con el Sierpinski: allí solo una de siete bandas se "
+            "adaptaba; aquí la antena acepta la energía **en todo el rango** de la fuente "
+            "TDT. La primera condición de la cadena —que la energía entre— se cumple.\n\n"
+            "Que la energía entre bien no dice todavía **cuánta** se capta ni hacia dónde. "
+            "Eso depende de cuánto **concentre** la antena la señal hacia la torre: la "
+            "siguiente pestaña, *Ganancia*."
         )
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
              "§4.2.1 Diseño paramétrico y dimensiones calculadas · "
              "Figura 3 (S₁₁ FLPDA Koch)")
 
     with tab_gain:
+        st.markdown(
+            "Una antena dirigida no capta por igual en todas direcciones: **concentra** la "
+            "energía hacia donde apunta. Cuanta más ganancia, más potencia recoge de la "
+            "torre. ¿Cuánta ganancia logra la FLPDA en su banda?"
+        )
         fig = fig_gain(sweep['freqs_MHz'], sweep['gain_dBi'],
                        'Ganancia realizada FLPDA Koch (modelo paramétrico, base ≈ 7,5 dBi)', xunit='MHz')
         fig.add_vrect(
@@ -137,17 +156,18 @@ def render():
             line_color='rgba(96, 165, 250, 0.3)',
         )
         st.plotly_chart(fig)
-        correspondencia('complementaria',
-                        "No es una figura del documento; muestra la ganancia realizada del "
-                        "modelo paramétrico de Carrel (§3.4.2) para ver su valor en banda.")
-        st.info(
-            f"Ganancia realizada @ 550 MHz: **{CANONICAL['gain_dBi']:.2f} dBi** "
-            f"(η_rad = {CANONICAL['eta_rad']:.4f}, modelo paramétrico de {geom['n_elements']} elementos consistente con Carrel 1961). "
-            "Referencia Carrel (1961): 7–9 dBi en banda.",
-            icon=":material/info:",
+        st.markdown(
+            f"**Lo que se observa:** la ganancia realizada se mantiene en torno a "
+            f"**{CANONICAL['gain_dBi']:.1f} dBi** en la banda (η_rad = "
+            f"{CANONICAL['eta_rad']:.3f}), un valor consistente con lo que Carrel (1961) "
+            f"predice para una log-periódica de {geom['n_elements']} elementos (7–9 dBi). La "
+            f"antena, por tanto, **concentra bien** la energía hacia la torre TDT.\n\n"
+            "Adaptación continua y buena ganancia significan que **mucha energía entra y se "
+            "concentra**. Queda la pregunta que de verdad cuantifica el escenario: a una "
+            "distancia real de la torre, **¿cuánta potencia continua llega al nodo?** Eso se "
+            "mide en *Presupuesto LoRa*. *(Curva del modelo paramétrico de Carrel, §3.4.2; "
+            "no es una figura del documento.)*"
         )
-        aporta("la ganancia concentra la energía hacia la torre TDT: más ganancia → más "
-               "P_in en la antena → mayor P_DC.")
         _ref("§2.4.4 Directividad, eficiencia de radiación y ganancia · "
              "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
@@ -187,6 +207,11 @@ def render():
             "La región activa cambia con la frecuencia: solo los dipolos cuya "
             "longitud está cerca de λ/2 participan en la radiación."
         )
+        st.markdown(
+            "**Predice antes de mover:** al **subir** la frecuencia, ¿se activarán los "
+            "dipolos **largos** (izquierda) o los **cortos** (derecha)? Mueve el control y "
+            "compruébalo."
+        )
         freq_active = st.select_slider(
             "Frecuencia operativa [MHz]",
             options=[470, 550, 600, 700, 800, 900],
@@ -196,10 +221,6 @@ def render():
         )
         st.plotly_chart(_fig_flpda_schematic(geom, freq_active), width="stretch",
                          key="flpda_active_region")
-        correspondencia('derivada',
-                        "Construida a partir de la geometría de la **Figura 4** (τ=0,90, "
-                        "σ=0,15, N=8); resalta de forma interactiva la región activa según "
-                        "la frecuencia seleccionada.")
         st.caption(
             ":material/lightbulb: El **dipolo amarillo brillante** es el más activo "
             "(longitud más cercana a λ/2). Los azules tenues están fuera de resonancia. "
@@ -339,6 +360,11 @@ def render():
                    "urbana media dejan de ser fiables; más allá de ~1 000 m el cold-start "
                    "(V_DC ≥ 130 mV) ya no está asegurado.",
         )
+        st.markdown(
+            "**Explóralo tú:** mueve la distancia y vigila dos umbrales. ¿A qué distancia el "
+            "**V_DC cae por debajo de 130 mV** y el nodo ya no arranca? ¿Y cómo cambia el "
+            "margen al pasar de **SF12** (lento, robusto) a **SF7** (rápido, exigente)?"
+        )
         with st.spinner(f"Presupuesto a {dist_m} m..."):
             budget = run_budget_lora(dist_m=float(dist_m))
         st.caption(f"Modelo: cadena completa Shockley sobre P_in (4 factores: "
@@ -385,12 +411,13 @@ def render():
                          'SF9':  st.column_config.TextColumn('SF9 (margen)'),
                          'SF7':  st.column_config.TextColumn('SF7 (margen)'),
                      })
-        st.caption(
-            ":material/visibility: **Qué observar físicamente:** al alejarte, P_rx cae "
-            "6 dB por cada duplicación de distancia (Friis ∝ 1/d²) y P_DC cae aún más "
-            "rápido porque la PCE del diodo se degrada a baja potencia (zona sub-umbral "
-            "de Shockley). El cold-start falla cuando V_DC < 130 mV: a esa distancia el "
-            "nodo ya no puede arrancar sin batería de cebado, aunque coseche algo de energía."
+        st.markdown(
+            "**Lo que vas viendo:** al alejarte, la potencia recibida cae 6 dB por cada "
+            "duplicación de distancia (Friis ∝ 1/d²), y la potencia continua cae aún más "
+            "rápido, porque a baja señal el diodo convierte peor (zona sub-umbral de "
+            "Shockley). Cuando V_DC baja de 130 mV, el nodo ya no arranca por sí solo, "
+            "aunque coseche algo de energía. **Ese par —cuánta energía y si arranca— es la "
+            "respuesta cuantitativa del Escenario B a su pregunta.**"
         )
 
         st.divider()
@@ -405,9 +432,6 @@ def render():
             annotation_position='top right', annotation_font_size=10,
         )
         st.plotly_chart(_fig_dist, key="curva_pdc_dist")
-        correspondencia('directa',
-                        "Reproduce la **Figura 6** del trabajo (P_DC vs distancia a la "
-                        "torre TDT); la línea vertical ámbar sigue al control de distancia.")
         st.caption(
             "Modelo: Friis (Pozar eq. 2.6) + ITU-R P.1546 +6 dB | "
             "Shockley cadena completa | PMIC BQ25504 η=85 % | cold-start 130 mV. "
@@ -435,6 +459,12 @@ def render():
             help="Frecuencia a la que se traza la curva PCE-vs-Pin. Es una vista; el "
                  "escenario de referencia es 550 MHz (canal 30 TDT).",
         )
+        st.markdown(
+            "**Explóralo tú:** el escenario de referencia opera a 550 MHz. Cambia la "
+            "frecuencia y observa cómo se desplaza la curva — ¿la PCE mejora o empeora al "
+            "subir en la banda? Lo retoma la pregunta de más abajo (*¿en qué punto del UHF "
+            "conviene operar?*)."
+        )
         with st.spinner(f"Curva PCE @ {f_mhz_sel} MHz..."):
             pce_data = run_pce_uhf_curve(f_hz=float(f_mhz_sel) * 1e6)
         fig = fig_pce_pin(
@@ -449,18 +479,15 @@ def render():
                        annotation_position='top right',
                        annotation_font_size=10)
         st.plotly_chart(fig)
-        correspondencia('derivada',
-                        "Construida con el modelo PCE–P_in de la tesis (Tabla 7); la línea "
-                        "vertical marca el P_in canónico. La curva combinada de ambos "
-                        "escenarios es la Figura 10.")
-        st.info(
-            f"Modelo Shockley iterativo (SMS7630, R_load=1300 Ω). "
-            f"PCE máx. ≈ **{CANONICAL['PCE']*100:.0f}%** en zona de saturación. "
-            "El valor del proyecto usa la cadena completa de cuatro factores sobre P_in.",
-            icon=":material/info:",
+        st.markdown(
+            f"**Lo que se observa:** la PCE crece con la potencia de entrada hasta saturar "
+            f"en el techo del modelo (~{CANONICAL['PCE']*100:.0f} %); la línea vertical "
+            f"marca el P_in canónico del escenario de referencia. Y aquí está el contraste "
+            f"con el Sierpinski: allí la señal ambiental era débil y la PCE quedaba muy por "
+            f"debajo del techo; aquí la fuente TDT es **potente y estable**, así que el "
+            f"rectificador trabaja **cerca de su máximo**. *(Modelo PCE–P_in, Tabla 7; la "
+            f"versión combinada de ambos escenarios es la Figura 10.)*"
         )
-        aporta("la PCE fija cuánta RF se convierte en corriente continua; en el escenario "
-               "de referencia (550 MHz, P_in ≈ +3,85 dBm) opera en su techo (0,85).")
         st.download_button(
             "Descargar CSV", sweep_a_csv(pce_data),
             file_name=f"pce_uhf_{f_mhz_sel}MHz.csv", mime="text/csv",
@@ -502,9 +529,6 @@ def render():
             key="modo_doubler",
         ) or "Semiciclo +"
         st.plotly_chart(_fig_greinacher_doubler(modo_rect), width="stretch")
-        correspondencia('complementaria',
-                        "No aparece literal en la tesis; ilustra los semiciclos del doblador "
-                        "Greinacher descritos en el **Apéndice E.8**.")
         if modo_rect == "Semiciclo +":
             st.caption(
                 ":material/bolt: **Durante el semiciclo positivo de la RF**: la tensión "
@@ -571,9 +595,6 @@ def render():
         )
         V_op = V_op_mV / 1000.0
         st.plotly_chart(_fig_diode_iv_curve(V_op), width="stretch")
-        correspondencia('complementaria',
-                        "No aparece literal en la tesis; traza la curva I-V de Shockley del "
-                        "SMS7630 (parámetros de la **Tabla 3**) descrita en el Apéndice E.5.")
         st.caption(
             ":material/info: A **V_D = 0** (sin polarización) R_d0 = n·V_T / I_S ≈ "
             "**5,4 kΩ**. Es el valor que define la impedancia del diodo a pequeña "

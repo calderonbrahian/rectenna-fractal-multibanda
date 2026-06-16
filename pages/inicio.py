@@ -16,7 +16,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from configs.parametros import CANONICAL
-from utils.pagina import (encabezado, badge_oficial, correspondencia,
+from utils.pagina import (encabezado, badge_oficial,
                           donde_se_desarrolla as _ref)
 from utils.glosario import metrica, glosario_pagina
 
@@ -134,10 +134,6 @@ def render():
         "**Introducción → Qué es una rectena**.)*"
     )
     st.plotly_chart(_render_block_diagram(), width="stretch")
-    correspondencia('complementaria',
-                    "No es una figura del documento; ilustra con iconos la **cascada de la "
-                    "cadena RF→DC** de la **Figura 5**, añadiendo los valores de cada "
-                    "interfaz para el escenario de referencia.")
 
     st.markdown(
         "**Leyendo el diagrama de izquierda a derecha:**\n\n"
@@ -238,10 +234,6 @@ def render():
     )
 
     _render_sankey()
-    correspondencia('complementaria',
-                    "No aparece literal en la tesis; descompone la cadena de potencia en un "
-                    "Sankey, según el análisis del **Apéndice E.12** (relacionado con la "
-                    "Figura 5).")
 
     with st.container(border=True):
         st.markdown(
@@ -312,9 +304,6 @@ def render():
                       "Valor": st.column_config.TextColumn("Valor", width="small"),
                       "Qué representa": st.column_config.TextColumn("Qué representa", width="large"),
                   })
-    correspondencia('derivada',
-                    "Resume los valores canónicos del **Apéndice E.1** (reporte de "
-                    "magnitudes del escenario de referencia).")
 
     with st.expander(":material/menu_book:  ¿Qué significan las variables principales?",
                       expanded=False):

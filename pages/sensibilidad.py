@@ -9,9 +9,9 @@ import plotly.graph_objects as go
 from analysis.sensibilidad import sweep_Q_L, sweep_R_load, sweep_tau_sigma
 from plots.charts import fig_sweep_generic, fig_heatmap_tau_sigma
 from utils.exportar import sweep_a_csv
-from utils.pagina import (encabezado, badge_exploracion, correspondencia,
+from utils.pagina import (encabezado, badge_exploracion,
                           control_interactivo, donde_se_desarrolla as _ref)
-from utils.glosario import criterio, aporta
+from utils.glosario import criterio
 
 
 def render():
@@ -125,12 +125,7 @@ def render():
             file_name=f"sensibilidad_QL_{topology}_{f_GHz}GHz.csv",
             mime="text/csv",
         )
-        correspondencia('complementaria',
-                        "Barridos de sensibilidad del **Apéndice E.7**; no aparecen como "
-                        "figura numerada en el documento.")
         criterio("Q_L 40")
-        aporta("un Q_L bajo aumenta la pérdida de la red de adaptación (IL) → menor η_IMN → "
-               "menos P_DC.")
         _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
              "§2.8 Redes de adaptación de impedancias (IMN)")
 
@@ -166,11 +161,6 @@ def render():
             file_name=f"sensibilidad_Rload_{topology}_{f_GHz}GHz.csv",
             mime="text/csv",
         )
-        correspondencia('complementaria',
-                        "Barridos de sensibilidad del **Apéndice E.7**; no aparecen como "
-                        "figura numerada en el documento.")
-        aporta("la R_load fija el punto de operación del rectificador; 1 300 Ω (entrada del "
-               "BQ25504) es el valor de diseño que sostiene el P_DC de referencia.")
         _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
              "§2.7 Física del diodo Schottky (carga del rectificador)")
 
@@ -196,9 +186,6 @@ def render():
             "**Eje Y** τ ∈ [0.80, 0.95] | **Eje X** σ ∈ [0.10, 0.22] | "
             "Ganancia promediada sobre 470–900 MHz | ⭐ = punto de diseño Escenario B"
         )
-        correspondencia('complementaria',
-                        "Mapa de diseño del **Apéndice E.4** (τ–σ del FLPDA), construido a "
-                        "partir del barrido paramétrico; no es una figura numerada.")
         _ref("Apéndice E.4 Mapa de diseño τ–σ del FLPDA · "
              "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 

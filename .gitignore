@@ -31,3 +31,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Carpeta de trabajo del docx (desempaquetado pesado)
+_regen/docx_work/

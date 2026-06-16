@@ -1,0 +1,11 @@
+parameter,value,unit,cumulative_dBm
+EIRP transmisor,70.0,dBm,70.0
+"FSPL (100 m, 550 MHz)",-67.2,dB,2.8
+Correccion urbana ITU-R P.1546,-6.0,dB,-3.2
+Ganancia antena Rx (realizada),+7.10,dBi,3.9
+Perdida mismatch (eta_mm),-0.07,dB,3.8
+"Perdida IMN (eta_imn, IL)",-0.23,dB,3.6
+P_RF en rectificador,3.6 dBm = 2266.7,uW,3.6
+PCE rectificador (85.0%),-0.71,dB,2.8
+eta_PMIC BQ25504 (85%),-0.71,dB,2.1
+P_DC util final,2.1 dBm = 1637.7,uW,2.1
