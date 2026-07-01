@@ -18,10 +18,11 @@ Proyecto computacional de simulación de **rectenas fractales multibanda** para 
 1. [Resultado canónico defendido](#resultado-canónico-defendido)
 2. [Ejecución local](#ejecución-local)
 3. [Tests de regresión](#tests-de-regresión)
-4. [Estructura del proyecto](#estructura-del-proyecto)
-5. [Alcance del modelo](#alcance-del-modelo)
-6. [Páginas del dashboard](#páginas-del-dashboard)
-7. [Licencia](#licencia)
+4. [Reproducibilidad del pipeline](#reproducibilidad-del-pipeline-figuras-tablas-y-valores-del-documento)
+5. [Estructura del proyecto](#estructura-del-proyecto)
+6. [Alcance del modelo](#alcance-del-modelo)
+7. [Páginas del dashboard](#páginas-del-dashboard)
+8. [Licencia](#licencia)
 
 ---
 
@@ -95,7 +96,30 @@ Verificación rápida (sanity check sin pytest):
 python tests/verify_canonical.py
 ```
 
-Cualquier cambio en `core/` o `configs/parametros.py` que altere los 20 valores canónicos rompe la regresión.
+Cualquier cambio en `core/` o `configs/parametros.py` que altere los 19 valores canónicos rompe la regresión.
+
+---
+
+## Reproducibilidad del pipeline (figuras, tablas y valores del documento)
+
+Todas las figuras y tablas del trabajo de grado se regeneran desde el modelo actual, sin intervención manual. Fuente única de verdad: `configs/parametros.py` → pipeline → artefactos.
+
+```bash
+# 1. Regenera las 11 figuras (PNG 300 dpi) + 7 tablas CSV + verificación canónica
+python _regen/generate_artifacts.py
+#    Salida: _regen/out/figuras/  _regen/out/tablas/  _regen/out/verificacion.json
+
+# 2. Deriva todos los valores numéricos que usa el documento (Tablas 2/9/11, E.7, E.8,
+#    umbrales de viabilidad, supercondensador, ganancia media…)
+python _regen/derive_doc_values.py
+#    Salida: _regen/out/doc_values.json
+```
+
+`generate_artifacts.py` imprime, para cada artefacto, un `[OK]`/`[ERR]` y una verificación en vivo contra `CANONICAL` (deltas ≈ 0). La cadena completa es:
+
+```
+configs/parametros.py  →  core/ + simulation/ + analysis/  →  _regen/*.py  →  figuras / tablas / doc_values.json
+```
 
 ---
 
@@ -121,12 +145,17 @@ rectenna-fractal-multibanda/
 │   └── lora_budget.py              E_ciclo, T_ciclo, mensajes/día
 ├── analysis/                       Runners cacheados (avanzado, sensibilidad)
 ├── simulation/                     Runners cacheados (escenarios A, B)
-├── pages/                          10 páginas Streamlit
+├── pages/                          14 páginas Streamlit (recorrido guiado)
 ├── plots/charts.py                 Templates Plotly simple_white
-├── utils/                          pagina, circuit_drawing, exportar, graficas
+├── utils/                          pagina, glosario, circuit_drawing, exportar
+├── _regen/                         Pipeline de regeneración de artefactos
+│   ├── generate_artifacts.py       11 figuras + 7 tablas CSV desde el modelo
+│   ├── derive_doc_values.py        doc_values.json (todos los valores del documento)
+│   └── out/                        figuras/, tablas/, doc_values.json, verificacion.json
+├── experimental/                   Prototipos animados (fuera de la app oficial)
 └── tests/
-    ├── test_regression_canonical.py  16 valores bloqueados
-    ├── test_models.py                35 tests unitarios
+    ├── test_regression_canonical.py  11 tests · valores canónicos bloqueados
+    ├── test_models.py                40 tests unitarios
     └── verify_canonical.py           Script de verificación rápida
 ```
 
@@ -152,18 +181,24 @@ Limitaciones explícitas (L1–L8):
 
 ## Páginas del dashboard
 
-| Página | Contenido |
-|---|---|
-| **Resultados de Referencia del Proyecto** | Sankey, diagrama de bloques, tabla canónica |
-| **Aplicación del nodo IoT** | Mapa EIRP×distancia×SF, mensajes/día, LoRa timeline, supercap sawtooth |
-| **Escenario A — Sierpinski multibanda** | 3 modos (Manual / Auto / Comparar), topologías |
-| **Escenario B — FLPDA Koch** | Región activa, iteraciones Koch 0–4, mapa τ–σ, Greinacher 3 estados, I-V Shockley |
-| **Validación con literatura** | Scatter vs Wang, descomposición del error |
-| **Cálculos avanzados** | Tornado, Monte Carlo, link budget, supercap |
-| **Sensibilidad** | Sweep Q_L, R_load, mapa τ–σ |
-| **Calculadora** | Sandbox interactivo con 7 sliders |
-| **Preparación para defensa** | 9 Q&A + L1–L8 + clip anatomy |
-| **Información del proyecto** | Metodología APA7 + referencias |
+Recorrido guiado de 14 páginas (`st.navigation`), en el mismo orden que la tesis. Cada página enlaza a la siguiente:
+
+| # | Página (`pages/…`) | Contenido |
+|---|---|---|
+| 1 | `presentacion` | Portada, objetivo, recorrido, diagrama-héroe del concepto |
+| 2 | `problema` | El problema de la batería en el IoT y la oportunidad RFEH |
+| 3 | `contexto` | Qué es una rectena: cadena antena→rectificador→DC |
+| 4 | `topologias` | Sierpinski (exploratorio) vs FLPDA Koch (cuantitativo) |
+| 5 | `escenario_a` | Sierpinski: S₁₁, impedancia, PCE, geometría, tabla |
+| 6 | `escenario_b` | FLPDA Koch: S₁₁, ganancia, geometría, presupuesto LoRa, PCE UHF |
+| 7 | `comparacion` | Comparación técnica integral (Tabla 10) |
+| 8 | `inicio` | Resultado de referencia: Sankey, bloques, tabla canónica |
+| 9 | `viabilidad_iot` | Mensajes/día, mapa EIRP×distancia, supercondensador |
+| 10 | `validacion` | Modelo vs Wang (2022) y Carrel (1961); RMSE 15,50 pp |
+| 11 | `analisis_avanzado` | Tornado, Monte Carlo, BW, link budget, supercap, estado del arte |
+| 12 | `sensibilidad` | Barridos Q_L, R_load y mapa τ–σ |
+| 13 | `conclusiones` | Hallazgos, condiciones y limitaciones (Tablas 13–14) |
+| 14 | `acerca` | Metodología, arquitectura y referencias |
 
 ---
 
