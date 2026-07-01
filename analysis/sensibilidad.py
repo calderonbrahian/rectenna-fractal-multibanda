@@ -6,7 +6,6 @@ Barridos sobre parámetros clave del sistema.
 import numpy as np
 import streamlit as st
 
-from core.antenna import FractalAntenna
 from core.rectifier import RectifierCircuit
 from core.matching import LMatchNetwork
 from core.flpda import FLPDA_Koch

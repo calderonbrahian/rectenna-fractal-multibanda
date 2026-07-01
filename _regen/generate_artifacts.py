@@ -35,7 +35,6 @@ import matplotlib.pyplot as plt
 
 from configs.parametros import (
     APA7_RC, CANONICAL, BANDS_A, SMS7630,
-    WANG2022_FREQS_GHZ, WANG2022_PCE_PCT,
 )
 
 OUT = os.path.join(_HERE, "out")
@@ -326,7 +325,6 @@ def tablas_codigo():
     import pandas as pd
     from simulation.escenario_a import run_bandas
     from simulation.escenario_b import run_geometry_b, run_pce_uhf_curve
-    from analysis.sensibilidad import run_validacion_wang
     from analysis.avanzado import run_link_budget
     n = 0
 

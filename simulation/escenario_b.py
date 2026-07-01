@@ -9,7 +9,7 @@ import streamlit as st
 from core.flpda import FLPDA_Koch
 from core.rectifier import RectifierCircuit
 from core.lora_budget import (
-    harvested_uw_full, harvested_uw, avg_power_uw,
+    harvested_uw_full, avg_power_uw,
     received_power_dBm, RF_SOURCES_UHF, LORA_PROFILES,
 )
 from configs.parametros import FLPDA_TAU, FLPDA_SIGMA, FLPDA_F_LOW_HZ, FLPDA_F_HIGH_HZ

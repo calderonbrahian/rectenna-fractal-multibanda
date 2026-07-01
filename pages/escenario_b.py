@@ -18,8 +18,8 @@ from simulation.escenario_b import (
     run_pce_uhf_curve,
 )
 from plots.charts import (
-    fig_s11, fig_gain, fig_impedancia,
-    fig_pce_pin, fig_harvested_vs_dist, COLORS,
+    fig_s11, fig_gain,
+    fig_pce_pin, fig_harvested_vs_dist,
 )
 from utils.exportar import sweep_a_csv
 from configs.parametros import CANONICAL

@@ -19,8 +19,8 @@ Autor: Brahian Calderon Munera . UdeA . 2026
 """
 
 import numpy as np
-from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Callable
+from dataclasses import dataclass
+from typing import Callable
 
 
 # ── Analisis de sensibilidad parametrica ────────────────────────────────────

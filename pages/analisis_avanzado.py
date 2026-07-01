@@ -5,7 +5,6 @@ Análisis avanzado — Sensibilidad · Monte Carlo · Supercondensador · Presup
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import numpy as np
 
 from analysis.avanzado import (
     run_tornado, run_monte_carlo, run_rectifier_bw,
@@ -239,7 +238,6 @@ cap de PCE = 0,85.
         st.dataframe(df_lb, hide_index=True)
 
         # Waterfall chart
-        params   = [r['parameter'] for r in lb]
         cum_vals = [float(r['cumulative_dBm']) for r in lb]
         fig_wf   = go.Figure(go.Scatter(
             x=list(range(len(cum_vals))), y=cum_vals,

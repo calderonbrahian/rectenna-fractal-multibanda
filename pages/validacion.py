@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 
 from analysis.sensibilidad import run_validacion_wang
 from core.flpda import FLPDA_Koch
-from core.comparacion import validate_carrel1961, WANG2022, CARREL1961
+from core.comparacion import validate_carrel1961
 from utils.pagina import encabezado, donde_se_desarrolla as _ref
 from utils.glosario import metrica, glosario_pagina
 # (fig_validacion_wang ya no se usa; se reemplazó por _fig_wang_scatter_with_errors)

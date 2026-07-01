@@ -13,16 +13,15 @@ except Exception:
     pass
 
 import numpy as np
-from configs.parametros import (CANONICAL, BANDS_A, FLPDA_TAU, FLPDA_SIGMA,
+from configs.parametros import (CANONICAL, FLPDA_TAU, FLPDA_SIGMA,
                                 FLPDA_F_LOW_HZ, FLPDA_F_HIGH_HZ)
 from simulation.escenario_a import run_bandas
 from core.flpda import FLPDA_Koch
 from core.lora_budget import (avg_power_uw, LORA_PROFILES, harvested_uw_full,
-                              fspl_dB, URBAN_CORRECTION_DB, RL_EQUIV, ETA_PMIC)
+                              fspl_dB, RL_EQUIV)
 from core.antenna import FractalAntenna
 from core.rectifier import RectifierCircuit
-from core.matching import LMatchNetwork
-from core.comparacion import validate_wang2022, WANG2022
+from core.comparacion import validate_wang2022
 
 out = {}
 

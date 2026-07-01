@@ -34,7 +34,7 @@ def render():
     with c1:
         st.markdown("**Autor**  \nBrahian Calderón Múnera")
     with c2:
-        st.markdown("**Director**  \nLuis Alberto Flórez Serna, M.Sc.")
+        st.markdown("**Director**  \nLuis Alberto Flórez Serna, Magíster en Telecomunicaciones")
     with c3:
         st.markdown("**Programa**  \nIngeniería de Telecomunicaciones")
     st.markdown(

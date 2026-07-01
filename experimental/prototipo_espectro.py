@@ -42,7 +42,6 @@ st.caption(
 probe = st.slider("Frecuencia de sintonía de la rectena [MHz]", 400, 6000, 550, 10)
 pf = probe / 1000.0
 # respuesta de banda (cosecha alta solo en UHF 470–900)
-import math
 capture = 100.0 / (1.0 + ((pf - 0.66) / 0.28) ** 6)
 # potencia disponible = fracción de la P_in canónica de diseño que sobrevive a la sintonía
 P_in_canon_uW = CANONICAL['P_in_mW'] * 1000.0
