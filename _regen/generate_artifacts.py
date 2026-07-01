@@ -92,20 +92,38 @@ def fig01_s11_sierpinski():
 
 def fig02_eta_banda_A():
     from simulation.escenario_a import run_bandas
+    from core.antenna import FractalAntenna
     bandas = run_bandas(topology="doubler", Pin_dBm=-10.0)
-    labels = [b["banda"] for b in bandas]
-    pce = [b["PCE_pct"] for b in bandas]
+    ant = FractalAntenna("sierpinski", iterations=3)
+
+    def eta_rad_of(f_hz):
+        try:
+            return float(ant.eta_rad(f_hz))
+        except Exception:
+            return float(CANONICAL["eta_rad"])
+
+    labels, eta_tot, s11s = [], [], []
+    for b in bandas:
+        eta_mm = max(1.0 - 10 ** (b["s11_dB"] / 10.0), 0.0)
+        eta_imn = 10 ** (-b["IL_dB"] / 10.0)
+        er = eta_rad_of(b["f_Hz"])
+        eta_tot.append(er * eta_mm * eta_imn * (b["PCE_pct"] / 100.0) * 100.0)
+        labels.append(b["banda"])
+        s11s.append(b["s11_dB"])
     fig, ax = plt.subplots(figsize=(6.8, 4.0))
     x = np.arange(len(labels))
-    bars = ax.bar(x, pce, color=C_AZUL, alpha=0.85)
-    for r, v in zip(bars, pce):
-        ax.text(r.get_x() + r.get_width() / 2, v + 0.5, f"{v:.1f}",
-                ha="center", va="bottom", fontsize=8)
+    # verde: banda adaptada (S11 < -10 dB); azul: el resto
+    colors = [C_VERDE if s < -10 else C_AZUL for s in s11s]
+    bars = ax.bar(x, eta_tot, color=colors, alpha=0.85)
+    for r, v, s in zip(bars, eta_tot, s11s):
+        ax.text(r.get_x() + r.get_width() / 2, v + 0.3, f"{v:.1f}\n{s:.0f} dB",
+                ha="center", va="bottom", fontsize=7)
     ax.set_xticks(x); ax.set_xticklabels(labels, rotation=30, ha="right")
-    ax.set_ylabel("PCE por banda (%)")
-    ax.set_title("Escenario A — conversión por banda (Pin = −10 dBm)", fontsize=11)
+    ax.set_ylabel(r"$\eta_{total}$ por banda (%)")
+    ax.set_title("Escenario A — eficiencia total por banda (Pin = −10 dBm)", fontsize=11)
+    ax.set_ylim(0, max(eta_tot) * 1.25)
     _save(fig, "Fig02_eta_banda_A.png")
-    return f"{len(labels)} bandas · PCE max={max(pce):.1f}%"
+    return f"{len(labels)} bandas · η_total max={max(eta_tot):.1f}% · adaptada: 5G-3,5"
 
 
 def fig03_s11_flpda():
