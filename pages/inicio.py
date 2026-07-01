@@ -104,7 +104,7 @@ def render():
         )
         metrica(
             "Mensajes LoRa SF12 / día",
-            f"≈ {msg_dia:.0f}",
+            f"≈ {int(msg_dia)}",
             interpretacion="viable para monitoreo periódico (no baja latencia)",
             ayuda=f"Un mensaje cada ≈ {CANONICAL['T_ciclo_s']:.0f} s en operación autónoma "
                   "(recolección continua a 100 m del transmisor TDT).",

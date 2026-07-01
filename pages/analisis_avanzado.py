@@ -75,7 +75,7 @@ def render():
                  "(GHz), **R_load** (carga del rectificador, Ω) y **N** (muestras del Monte "
                  "Carlo). Definen el punto de operación que se analiza.",
         referencia="Escenario de referencia: EIRP = 70 dBm · d = 100 m · f = 550 MHz · "
-                   "R_load = 1 300 Ω · N = 2 000.",
+                   "R_load = 1 300 Ω · N = 10 000.",
         al_subir="Más EIRP o menor distancia → más P_DC. Más N → estimación Monte Carlo más "
                  "estable (pero más lenta).",
         al_bajar="Menos EIRP o más distancia → menos P_DC; pocas muestras → histograma "
@@ -384,6 +384,11 @@ cap de PCE = 0,85.
         _ref("§2.2 Estado del arte en rectenas fractales · "
              "§5.3 Limitaciones del estudio (L6: PCE = 0,85 es cap del modelo) · "
              "Tabla 14 (resumen estructural por subsistema)")
+
+    st.divider()
+    st.page_link("pages/sensibilidad.py",
+                 label="Siguiente - sensibilidad parametrica →",
+                 icon=":material/tune:")
 
 
 render()

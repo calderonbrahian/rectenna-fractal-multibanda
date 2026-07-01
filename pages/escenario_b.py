@@ -1117,5 +1117,10 @@ def _fig_koch_miniaturization(extended: bool = False):
     )
     return fig
 
+    st.divider()
+    st.page_link("pages/comparacion.py",
+                 label="Siguiente - comparar los dos escenarios →",
+                 icon=":material/compare:")
+
 
 render()

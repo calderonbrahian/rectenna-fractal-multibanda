@@ -44,6 +44,37 @@ def render():
     st.divider()
 
     # ════════════════════════════════════════════════════════════════════════
+    # 1b · LA IDEA EN UNA IMAGEN (modelo mental de un vistazo)
+    # ════════════════════════════════════════════════════════════════════════
+    st.subheader("La idea, en una imagen")
+    st.caption("Aprovechar la energía de radiofrecuencia que ya está en el aire y "
+               "convertirla en electricidad para alimentar un nodo IoT, sin batería.")
+    st.graphviz_chart(
+        """
+        digraph idea {
+            rankdir=LR; bgcolor="transparent";
+            node [shape=box, style="rounded,filled", fontname="Arial",
+                  fontsize="11", color="#0077BB", fillcolor="#EAF2FB", penwidth="1.2"];
+            edge [color="#64748B", penwidth="1.3", arrowsize="0.8"];
+            rf   [label="Ondas RF del ambiente\\n(TV digital · LTE · Wi-Fi)",
+                  fillcolor="#FDEFE1", color="#EE7733"];
+            ant  [label="Antena fractal\\nmultibanda"];
+            rect [label="Rectificador\\n(RF → DC)"];
+            pmic [label="Gestor de energía\\n(PMIC)"];
+            iot  [label="Nodo IoT\\nsin batería",
+                  fillcolor="#E4F3EA", color="#009988"];
+            rf -> ant -> rect -> pmic -> iot;
+        }
+        """,
+        width="stretch",
+    )
+    st.caption(":material/lightbulb: Una **rectena** = antena + rectificador. La geometría "
+               "**fractal** permite captar varias bandas con una sola antena compacta. "
+               "Cada etapa se estudia en detalle en las secciones siguientes.")
+
+    st.divider()
+
+    # ════════════════════════════════════════════════════════════════════════
     # 2 · POR QUÉ ESTE TRABAJO (motivación: arranca desde la pregunta)
     # ════════════════════════════════════════════════════════════════════════
     st.subheader("Por qué este trabajo")

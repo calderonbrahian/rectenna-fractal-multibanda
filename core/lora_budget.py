@@ -55,12 +55,16 @@ Autor: Brahian Calderón Múnera · UdeA · 2026
 
 import numpy as np
 
-C0 = 3e8  # velocidad de la luz [m/s]
-
-# ── Constantes PMIC (BQ25504 boost-converter) ─────────────────────────────────
-ETA_PMIC          = 0.85   # eficiencia del conversor boost DC-DC
-V_COLDSTART_MIN_V = 0.130  # voltaje mínimo de arranque en frío [V] = 130 mV
-RL_EQUIV          = 1300.0 # resistencia de carga equivalente del rectificador [Ω]
+# ── Constantes centralizadas (SSOT: configs/parametros.py) ────────────────────
+# Se importan desde la configuración central para evitar duplicación de valores.
+# Los nombres locales se conservan como alias para no romper importadores.
+from configs.parametros import (
+    C0,                                  # velocidad de la luz [m/s]
+    URBAN_CORRECTION_DB,                 # ITU-R P.1546, entorno urbano denso [dB]
+    R_LOAD as RL_EQUIV,                  # resistencia de carga equivalente [Ω]
+    BQ25504_ETA_PMIC as ETA_PMIC,        # eficiencia del boost converter DC-DC
+    BQ25504_V_COLDSTART as V_COLDSTART_MIN_V,  # arranque en frío [V] = 130 mV
+)
 
 
 # ── Fuentes RF en banda UHF (470–900 MHz) ─────────────────────────────────────
@@ -122,8 +126,6 @@ def fspl_dB(dist_m: float, freq_ghz: float) -> float:
     lam = C0 / (freq_ghz * 1e9)
     return 20 * np.log10(4 * np.pi * dist_m / lam)
 
-
-URBAN_CORRECTION_DB = 6.0  # ITU-R P.1546, entorno urbano denso
 
 def received_power_dBm(eirp_dbm: float, dist_m: float, freq_ghz: float,
                        ant_gain_dBi: float = 7.5) -> float:

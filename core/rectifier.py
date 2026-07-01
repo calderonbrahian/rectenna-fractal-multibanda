@@ -57,17 +57,18 @@ class SchottkyDiode_SMS7630:
     """
 
     def __init__(self):
-        # Parámetros SPICE SMS7630 (Skyworks AN-4003)
-        self.Is  = 5e-6        # corriente de saturación [A]
-        self.n   = 1.05        # factor de idealidad
-        self.Rs  = 20.0        # resistencia serie [Ω]
-        self.Cj0 = 0.14e-12   # capacitancia de juntura a 0 V [F]
-        self.Vj  = 0.34        # potencial de juntura [V]
-        self.M   = 0.4         # coeficiente de gradiente
+        # Parámetros SPICE SMS7630 — SSOT: configs/parametros.py (Skyworks AN-4003)
+        from configs.parametros import SMS7630, Q_E, K_B
+        self.Is  = SMS7630['Is']    # corriente de saturación [A]
+        self.n   = SMS7630['n']     # factor de idealidad
+        self.Rs  = SMS7630['Rs']    # resistencia serie [Ω]
+        self.Cj0 = SMS7630['Cj0']   # capacitancia de juntura a 0 V [F]
+        self.Vj  = SMS7630['Vj']    # potencial de juntura [V]
+        self.M   = SMS7630['M']     # coeficiente de gradiente
 
-        # Constantes físicas
-        self.q  = 1.602e-19    # carga del electrón [C]
-        self.k  = 1.381e-23    # constante de Boltzmann [J/K]
+        # Constantes físicas (SSOT: configs/parametros.py)
+        self.q  = Q_E              # carga del electrón [C]
+        self.k  = K_B              # constante de Boltzmann [J/K]
         self.T  = 300.0        # temperatura de operación [K]
         self.Vt = self.k * self.T / self.q   # voltaje térmico ≈ 25.85 mV
 

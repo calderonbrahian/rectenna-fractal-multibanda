@@ -39,7 +39,7 @@ def render():
         ("P_DC a 100 m de fuente", "~0,3–8 µW (interior)",   "1 638 µW (TDT 10 kW)"),
         ("Escenario óptimo",       "IoT interior / portátil","Estación exterior fija"),
         ("Carga viable",           "Sensor BLE / ZigBee",    "Nodo LoRa SF12"),
-        ("η_total (rango)",        "0,1–25,0 % (por banda)", "28–67 % (varía con P_in; tope 67 % por PCE 0,85)"),
+        ("η_total (rango)",        "1,0–13,8 % (por banda)", "28–67 % (varía con P_in; tope 67 % por PCE 0,85)"),
     ]
     df = pd.DataFrame(tabla10, columns=["Criterio", "Escenario A — Sierpinski it. 3",
                                         "Escenario B — FLPDA Koch it. 2"])

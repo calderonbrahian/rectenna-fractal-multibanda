@@ -99,7 +99,7 @@ def render():
         st.metric("Energía por mensaje SF12", f"{E_ciclo_mJ:.1f} mJ", border=True)
         st.metric("Período entre mensajes", f"≈ {T_ciclo_s:.0f} s",
                   help="Tiempo necesario para recolectar la energía de un ciclo.", border=True)
-        st.metric("Mensajes / día (SF12)", f"≈ {msg_per_day:.0f}",
+        st.metric("Mensajes / día (SF12)", f"≈ {int(msg_per_day)}",
                   delta="modo autónomo (sin batería primaria)", delta_color="off", border=True)
         st.metric("Tensión continua", f"{CANONICAL['V_dc_mV']:.0f} mV",
                   delta=f"+{CANONICAL['V_dc_mV']-CANONICAL['V_cs_mV']:.0f} mV vs cold-start",
@@ -306,7 +306,7 @@ def render():
             st.markdown(
                 f"- Se alimenta **exclusivamente** de la recolección RF.\n"
                 f"- Cadencia limitada por T_ciclo ≈ **{T_ciclo_s:.0f} s** (SF12).\n"
-                f"- ≈ **{msg_per_day:.0f} mensajes/día** a 100 m del transmisor TDT.\n"
+                f"- ≈ **{int(msg_per_day)} mensajes/día** a 100 m del transmisor TDT.\n"
                 f"- Arranca en frío desde V_DC = {CANONICAL['V_dc_mV']:.0f} mV "
                 f"(umbral 130 mV).\n"
                 f"- :material/check: Ideal para **monitoreo ambiental** de baja frecuencia.\n"
@@ -379,7 +379,7 @@ def _render_energy_chain(P_DC_uW, T_ciclo_s, E_ciclo_mJ, msg_per_day):
                 f"Sensibilidad −137 dBm  \n"
                 f"ToA ≈ 1,15 s  \n"
                 f"DC activo < 1 %  \n"
-                f":material/arrow_forward: **~{msg_per_day:.0f} mensajes/día**"
+                f":material/arrow_forward: **~{int(msg_per_day)} mensajes/día**"
             )
 
 
@@ -762,6 +762,11 @@ def sf_label_for_title(E_mJ):
         if abs(cfg["E_mJ"] - E_mJ) < 0.5:
             return sf_key.split()[0]
     return "LoRa"
+
+    st.divider()
+    st.page_link("pages/validacion.py",
+                 label="Siguiente - que tan confiable es el modelo →",
+                 icon=":material/biotech:")
 
 
 render()

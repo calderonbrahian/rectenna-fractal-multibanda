@@ -284,5 +284,10 @@ del boom.
         _ref("§3.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
              "§4.5 Validación cruzada · Referencia: Carrel (1961)")
 
+    st.divider()
+    st.page_link("pages/analisis_avanzado.py",
+                 label="Siguiente - analisis de incertidumbre →",
+                 icon=":material/analytics:")
+
 
 render()

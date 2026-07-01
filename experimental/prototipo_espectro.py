@@ -1,3 +1,5 @@
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 """
 PROTOTIPO (experimental) — "El espectro urbano: qué hay en el aire".
 

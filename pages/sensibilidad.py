@@ -189,5 +189,10 @@ def render():
         _ref("Apéndice E.4 Mapa de diseño τ–σ del FLPDA · "
              "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
+    st.divider()
+    st.page_link("pages/conclusiones.py",
+                 label="Siguiente - conclusiones del trabajo →",
+                 icon=":material/flag:")
+
 
 render()

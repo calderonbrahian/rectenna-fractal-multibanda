@@ -24,14 +24,15 @@ def render():
     st.subheader("Hallazgos principales")
     st.markdown(
         "- La **FLPDA Koch it. 2** presenta el mayor potencial para sostener transmisiones "
-        "**LoRa SF12 a ≤ 100 m** de una torre TDT de alta potencia, bajo condiciones de "
-        "propagación media estimada (corrección ITU-R P.1546, sin fading modelado).\n"
+        "**LoRa SF12 hasta ≈ 194 m** de una torre TDT de alta potencia (con el caso de "
+        "referencia a 100 m operando con amplio margen), bajo condiciones de propagación "
+        "media estimada (corrección ITU-R P.1546, sin fading modelado).\n"
         "- **A 100 m:** P_DC = 1 638 µW → un mensaje cada ≈ 158 s (≈ 2,6 min). "
         "**A 1 000 m:** P_DC ≈ 16,4 µW, con V_DC ≈ 146 mV > 130 mV (arranca el BQ25504), "
         "pero el período sube a ≈ 4,4 h.\n"
         "- La **fase de transmisión domina el ~99,5 %** de la energía por ciclo.\n"
         "- El **Sierpinski it. 3 sobre FR-4** resuena solo en **1 de 7** bandas objetivo "
-        "(5G-3,5 GHz, S₁₁ = −16,4 dB), lo que cuestiona el valor del fractal puro —sin "
+        "(5G-3,5 GHz, S₁₁ = −17,4 dB), lo que cuestiona el valor del fractal puro —sin "
         "elementos adicionales— para recolección multibanda.\n"
         "- El **RMSE de 15,50 pp** frente a Wang (2022) se explica sobre todo por la "
         "pérdida de adaptación fuera de resonancia; secundariamente, por la diferencia de "
@@ -98,6 +99,11 @@ def render():
     _ref("§5.3 Limitaciones del estudio · §5.4 Trabajo futuro · "
          "Tabla 13 (limitaciones y soluciones) · Tabla 14 (resumen estructural) · "
          "Apéndice E.11 Tabla canónica de limitaciones (L1–L8)")
+
+    st.divider()
+    st.page_link("pages/acerca.py",
+                 label="Informacion del proyecto: metodologia y referencias →",
+                 icon=":material/info:")
 
 
 render()

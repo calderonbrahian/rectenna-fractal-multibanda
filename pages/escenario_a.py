@@ -160,7 +160,7 @@ def render():
             "**¿Qué nos muestra esta evidencia?**\n\n"
             "El Sierpinski genera varias resonancias, pero **solo una de las siete bandas "
             "objetivo** —la de 5G en 3,5 GHz— cae con holgura por debajo de −10 dB "
-            "(S₁₁ = −16,4 dB). En las demás, buena parte de la energía se refleja antes de "
+            "(S₁₁ = −17,4 dB). En las demás, buena parte de la energía se refleja antes de "
             "entrar a la antena.\n\n"
             "Importa porque S₁₁ es la **primera condición de toda la cadena**: si la energía "
             "no entra, ninguna etapa posterior puede recuperarla. La multibanda *geométrica* "
@@ -488,6 +488,11 @@ def _fig_sierpinski_active(freq_active_ghz: float, compact: bool = False):
         margin=dict(l=20, r=20, t=top_margin, b=20),
     )
     return fig
+
+    st.divider()
+    st.page_link("pages/escenario_b.py",
+                 label="Siguiente — Escenario B (FLPDA Koch) →",
+                 icon=":material/radio:")
 
 
 render()
