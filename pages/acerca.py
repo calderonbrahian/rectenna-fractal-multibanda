@@ -51,7 +51,7 @@ def render():
     with st.expander("Ver cadena de cálculo completa", expanded=True):
         st.markdown("### Escenario B — FLPDA Koch (470–900 MHz) · escenario cuantitativo")
         st.markdown(
-            "**Carrel (1961)** establece el número de elementos del arreglo log-periódico "
+            "Carrel (1961) establece el número de elementos del arreglo log-periódico "
             "a partir de la razón de escala τ y de las frecuencias extremas:"
         )
         st.latex(r"N \;=\; 1 + \left\lceil \frac{\log(f_H/f_L)}{\log(1/\tau)} \right\rceil")
@@ -62,7 +62,7 @@ def render():
         )
         st.latex(r"k_{\mathrm{red}} \;=\; (3/4)^2 = 0{,}5625 \quad\Longrightarrow\quad \text{reducción física } 43{,}75\%")
 
-        st.markdown("**Modelo de propagación** (Friis + ITU-R P.1546):")
+        st.markdown("Modelo de propagación (Friis + ITU-R P.1546):")
         st.latex(
             r"P_{\mathrm{in}} \;=\; \mathrm{EIRP} \;-\; \mathrm{FSPL}(f,d) \;-\; L_{\mathrm{urb}} \;+\; G_{\mathrm{ant}}"
         )
@@ -72,34 +72,34 @@ def render():
             f"da **P_in = {CANONICAL['P_in_dBm']:.2f} dBm = {CANONICAL['P_in_mW']:.3f} mW**."
         )
 
-        st.markdown("**Cadena de potencia.** La potencia continua se obtiene aplicando a P_in "
-                    "los cuatro factores de las etapas posteriores a la antena. "
-                    "**η_rad ya está embebida en la ganancia realizada G** que define P_in; "
+        st.markdown("Cadena de potencia: la potencia continua se obtiene aplicando a P_in "
+                    "los cuatro factores de las etapas posteriores a la antena. Aquí η_rad "
+                    "ya está embebida en la ganancia realizada G que define P_in, así que "
                     "no se vuelve a multiplicar.")
         st.latex(
             r"P_{DC} \;=\; P_{\mathrm{in}} \cdot \eta_{mm} \cdot \eta_{IMN} \cdot \mathrm{PCE} \cdot \eta_{PMIC}"
         )
 
-        st.markdown("**Figura de mérito global** (cinco factores, referida a la potencia "
+        st.markdown("Figura de mérito global (cinco factores, referida a la potencia "
                     "interceptada antes de las pérdidas de radiación). "
-                    ":material/warning: **No se multiplica por P_in** para recuperar P_DC, "
+                    ":material/warning: No se multiplica por P_in para recuperar P_DC, "
                     "porque eso contabilizaría dos veces η_rad:")
         st.latex(
             r"\eta_{\mathrm{total}} \;=\; \eta_{\mathrm{rad}} \cdot \eta_{mm} \cdot \eta_{IMN} \cdot \mathrm{PCE} \cdot \eta_{PMIC}"
             r"\;=\; " + f"{CANONICAL['eta_total']:.4f}"
         )
 
-        st.markdown("**Rectificador SMS7630.** Modelo iterativo de Shockley con amortiguación "
+        st.markdown("Rectificador SMS7630: modelo iterativo de Shockley con amortiguación "
                     "0,4/0,6, 80 iteraciones máximo. El resultado se recorta a un techo "
-                    "**PCE = 0,85** (cap explícito del modelo, no de medición):")
+                    "PCE = 0,85 (cap explícito del modelo, no de medición):")
         st.latex(
             r"V_{DC} \;=\; N\,(V_{\mathrm{oc,pk}} - V_f), \quad "
             r"V_f \;=\; n\,V_T\,\ln\!\Big(\tfrac{I_d}{I_s} + 1\Big), \quad "
             r"\mathrm{PCE} \;\in\; [0,\;0{,}85]"
         )
 
-        st.markdown("**PMIC BQ25504.** Convertidor elevador con arranque en frío para "
-                    "V_in ≥ **130 mV** y eficiencia **η_PMIC = 0,85** (datasheet SLUSCY3).")
+        st.markdown("PMIC BQ25504: convertidor elevador con arranque en frío para "
+                    "V_in ≥ 130 mV y eficiencia η_PMIC = 0,85 (datasheet SLUSCY3).")
 
         st.divider()
 
@@ -109,11 +109,11 @@ def render():
         )
         st.latex(r"f_k \;=\; f_0 \cdot 2^k, \quad k = 0, 1, 2 \;\;\Rightarrow\;\; 1{,}84\,/\,3{,}68\,/\,7{,}36\;\mathrm{GHz}")
         st.markdown(
-            "Impedancia de entrada modelada por **combinación en admitancia** de resonadores "
+            "Impedancia de entrada modelada por combinación en admitancia de resonadores "
             "RLC, uno por banda (Puente-Baliarda et al., 1998), con un fondo inductivo y "
             "Q ≈ 8,5 sobre FR-4 (dominado por tan δ). Cerca de cada resonancia el resonador "
             "asociado domina; lejos, el sumatorio en admitancia produce alta impedancia. "
-            ":material/warning: El escenario A **no cuantifica P_DC final** porque los EIRP de "
+            ":material/warning: El escenario A no cuantifica P_DC final porque los EIRP de "
             "fuentes urbanas (GSM/5G/WiFi) son variables y no están especificados."
         )
     _ref("§2.9 Métodos de análisis electromagnético: enfoque adoptado · "
@@ -190,14 +190,14 @@ def render():
     with st.container(border=True):
         st.markdown(
             """
-La revisión metodológica de 2026-05-28 corrigió **15 hallazgos** entre el documento, el código y la app. Los más importantes para la sustentación:
+La revisión metodológica de 2026-05-28 corrigió 15 hallazgos entre el documento, el código y la app. Los que más pesan para la sustentación:
 
-- **η_total ya no se multiplica por P_in** (hallazgo 1.1). La cadena operativa usa cuatro factores sobre P_in; η_total = 0,6715 es figura de mérito de cinco factores.
-- **CANONICAL del dashboard sincronizado** con la plataforma: η_rad 0,9888 → 0,9952; η_mm 0,9852 → 0,9847; η_imn 0,9481 → 0,9484; η_total 0,6777 → 0,6715.
-- **f_c con R_S (no R_d0)**: f_c = 1/(2π·R_S·C_j0) = 56,84 GHz con R_S = 20 Ω.
-- **Frecuencias de Wang corregidas** a las canónicas: 1,84 / 2,04 / 2,36 / 2,54 / 3,30 / 4,76 / 5,80 GHz.
-- **Caveats explícitos** sobre sustrato Duroid vs FR-4 y punto de comparación P_in = −10 dBm en la página de Validación.
-- **PCE = 0,85 reconocido como cap del modelo**, no como medida; el resultado de referencia opera en el techo.
+- El η_total dejó de multiplicarse por P_in (hallazgo 1.1): la cadena operativa usa cuatro factores sobre P_in, mientras que η_total = 0,6715 es la figura de mérito de cinco factores.
+- Se sincronizó el CANONICAL del dashboard con la plataforma: η_rad 0,9888 → 0,9952; η_mm 0,9852 → 0,9847; η_imn 0,9481 → 0,9484; η_total 0,6777 → 0,6715.
+- La frecuencia de corte del diodo se calcula con R_S, no con R_d0: f_c = 1/(2π·R_S·C_j0) = 56,84 GHz con R_S = 20 Ω.
+- Las frecuencias de Wang se ajustaron a las canónicas: 1,84 / 2,04 / 2,36 / 2,54 / 3,30 / 4,76 / 5,80 GHz.
+- Se hicieron explícitos los caveats de sustrato (Duroid frente a FR-4) y el punto de comparación P_in = −10 dBm en la página de Validación.
+- Se reconoció la PCE = 0,85 como cap del modelo, no como medida: el resultado de referencia opera en ese techo.
 
 La tabla L1–L8 de limitaciones, con el impacto cuantitativo de cada una, se documenta en el Apéndice E del informe de grado.
 """
