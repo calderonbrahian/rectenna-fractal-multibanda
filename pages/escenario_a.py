@@ -378,6 +378,11 @@ def render():
         _ref("§4.1 Escenario A — Sierpinski · §4.1.1 Resultados del modelo computacional · "
              "Tabla 2 (bandas del Escenario A y resultados del modelo)")
 
+    st.divider()
+    st.page_link("pages/escenario_b.py",
+                 label="Siguiente — Escenario B (FLPDA Koch) →",
+                 icon=":material/radio:")
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 #  Visualización conceptual: bandas activas del Sierpinski
@@ -488,11 +493,6 @@ def _fig_sierpinski_active(freq_active_ghz: float, compact: bool = False):
         margin=dict(l=20, r=20, t=top_margin, b=20),
     )
     return fig
-
-    st.divider()
-    st.page_link("pages/escenario_b.py",
-                 label="Siguiente — Escenario B (FLPDA Koch) →",
-                 icon=":material/radio:")
 
 
 render()

@@ -24,9 +24,11 @@ def render():
     st.subheader("Hallazgos principales")
     st.markdown(
         "- La FLPDA Koch it. 2 es la que muestra mayor potencial para sostener transmisiones "
-        "LoRa SF12 hasta ≈ 194 m de una torre TDT de alta potencia. El caso de referencia a "
-        "100 m opera con amplio margen, bajo condiciones de propagación media estimada "
-        "(corrección ITU-R P.1546, sin fading modelado).\n"
+        "LoRa SF12 hasta ≈ 194 m de una torre TDT de alta potencia (criterio de consumo "
+        "continuo del nodo, P_DC ≥ 438,5 µW); con el ciclo de trabajo regulatorio del 1 %, el "
+        "alcance útil baja a ≈ 134 m. El caso de referencia a 100 m opera con amplio margen, "
+        "bajo condiciones de propagación media estimada (corrección ITU-R P.1546, sin fading "
+        "modelado).\n"
         "- A 100 m, P_DC = 1 638 µW, es decir un mensaje cada ≈ 158 s (unos 2,6 min). A 1 000 m "
         "la potencia cae a ≈ 16,4 µW; el V_DC ≈ 146 mV todavía supera los 130 mV que necesita el "
         "BQ25504 para arrancar, pero el período entre mensajes sube a ≈ 4,4 h.\n"

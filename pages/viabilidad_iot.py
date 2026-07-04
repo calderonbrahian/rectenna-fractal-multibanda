@@ -333,6 +333,11 @@ def render():
     )
     _ref("§5.1 Conclusiones · §1.3 Alcance y limitaciones del estudio")
 
+    st.divider()
+    st.page_link("pages/validacion.py",
+                 label="Siguiente — ¿qué tan confiable es el modelo? →",
+                 icon=":material/biotech:")
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 #  Helpers
@@ -762,11 +767,6 @@ def sf_label_for_title(E_mJ):
         if abs(cfg["E_mJ"] - E_mJ) < 0.5:
             return sf_key.split()[0]
     return "LoRa"
-
-    st.divider()
-    st.page_link("pages/validacion.py",
-                 label="Siguiente - que tan confiable es el modelo →",
-                 icon=":material/biotech:")
 
 
 render()

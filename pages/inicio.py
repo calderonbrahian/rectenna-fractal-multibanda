@@ -137,11 +137,11 @@ def render():
 
     st.markdown(
         "**Leyendo el diagrama de izquierda a derecha:**\n\n"
-        "- La señal sale de la torre TDT y viaja por el aire. En esos 100 m pierde "
-        "**67,25 dB**: la mayor parte es la atenuación natural del espacio libre "
-        "(la onda se reparte en una superficie cada vez mayor al alejarse), y el modelo "
-        "suma además una corrección urbana de 6 dB para representar obstáculos y "
-        "reflexiones de un entorno real.\n"
+        "- La señal sale de la torre TDT y viaja por el aire. En esos 100 m la pérdida de "
+        "propagación suma **73,25 dB**: la mayor parte es la atenuación natural del espacio "
+        "libre (FSPL = 67,25 dB, porque la onda se reparte en una superficie cada vez mayor "
+        "al alejarse), y a eso el modelo añade una corrección urbana de 6 dB para representar "
+        "obstáculos y reflexiones de un entorno real.\n"
         "- La antena recupera una fracción de lo que queda gracias a su ganancia, que "
         "concentra la energía que recibe. Tras este paso, la potencia disponible a la "
         "entrada del sistema es de unos **2,43 mW**.\n"
@@ -488,7 +488,7 @@ def _render_block_diagram():
 
     # Anotaciones de interfaz (entre bloques): (x, top_text, bottom_text)
     interfaces = [
-        (2.35, "↓ 67,25 dB",  "FSPL + 6 dB urb."),
+        (2.35, "↓ 73,25 dB",  "FSPL 67,25 + 6 urb."),
         (5.05, "↓ 2,43 mW", "P_in en antena"),
         (7.75, "↓ × η_IMN",   "potencia al diodo"),
         (10.45,"↓ × PCE",     "V_DC ≈ 1 460 mV"),

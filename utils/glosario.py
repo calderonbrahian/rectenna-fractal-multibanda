@@ -77,7 +77,8 @@ CRITERIOS: dict[str, str] = {
                      "el nodo se apaga entre transmisiones.",
     "duty 1 %": "tope regulatorio del 1 % de ciclo de trabajo en la banda ISM 915 MHz "
                 "(compatible ETSI).",
-    "PCE cap 85 %": "techo de PCE del modelo: ningún doblador Greinacher reportado en la "
+    "PCE cap 85 %": "techo de PCE del modelo: la PCE del rectificador Shockley se recorta "
+                    "(clip) a 0,85, porque ningún doblador Greinacher reportado en la "
                     "literatura supera ~85 % en este rango de potencia.",
     "Q_L 40": "factor de calidad típico de un inductor SMD 0402/0603; valor de diseño del "
               "proyecto.",

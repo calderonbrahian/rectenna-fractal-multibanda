@@ -80,7 +80,7 @@ def _fig_wang_scatter_with_errors(res: dict) -> go.Figure:
     )
     fig.add_annotation(
         x=5.8, y=72, xref='x', yref='y',
-        text='Δ tan δ: 0,02 (FR-4) vs 0,0009 (Duroid 5880)<br>≈ 22× más pérdidas → ~6 pp de sesgo',
+        text='Δ tan δ: 0,02 (FR-4) vs 0,0009 (Duroid 5880)<br>≈ 22× más pérdidas · banda de incertidumbre ±6 pp',
         showarrow=False, align='right',
         font=dict(size=10, color='#B45309'),
         bgcolor='rgba(248, 250, 252, 0.9)', bordercolor='rgba(251,191,36,0.4)', borderwidth=1, borderpad=6,
@@ -106,9 +106,10 @@ def render():
                   "de las causas y una comparativa de parámetros con Carrel."),
         como_leer=("**RMSE 15,50 pp** es el error global. El modelo *sobreestima* a baja "
                    "frecuencia (1,84–2,04 GHz) y *subestima* a alta (3,30–5,80 GHz). "
-                   "El sesgo viene principalmente de la diferencia de sustrato (FR-4 vs "
-                   "Duroid 5880, ≈ 22× más pérdidas). Lectura honesta: **verificación de "
-                   "orden de magnitud**, no validación punto a punto."),
+                   "El grueso del error viene de la desadaptación fuera de resonancia; el "
+                   "sustrato (FR-4 vs Duroid 5880, ≈ 22× más pérdidas) contribuye en segundo "
+                   "orden. Lectura honesta: **verificación de orden de magnitud**, no "
+                   "validación punto a punto."),
     )
 
     # ── Caveats visibles arriba (no en expander) ──────────────────────────────
@@ -126,10 +127,11 @@ def render():
             )
         with c2:
             st.markdown(
-                "**:material/layers: Sustrato (factor dominante)**\n\n"
+                "**:material/layers: Sustrato (sesgo de segundo orden)**\n\n"
                 "Wang: **Duroid 5880** (tan δ ≈ 0,0009).\n"
                 "Este modelo: **FR-4** (tan δ ≈ 0,02), unas 22× más disipativo. "
-                "Sesgo estimado: **~6 pp** del RMSE total."
+                "Contribución estimada al RMSE: **~10–12 pp** (la banda de incertidumbre "
+                "de la figura es de ±6 pp)."
             )
         with c3:
             st.markdown(
@@ -159,7 +161,8 @@ def render():
                 "RMSE", f"{res['RMSE']:.2f} pp",
                 interpretacion="moderado: verificación de orden de magnitud, no punto a punto",
                 ayuda="Raíz del error cuadrático medio frente a las medidas de Wang (2022). "
-                      "El grueso se explica por la diferencia de sustrato (FR-4 vs Duroid).",
+                      "El grueso se explica por la desadaptación fuera de resonancia; el "
+                      "sustrato (FR-4 vs Duroid) pesa en segundo orden.",
             )
             metrica(
                 "Sesgo (error medio)", f"{res['mean_error_abs']:.2f} pp",
@@ -179,17 +182,20 @@ def render():
         st.markdown("#### :material/biotech: Causas del error sistemático")
         st.markdown(
             """
-| # | Causa | Banda donde se manifiesta | Magnitud estimada |
-|---|------|---------------------------|-------------------|
-| 1 | **Sustrato FR-4 vs Duroid 5880** (tan δ 22× mayor) | Toda la banda | ≈ **6 pp** sistemático |
-| 2 | **Adaptación perfecta asumida** en el modelo | 1,84 – 2,04 GHz (sobreestimación) | + 25 a + 12 pp |
-| 3 | **Capacitancia parásita C_j a alta frecuencia** no modelada | 3,30 – 5,80 GHz (subestimación) | − 14 a − 19 pp |
+| # | Causa | Peso en el RMSE | Magnitud estimada |
+|---|------|-----------------|-------------------|
+| 1 | Desadaptación fuera de resonancia (el modelo asume adaptación ideal y η_mm real cae) | Dominante | ≈ 15 – 18 pp |
+| 2 | Sustrato FR-4 vs Duroid 5880 (tan δ 22× mayor) | Segundo orden | ≈ 10 – 12 pp |
+| 3 | Ausencia de elementos adicionales (el Sierpinski cubre 1 de 7 bandas) | Menor | ≈ 2 – 4 pp |
 
-En conjunto, el RMSE de 15,50 pp y la asimetría del error son coherentes con las
-hipótesis declaradas: el modelo es más fiable en el extremo inferior del espectro,
-justamente donde opera el Escenario B de referencia (550 MHz). La comparación no es
-entre diseños sobre el mismo material, así que conviene leerla como una verificación
-de orden de magnitud.
+El sesgo es asimétrico. A baja frecuencia (1,84 – 2,04 GHz) el modelo sobreestima
+(+25 a +12 pp): asume una adaptación RF ideal que el circuito de Wang no alcanza. A alta
+frecuencia (3,30 – 5,80 GHz) subestima (−14 a −19 pp): el modelo cuasi-estático no captura
+del todo la capacitancia parásita Cj(V) del diodo. En conjunto, el RMSE de 15,50 pp es
+coherente con las hipótesis declaradas y el modelo resulta más fiable en el extremo inferior
+del espectro, justamente donde opera el Escenario B de referencia (550 MHz). La comparación
+no es entre diseños sobre el mismo material, así que conviene leerla como una verificación de
+orden de magnitud.
 """
         )
 

@@ -3,12 +3,12 @@ Rectenna Fractal Multibanda — Demostración interactiva del proyecto de grado
 ============================================================================
 Punto de entrada Streamlit. La navegación está pensada como **experiencia de
 usuario** y sigue el principio "primero explicar, luego justificar, finalmente
-mostrar resultados": 7 secciones principales (más una de referencia) en orden
-narrativo — Introducción → Diseño y metodología → Escenarios estudiados →
-Resultados → Aplicación al nodo IoT → Validación → Conclusiones. La aplicación
-abre en la Introducción (el problema y la identidad del trabajo). Cada página
-indica, con el bloque "Dónde se desarrolla en el proyecto", a qué sección del
-documento corresponde.
+mostrar resultados": un recorrido narrativo — Presentación → Introducción →
+Diseño de las antenas → Escenarios estudiados → Resultados → Aplicación al nodo
+IoT → Validación → Conclusiones — más una sección de referencia (Información del
+proyecto). La aplicación abre en la Presentación (identidad del trabajo y marco
+metodológico). Cada página indica, con el bloque "Dónde se desarrolla en el
+proyecto", a qué sección del documento corresponde.
 
 Ejecución local:
     .venv/Scripts/streamlit run app.py

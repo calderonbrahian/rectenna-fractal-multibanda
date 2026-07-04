@@ -357,8 +357,9 @@ def render():
             al_bajar="Más cerca → más P_DC y mensajes más frecuentes, hasta saturar el "
                      "techo de la cadena.",
             limite="Por debajo de ~50 m la hipótesis de campo lejano y la corrección "
-                   "urbana media dejan de ser fiables; más allá de ~1 000 m el cold-start "
-                   "(V_DC ≥ 130 mV) ya no está asegurado.",
+                   "urbana media dejan de ser fiables; más allá de ≈ 1 200 m el cold-start "
+                   "(V_DC ≥ 130 mV) ya no está asegurado (a 1 000 m el modelo aún da "
+                   "V_DC ≈ 146 mV).",
         )
         st.markdown(
             "**Explóralo tú:** mueve la distancia y vigila dos umbrales. ¿A qué distancia el "
@@ -607,6 +608,11 @@ def render():
         _ref("§2.7.1 Ecuación de Shockley · §2.7.2 Parámetros SPICE del SMS7630 · "
              "Tabla 3 (parámetros SPICE del SMS7630) · "
              "Apéndice E.5 Caracterización numérica I-V del diodo SMS7630")
+
+    st.divider()
+    st.page_link("pages/comparacion.py",
+                 label="Siguiente — comparar los dos escenarios →",
+                 icon=":material/compare:")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1116,11 +1122,6 @@ def _fig_koch_miniaturization(extended: bool = False):
         margin=dict(l=20, r=20, t=20, b=20),
     )
     return fig
-
-    st.divider()
-    st.page_link("pages/comparacion.py",
-                 label="Siguiente - comparar los dos escenarios →",
-                 icon=":material/compare:")
 
 
 render()
