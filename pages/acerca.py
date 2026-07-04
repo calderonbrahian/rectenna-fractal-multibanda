@@ -185,25 +185,25 @@ def render():
 
     st.divider()
 
-    # ── Nota sobre la auditoría ─────────────────────────────────────────────
-    st.subheader(":material/fact_check: Estado de la auditoría 2026-05-28")
+    # ── Limitaciones y alcance ──────────────────────────────────────────────
+    st.subheader(":material/rule: Limitaciones y alcance del estudio")
     with st.container(border=True):
         st.markdown(
             """
-La revisión metodológica de 2026-05-28 corrigió 15 hallazgos entre el documento, el código y la app. Los que más pesan para la sustentación:
+Este es un trabajo de modelado, no una medición. Los resultados estiman órdenes de magnitud y permiten comparar diseños, pero no reemplazan la caracterización experimental de un prototipo. Conviene leerlos junto con las limitaciones que el propio informe declara:
 
-- El η_total dejó de multiplicarse por P_in (hallazgo 1.1): la cadena operativa usa cuatro factores sobre P_in, mientras que η_total = 0,6715 es la figura de mérito de cinco factores.
-- Se sincronizó el CANONICAL del dashboard con la plataforma: η_rad 0,9888 → 0,9952; η_mm 0,9852 → 0,9847; η_imn 0,9481 → 0,9484; η_total 0,6777 → 0,6715.
-- La frecuencia de corte del diodo se calcula con R_S, no con R_d0: f_c = 1/(2π·R_S·C_j0) = 56,84 GHz con R_S = 20 Ω.
-- Las frecuencias de Wang se ajustaron a las canónicas: 1,84 / 2,04 / 2,36 / 2,54 / 3,30 / 4,76 / 5,80 GHz.
-- Se hicieron explícitos los caveats de sustrato (Duroid frente a FR-4) y el punto de comparación P_in = −10 dBm en la página de Validación.
-- Se reconoció la PCE = 0,85 como cap del modelo, no como medida: el resultado de referencia opera en ese techo.
+- El sustrato modelado es FR-4 (tan δ ≈ 0,02), bastante más disipativo que un laminado de microondas. Frente a un Duroid 5880, esto resta del orden de 10–12 puntos a la η_total.
+- La ganancia de las antenas proviene de un modelo analítico, no de una simulación de onda completa; arrastra una incertidumbre de ±1,5 dBi que no se midió.
+- La propagación usa Friis con una corrección urbana fija de +6 dB y no modela el desvanecimiento; en un emplazamiento real el error local puede llegar a ±10–20 dB.
+- No se fabricaron prototipos. La comparación con Wang (2022) es una verificación de orden de magnitud, no una validación punto a punto (RMSE = 15,50 pp), y además contrasta diseños sobre sustratos distintos.
+- La PCE = 0,85 es el techo del modelo del rectificador, no un valor medido. El resultado de referencia opera justo en ese máximo, así que es un mejor caso, no un valor esperado en campo.
+- El η_total = 0,6715 es una figura de mérito de cinco factores. La potencia útil se obtiene aplicando solo cuatro factores sobre P_in, porque η_rad ya está contenida en la ganancia G; multiplicar η_total por P_in contaría dos veces la pérdida de radiación.
 
-La tabla L1–L8 de limitaciones, con el impacto cuantitativo de cada una, se documenta en el Apéndice E del informe de grado.
+La tabla completa de limitaciones (L1–L8), con el impacto cuantitativo de cada una y su posible mitigación, está en el Apéndice E del informe de grado.
 """
         )
-    _ref("§4.5 Validación cruzada y análisis del error · "
-         "Apéndice D Limitaciones metodológicas documentadas · "
+    _ref("§1.3 Alcance y limitaciones del estudio · §5.3 Limitaciones del estudio · "
+         "§4.5 Validación cruzada y análisis del error · "
          "Apéndice E.11 Tabla canónica de limitaciones del estudio (L1–L8)")
 
     st.caption(
