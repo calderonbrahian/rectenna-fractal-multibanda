@@ -82,7 +82,7 @@ def render():
         "Los nodos IoT desplegados en campo dependen de baterías, y reemplazarlas a gran "
         "escala resulta costoso o inviable: la autonomía energética es hoy su principal "
         "límite. Al mismo tiempo, el entorno urbano está lleno de energía de "
-        "radiofrecuencia —de televisión, telefonía móvil y Wi-Fi— que casi siempre se "
+        "radiofrecuencia, de televisión, telefonía móvil y Wi-Fi, que casi siempre se "
         "desaprovecha. Este trabajo estudia si esa energía, ya presente en el aire, puede "
         "aprovecharse para alimentar dispositivos IoT de bajo consumo."
     )

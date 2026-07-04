@@ -27,30 +27,29 @@ def render():
 
     st.subheader("La batería: el límite práctico de la autonomía")
     st.markdown(
-        "Un nodo IoT —un pequeño sensor inalámbrico desplegado en campo— suele alimentarse "
-        "con una batería, y ahí está su talón de Aquiles: la batería **se agota**. Cuando "
-        "hay miles de sensores repartidos por una subestación eléctrica, en lo alto de una "
-        "torre o en una zona rural de difícil acceso, mantenerlos vivos significa ir hasta "
-        "cada uno a cambiarle la batería. Ese costo, cuando supera al del propio sensor, "
-        "**vuelve inviable el despliegue**: la batería deja de ser un detalle y se "
-        "convierte en el **límite real de la autonomía** del sistema."
+        "Un nodo IoT (un pequeño sensor inalámbrico desplegado en campo) suele alimentarse "
+        "con una batería, y ahí está su talón de Aquiles: la batería **se agota**. Imagina "
+        "miles de sensores repartidos por una subestación eléctrica, en lo alto de una "
+        "torre o en una zona rural de difícil acceso. Mantenerlos vivos significa ir hasta "
+        "cada uno a cambiarle la batería. Cuando ese costo supera al del propio sensor, el "
+        "despliegue deja de ser viable. La batería ya no es un detalle: se vuelve el límite "
+        "real de la autonomía del sistema."
     )
 
     st.subheader("La oportunidad: energía que ya viaja por el aire")
     st.markdown(
-        "En cualquier ciudad hay señales de radio —de televisión, telefonía móvil, "
-        "Wi-Fi— que **ya están presentes en el entorno** y que, además de información, "
-        "transportan **pequeñas cantidades de energía**. Casi siempre esa energía se "
-        "desaprovecha.\n\n"
+        "En cualquier ciudad hay señales de radio (de televisión, telefonía móvil, "
+        "Wi-Fi) que ya circulan por el entorno y que, además de información, transportan "
+        "pequeñas cantidades de energía. Casi siempre esa energía se desaprovecha.\n\n"
         "La pregunta de fondo del trabajo es sencilla: **¿se puede recoger una parte de "
-        "esa energía y usarla para que un sensor funcione por sí mismo?** Hoy esas señales "
-        "urbanas son **persistentes** y la electrónica de muy bajo consumo vuelve la idea "
-        "plausible."
+        "esa energía y usarla para que un sensor funcione por sí mismo?** Dos cosas la "
+        "vuelven plausible hoy: esas señales urbanas son persistentes y la electrónica de "
+        "muy bajo consumo necesita cada vez menos para arrancar."
     )
 
     st.subheader("El caso de estudio: una fuente real y conocida")
     st.markdown(
-        "Para responder la pregunta con números reales —y no con suposiciones— hace falta "
+        "Para responder la pregunta con números reales, y no con suposiciones, hace falta "
         "una fuente de radio concreta y bien caracterizada: solo así se puede calcular "
         "cuánta energía llega y cuánta se aprovecha. En este trabajo se eligió el "
         f"transmisor de {termino('TDT', 'televisión digital')} del **Cerro Nutibara**, en "
@@ -58,8 +57,8 @@ def render():
         unsafe_allow_html=True,
     )
     st.markdown(
-        "¿Por qué esa fuente? Porque es **potente, permanente y conocida**: emite de forma "
-        "continua y sus características están documentadas, lo que permite apoyar todo el "
+        "¿Por qué esa fuente? Porque es potente, permanente y conocida: emite de forma "
+        "continua y sus características están documentadas. Eso permite apoyar todo el "
         "estudio sobre un escenario real en lugar de una estimación vaga."
     )
     _ref("§1.1 Contexto y motivación · §1.3 Alcance y limitaciones del estudio · "
@@ -83,7 +82,7 @@ def render():
     st.markdown(
         "La dependencia de baterías sigue siendo una limitación importante para muchos "
         "nodos IoT. Este trabajo explora si la energía de radiofrecuencia del entorno "
-        "puede aprovecharse como **fuente complementaria** de alimentación. Para entender "
+        "puede aprovecharse como fuente complementaria de alimentación. Para entender "
         "cómo hacerlo, primero hay que conocer el dispositivo encargado de capturar esa "
         "energía: la **rectena**."
     )

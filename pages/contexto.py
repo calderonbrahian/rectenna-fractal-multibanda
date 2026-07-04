@@ -29,21 +29,21 @@ def render():
     # ── Definición mínima ────────────────────────────────────────────────────
     st.subheader("Una rectena = antena + rectificador")
     st.markdown(
-        "Una **rectena** es la unión de dos piezas: una **antena**, que capta las ondas de "
-        "radio del aire, y un **rectificador**, que convierte esa señal en corriente "
-        "continua aprovechable. En una sola pieza combina las dos funciones clave: "
-        "**capturar energía y transformarla en electricidad utilizable**."
+        "Una **rectena** es la unión de dos piezas: una antena, que capta las ondas de "
+        "radio del aire, y un rectificador, que convierte esa señal en corriente "
+        "continua aprovechable. En una sola pieza reúne las dos funciones clave: capturar "
+        "la energía y transformarla en electricidad utilizable."
     )
 
     # ── El recorrido de la energía (alto nivel) + diagrama (detalle visual) ───
     st.subheader("El recorrido de la energía")
     st.markdown(
         "Entre captar la onda y alimentar el sensor, la energía hace un recorrido. Empieza "
-        "en el aire como una onda de radio y, para poder usarse, debe atravesar varias "
-        "etapas: ser **capturada**, **acondicionada** para que no se pierda, **convertida** "
-        "en corriente continua y, por fin, **entregada** al dispositivo que la usa. La "
-        "rectena es el sistema que realiza ese recorrido completo, de izquierda (entra como "
-        "radio) a derecha (sale como electricidad):"
+        "en el aire como una onda de radio y, para poder usarse, atraviesa varias etapas: "
+        "primero se capta, luego se acondiciona para que no se pierda, después se convierte "
+        "en corriente continua y por fin se entrega al dispositivo que la usa. La rectena es "
+        "el sistema que realiza ese recorrido completo, de izquierda (entra como radio) a "
+        "derecha (sale como electricidad):"
     )
     st.plotly_chart(_fig_rectena(), width="stretch")
 
@@ -52,18 +52,18 @@ def render():
     # ── Por qué no toda la energía llega: fenómeno primero, ecuación después ──
     st.subheader("Por qué no toda la energía llega")
     st.markdown(
-        "Ese recorrido tiene un precio. **Ninguna etapa es perfecta:** cada bloque conserva "
-        "solo una parte de la energía que recibe y pierde el resto —por reflexión, por "
-        "calor o por conversión incompleta—. Si la antena y el rectificador no están bien "
+        "Ese recorrido tiene un precio. Ninguna etapa es perfecta: cada bloque conserva "
+        "solo una parte de la energía que recibe y pierde el resto, sea por reflexión, por "
+        "calor o por una conversión incompleta. Si la antena y el rectificador no están bien "
         "acoplados, por ejemplo, parte de la energía rebota y se pierde antes de avanzar."
     )
     st.markdown(
-        "Y como las etapas están **en cadena**, esas pérdidas se acumulan: la eficiencia "
-        "total depende de todas a la vez, y **la etapa más débil marca el techo** de todo "
-        "el sistema. Basta con que un bloque rinda poco para que caiga el conjunto."
+        "Y como las etapas van en cadena, esas pérdidas se acumulan: la eficiencia total "
+        "depende de todas a la vez, y **la etapa más débil marca el techo** de todo el "
+        "sistema. Basta con que un bloque rinda poco para que caiga el conjunto."
     )
     st.markdown(
-        "Matemáticamente, esa idea se expresa como el **producto** de las eficiencias de "
+        "Matemáticamente, esa idea se expresa como el producto de las eficiencias de "
         "cada etapa:"
     )
     st.latex(

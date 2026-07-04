@@ -180,10 +180,10 @@ def render():
     # ── Carga y descarga del supercap en el tiempo ──────────────────────────
     st.markdown("**:material/show_chart: Carga y descarga del supercap en el tiempo**")
     st.markdown(
-        "El supercap **se carga lentamente** con la potencia continua P_DC y se "
-        "**descarga en saltos** cada vez que el nodo transmite. En régimen permanente "
-        "la tensión oscila como diente de sierra entre un valle (justo después del TX) "
-        "y un techo (justo antes del siguiente)."
+        "El supercap se carga lentamente con la potencia continua P_DC y se "
+        "descarga en saltos cada vez que el nodo transmite. En régimen permanente "
+        "la tensión oscila como un diente de sierra: baja a un valle justo después del TX "
+        "y sube a un techo justo antes del siguiente."
     )
     csf, cdur = st.columns(2)
     with csf:

@@ -49,11 +49,11 @@ def render():
                    "porque los EIRP urbanos son variables; lee las cifras como cotas superiores."),
     )
 
-    badge_exploracion("El Escenario A es **exploratorio**: su propósito es **mapear en qué "
-                       "bandas urbanas** una antena fractal podría captar energía, no fijar "
+    badge_exploracion("El Escenario A es exploratorio: su propósito es mapear en qué "
+                       "bandas urbanas una antena fractal podría captar energía, no fijar "
                        "una cifra final. Por eso sus valores se leen como **cotas "
                        "superiores** (el resultado energético firme lo aporta el "
-                       "**Escenario B**: TDT, 550 MHz, P_DC = 1 637,6 µW).")
+                       "Escenario B: TDT, 550 MHz, P_DC = 1 637,6 µW).")
 
     st.markdown(
         "Este escenario pone a prueba la pregunta que dejó abierta **Topologías**:"
@@ -113,8 +113,8 @@ def render():
     pout_vals = [b['Pout_uW'] for b in bandas]
 
     st.markdown(
-        "**Primera señal, antes del detalle.** Si la antena recolectara bien en varias "
-        "bandas, esperaríamos una PCE **alta y pareja** entre ellas. Conviene mirar la "
+        "**Una primera señal, antes del detalle.** Si la antena recolectara bien en varias "
+        "bandas, esperaríamos una PCE alta y pareja entre ellas. Conviene mirar la "
         "media, la máxima y cuánto se separan:"
     )
     with st.container(horizontal=True):
@@ -125,10 +125,10 @@ def render():
         st.metric("Pout máx. [µW]",     f"{max(pout_vals):.2f}",                     border=True)
 
     st.caption(
-        ":material/lightbulb: Los valores son **bajos y desiguales**: la PCE media queda "
+        ":material/lightbulb: Los valores son bajos y desiguales: la PCE media queda "
         "muy por debajo del techo del modelo (85 %) y la salida es de microvatios. Es la "
-        "primera señal de que la multibanda no se está cumpliendo por igual —el **porqué** "
-        "está en las pestañas siguientes—. Léelos como **cotas superiores**, no como "
+        "primera señal de que la multibanda no se está cumpliendo por igual; el porqué "
+        "está en las pestañas siguientes. Conviene leerlos como cotas superiores, no como "
         "resultado firme."
     )
 
@@ -145,29 +145,29 @@ def render():
 
     with tab_s11:
         st.markdown(
-            "**La geometría multibanda existe, pero eso no asegura que la energía entre.** "
-            "S₁₁ mide la **puerta de entrada** de la antena: qué fracción de la energía pasa "
-            "y qué fracción rebota. La línea de **−10 dB** es el aprobado —por debajo, la "
-            "energía entra; por encima, se refleja—. Si el fractal fuera multibanda "
+            "La geometría multibanda existe, pero eso no asegura que la energía entre. "
+            "S₁₁ mide la puerta de entrada de la antena: qué fracción de la energía pasa "
+            "y qué fracción rebota. La línea de −10 dB es el aprobado; por debajo, la "
+            "energía entra; por encima, se refleja. Si el fractal fuera multibanda "
             "*aprovechable*, la curva debería cruzar esa línea en cada una de sus "
-            "resonancias. La prueba es contar en cuántas lo hace:"
+            "resonancias. La prueba está en contar en cuántas lo hace:"
         )
         bandas_dict = {b: f / 1e9 for b, f in BANDS_A.items()}
         fig = fig_s11(sweep['freqs_GHz'], sweep['s11_dB'],
                       'S11 — Sierpinski Gasket it.3 (sin IMN)', xunit='GHz', bandas=bandas_dict)
         st.plotly_chart(fig)
         st.markdown(
-            "**¿Qué nos muestra esta evidencia?**\n\n"
-            "El Sierpinski genera varias resonancias, pero **solo una de las siete bandas "
-            "objetivo** —la de 5G en 3,5 GHz— cae con holgura por debajo de −10 dB "
+            "**¿Qué muestra esta evidencia?**\n\n"
+            "El Sierpinski genera varias resonancias, pero solo una de las siete bandas "
+            "objetivo, la de 5G en 3,5 GHz, cae con holgura por debajo de −10 dB "
             "(S₁₁ = −17,4 dB). En las demás, buena parte de la energía se refleja antes de "
             "entrar a la antena.\n\n"
-            "Importa porque S₁₁ es la **primera condición de toda la cadena**: si la energía "
+            "Importa porque S₁₁ es la primera condición de toda la cadena: si la energía "
             "no entra, ninguna etapa posterior puede recuperarla. La multibanda *geométrica* "
             "no se está convirtiendo, al menos aquí, en multibanda *aprovechable*.\n\n"
-            "Pero esto abre dos preguntas que S₁₁ por sí solo no responde: **¿por qué la "
-            "antena se adapta justo en esas frecuencias y no en otras?** y **¿basta con que "
-            "la energía entre para que se aproveche?** La primera se ve en *Impedancia*; la "
+            "Esto abre dos preguntas que S₁₁ por sí solo no responde: ¿por qué la "
+            "antena se adapta justo en esas frecuencias y no en otras? y ¿basta con que "
+            "la energía entre para que se aproveche? La primera se ve en *Impedancia*; la "
             "segunda, en *PCE vs Pin*."
         )
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
@@ -328,10 +328,10 @@ def render():
 
         st.markdown(
             "**Lo que acabas de ver:** al subir de banda, los triángulos activos se hacen "
-            "más **pequeños** y más **numerosos** (1 → 3 → 9). A cada frecuencia "
-            "$f_k = f_0 \\cdot 2^k$ radia la escala $L_0/2^k$: eso es la **autoafinidad**. "
-            "La antena no es una banda, son tres antenas anidadas, una por escala — la "
-            "multibanda **es real y nace de la geometría**.\n\n"
+            "más pequeños y más numerosos (1 → 3 → 9). A cada frecuencia "
+            "$f_k = f_0 \\cdot 2^k$ radia la escala $L_0/2^k$: eso es la autoafinidad. "
+            "La antena no es una banda, son tres antenas anidadas, una por escala; la "
+            "multibanda es real y nace de la geometría.\n\n"
             "Lo que la geometría no garantiza es que esas bandas sean *aprovechables*: eso "
             "es lo que miden S₁₁, la impedancia y la PCE. El desarrollo formal de la "
             "autosimilitud y su dimensión de Hausdorff está en **§2.3.1–§2.3.2**, y la "
@@ -369,7 +369,7 @@ def render():
             "ninguna reúne a la vez las dos virtudes que la recolección necesita. Esa es, "
             "reunida, la respuesta del Escenario A a su pregunta: **una antena fractal "
             "multibanda, sin una red de adaptación dedicada por banda, no capta energía útil "
-            "en varias bandas a la vez**. Es un hallazgo de exploración —cotas superiores—, "
+            "en varias bandas a la vez**. Es un hallazgo de exploración, de cotas superiores, "
             "no la cifra final del proyecto.\n\n"
             "El análisis completo de estas limitaciones, banda por banda, se desarrolla en "
             "**§5.1** y en la tabla de limitaciones **L1–L8** (Apéndice E). El resultado "

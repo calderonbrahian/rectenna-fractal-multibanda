@@ -37,10 +37,10 @@ def render():
     # ── Por qué fractal (contado desde la utilidad, no desde la teoría) ───────
     st.subheader("Por qué geometría fractal")
     st.markdown(
-        "El estudio utiliza geometrías fractales porque permiten obtener comportamientos "
-        "difíciles de lograr con antenas convencionales: **operar en varias bandas** o "
-        "**reducir el tamaño físico** sin perder funcionalidad. Estas dos propiedades son "
-        "justamente las que explora este trabajo, una en cada antena."
+        "El estudio usa geometrías fractales porque permiten comportamientos difíciles de "
+        "lograr con antenas convencionales: operar en varias bandas, o reducir el tamaño "
+        "físico sin perder funcionalidad. Son justo las dos propiedades que explora este "
+        "trabajo, una en cada antena."
     )
 
     # ── Las dos estrategias, leídas como investigación (no como fichas) ───────
@@ -62,7 +62,7 @@ def render():
                 "Porque su estructura fractal genera resonancias en múltiples bandas "
                 "(1,8–5,8 GHz).\n\n"
                 "**¿Qué aporta al estudio?**  \n"
-                "Representa el enfoque **exploratorio**: prioriza la cobertura espectral "
+                "Representa el enfoque exploratorio: prioriza la cobertura espectral "
                 "sobre una estimación precisa de energía.\n\n"
                 "**Principal ventaja** · una única antena compacta puede operar en varias "
                 "bandas de frecuencia.  \n"
@@ -79,11 +79,11 @@ def render():
                 "Cuánta energía útil puede entregar una antena cuando apunta a una fuente "
                 "concreta y bien conocida.\n\n"
                 "**¿Por qué esta geometría?**  \n"
-                "Porque la curva de Koch permite **miniaturizar** una antena dirigida de "
+                "Porque la curva de Koch permite miniaturizar una antena dirigida de "
                 "banda ancha y mantenerla compacta en la banda de televisión y telefonía "
                 "baja (UHF, 470–900 MHz).\n\n"
                 "**¿Qué aporta al estudio?**  \n"
-                "Representa el enfoque **cuantitativo**: prioriza maximizar y cuantificar "
+                "Representa el enfoque cuantitativo: prioriza maximizar y cuantificar "
                 "la energía capturada frente a la cobertura multibanda.\n\n"
                 "**Principal ventaja** · al concentrar la energía en una dirección, permite "
                 "estimar cifras concretas de energía recuperable.  \n"
@@ -96,11 +96,10 @@ def render():
     # ── Cierre: qué se espera aprender al compararlas (crea expectativa) ──────
     st.subheader("Qué se espera aprender al compararlas")
     st.markdown(
-        "Ninguna de las dos antenas pretende ser «la mejor» en todos los escenarios. El "
-        "interés del estudio es entender **qué se gana y qué se pierde con cada "
-        "estrategia**: cobertura multibanda frente a captación dirigida de energía. Los "
-        "resultados de los escenarios siguientes permitirán **cuantificar** esas "
-        "diferencias."
+        "Ninguna de las dos antenas pretende ser «la mejor» en todo escenario. Lo que "
+        "interesa es entender qué se gana y qué se pierde con cada estrategia: cobertura "
+        "multibanda frente a captación dirigida de energía. Los escenarios siguientes le "
+        "ponen números a esa diferencia."
     )
     _ref("§2.3 Geometría fractal aplicada a antenas · §2.3.2 Triángulo de Sierpinski · "
          "§2.3.3 Curva de Koch · §3.4 Módulo 1 — Geometrías fractales · "

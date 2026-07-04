@@ -53,21 +53,21 @@ def render():
                    "banda ancha sin necesidad de redes de adaptación complejas."),
     )
 
-    badge_exploracion("Esta página es **diagnóstico técnico**: muestra el comportamiento "
-                       "del modelo de la antena en toda la banda. El **resultado de "
-                       "referencia** (P_DC = 1 637,6 µW) se presenta en **Resultados de "
+    badge_exploracion("Esta página es diagnóstico técnico: muestra el comportamiento "
+                       "del modelo de la antena en toda la banda. El resultado de "
+                       "referencia (P_DC = 1 637,6 µW) se presenta en **Resultados de "
                        "Referencia del Proyecto**.")
 
     st.markdown(
         "**Topologías** presentó la FLPDA como la apuesta *cuantitativa*: una antena "
-        "**dirigida** que apunta a una fuente real y bien caracterizada —el transmisor de "
-        "TDT del Cerro Nutibara—. La pregunta que pone a prueba este escenario es **cuánta "
-        "energía útil puede entregar**.\n\n"
-        "**Si la antena cumpliera su papel**, deberíamos ver cuatro cosas: adaptación "
-        "**continua** en toda la banda UHF (no en puntos sueltos como el Sierpinski), una "
-        "**ganancia** que concentre la energía hacia la torre, una geometría **compacta** "
-        "pese a operar en UHF, y una potencia continua que **baste para arrancar y "
-        "sostener** un nodo IoT a distancias realistas. Las pestañas lo comprueban una a una."
+        "dirigida que apunta a una fuente real y bien caracterizada, el transmisor de "
+        "TDT del Cerro Nutibara. La pregunta que pone a prueba este escenario es cuánta "
+        "energía útil puede entregar.\n\n"
+        "Si la antena cumpliera su papel, deberíamos ver cuatro cosas: adaptación "
+        "continua en toda la banda UHF (no en puntos sueltos como el Sierpinski), una "
+        "ganancia que concentre la energía hacia la torre, una geometría compacta "
+        "pese a operar en UHF, y una potencia continua que baste para arrancar y "
+        "sostener un nodo IoT a distancias realistas. Las pestañas lo comprueban una a una."
     )
     _ref("§3.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
          "§4.2 Escenario B — FLPDA Koch (470–900 MHz) · "
@@ -94,8 +94,8 @@ def render():
                       "ganancia → más P_in → mayor P_DC.")
     st.caption(
         ":material/lightbulb: **Geometría:** 8 dipolos sobre un boom de ~50 cm; la curva de "
-        "Koch **reduce −43 % la dimensión** del dipolo sin cambiar su frecuencia → antena "
-        "más compacta para el mismo rango de operación."
+        "Koch reduce −43 % la dimensión del dipolo sin cambiar su frecuencia, así que la "
+        "antena resulta más compacta para el mismo rango de operación."
     )
 
     st.divider()
@@ -111,10 +111,10 @@ def render():
 
     with tab_s11:
         st.markdown(
-            "Lo primero que debe cumplir la antena es **dejar entrar la energía** en toda la "
-            "banda de la fuente. La línea de **−10 dB** es el aprobado; la zona sombreada es "
+            "Lo primero que debe cumplir la antena es dejar entrar la energía en toda la "
+            "banda de la fuente. La línea de −10 dB es el aprobado; la zona sombreada es "
             "la banda de diseño (470–900 MHz). A diferencia del Sierpinski, aquí "
-            "esperaríamos ver la curva **por debajo del umbral en toda la banda**, no solo "
+            "esperaríamos ver la curva por debajo del umbral en toda la banda, no solo "
             "en un punto:"
         )
         fig = fig_s11(sweep['freqs_MHz'], sweep['s11_dB'],
@@ -129,14 +129,14 @@ def render():
         )
         st.plotly_chart(fig)
         st.markdown(
-            "**¿Qué nos muestra esta evidencia?**\n\n"
-            "La FLPDA mantiene **S₁₁ < −10 dB de forma continua** en toda la banda UHF. Es "
+            "**¿Qué muestra esta evidencia?**\n\n"
+            "La FLPDA mantiene S₁₁ < −10 dB de forma continua en toda la banda UHF. Es "
             "el contraste directo con el Sierpinski: allí solo una de siete bandas se "
-            "adaptaba; aquí la antena acepta la energía **en todo el rango** de la fuente "
-            "TDT. La primera condición de la cadena —que la energía entre— se cumple.\n\n"
-            "Que la energía entre bien no dice todavía **cuánta** se capta ni hacia dónde. "
-            "Eso depende de cuánto **concentre** la antena la señal hacia la torre: la "
-            "siguiente pestaña, *Ganancia*."
+            "adaptaba; aquí la antena acepta la energía en todo el rango de la fuente "
+            "TDT. La primera condición de la cadena, que la energía entre, se cumple.\n\n"
+            "Que la energía entre bien no dice todavía cuánta se capta ni hacia dónde. "
+            "Eso depende de cuánto concentre la antena la señal hacia la torre, y se ve en "
+            "la siguiente pestaña, *Ganancia*."
         )
         _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
              "§4.2.1 Diseño paramétrico y dimensiones calculadas · "
@@ -416,8 +416,8 @@ def render():
             "duplicación de distancia (Friis ∝ 1/d²), y la potencia continua cae aún más "
             "rápido, porque a baja señal el diodo convierte peor (zona sub-umbral de "
             "Shockley). Cuando V_DC baja de 130 mV, el nodo ya no arranca por sí solo, "
-            "aunque coseche algo de energía. **Ese par —cuánta energía y si arranca— es la "
-            "respuesta cuantitativa del Escenario B a su pregunta.**"
+            "aunque coseche algo de energía. Ese par, cuánta energía y si arranca, es la "
+            "respuesta cuantitativa del Escenario B a su pregunta."
         )
 
         st.divider()
@@ -461,7 +461,7 @@ def render():
         )
         st.markdown(
             "**Explóralo tú:** el escenario de referencia opera a 550 MHz. Cambia la "
-            "frecuencia y observa cómo se desplaza la curva — ¿la PCE mejora o empeora al "
+            "frecuencia y observa cómo se desplaza la curva: ¿la PCE mejora o empeora al "
             "subir en la banda? Lo retoma la pregunta de más abajo (*¿en qué punto del UHF "
             "conviene operar?*)."
         )
@@ -504,12 +504,12 @@ def render():
             "500 y 600 MHz** por dos razones que compiten:"
         )
         st.markdown(
-            "- **A frecuencia más baja**: menor FSPL → más potencia disponible (gana).\n"
-            "- **A frecuencia más alta**: mayor PCE del rectificador (gana hasta la "
-            "  saturación) y mejor adaptación con la red L de diseño.\n\n"
-            f"El **canal 30 de UHF Colombia (550 MHz)** del transmisor TDT cae "
-            "justamente en el punto de equilibrio y por eso es el elegido como "
-            "escenario de referencia. Esto **no es coincidencia**: la antena se "
+            "- A frecuencia más baja, el FSPL es menor y hay más potencia disponible (gana).\n"
+            "- A frecuencia más alta, el rectificador rinde más PCE (hasta la saturación) "
+            "  y mejora la adaptación con la red L de diseño.\n\n"
+            "El canal 30 de UHF Colombia (550 MHz) del transmisor TDT cae "
+            "justamente en ese punto de equilibrio, y por eso es el elegido como "
+            "escenario de referencia. No es casualidad: la antena se "
             "diseñó para esa banda."
         )
         _ref("§2.6.2 El espectro UHF colombiano — Escenario B · "
