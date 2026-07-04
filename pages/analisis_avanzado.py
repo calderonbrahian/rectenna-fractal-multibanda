@@ -133,9 +133,9 @@ def render():
     with tab_mc:
         st.markdown(
             r"""
-Propagación de incertidumbre mediante Monte Carlo (N muestras).
-**Este Monte Carlo mide la sensibilidad al despliegue (entorno y emplazamiento), no la
-incertidumbre del modelo en sí.** La segunda se trata en las limitaciones L1–L8.
+Propagación de incertidumbre mediante Monte Carlo (N muestras). Este Monte Carlo mide la
+sensibilidad al despliegue (entorno y emplazamiento), no la incertidumbre del modelo en
+sí; esa segunda parte se trata en las limitaciones L1–L8.
 
 | Parámetro | Distribución | σ / rango | Justificación |
 |-----------|-------------|-----------|---------------|

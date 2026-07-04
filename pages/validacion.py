@@ -185,10 +185,11 @@ def render():
 | 2 | **Adaptación perfecta asumida** en el modelo | 1,84 – 2,04 GHz (sobreestimación) | + 25 a + 12 pp |
 | 3 | **Capacitancia parásita C_j a alta frecuencia** no modelada | 3,30 – 5,80 GHz (subestimación) | − 14 a − 19 pp |
 
-**Conclusión.** El RMSE de **15,50 pp** y la asimetría del error son coherentes con las
+En conjunto, el RMSE de 15,50 pp y la asimetría del error son coherentes con las
 hipótesis declaradas: el modelo es más fiable en el extremo inferior del espectro,
 justamente donde opera el Escenario B de referencia (550 MHz). La comparación no es
-entre diseños sobre el mismo material; léase como **verificación de orden de magnitud**.
+entre diseños sobre el mismo material, así que conviene leerla como una verificación
+de orden de magnitud.
 """
         )
 
