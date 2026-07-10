@@ -84,7 +84,7 @@ La app queda disponible en `http://localhost:8501`. Tema institucional UdeA (bla
 
 ## Tests de regresión
 
-51 tests bloquean los valores canónicos. Ejecutar:
+56 tests (51 canónicos/modelos + 5 pipeline) bloquean los valores y artefactos. Ejecutar:
 
 ```bash
 python -m pytest tests/ -v
@@ -105,7 +105,7 @@ Cualquier cambio en `core/` o `configs/parametros.py` que altere los 19 valores 
 Todas las figuras y tablas del trabajo de grado se regeneran desde el modelo actual, sin intervención manual. Fuente única de verdad: `configs/parametros.py` → pipeline → artefactos.
 
 ```bash
-# 1. Regenera las 11 figuras (PNG 300 dpi) + 7 tablas CSV + verificación canónica
+# 1. Regenera 11 figuras de datos + 5 conceptuales (PNG 300 dpi) + 7 tablas CSV + verificación
 python _regen/generate_artifacts.py
 #    Salida: _regen/out/figuras/  _regen/out/tablas/  _regen/out/verificacion.json
 
@@ -149,13 +149,15 @@ rectenna-fractal-multibanda/
 ├── plots/charts.py                 Templates Plotly simple_white
 ├── utils/                          pagina, glosario, circuit_drawing, exportar
 ├── _regen/                         Pipeline de regeneración de artefactos
-│   ├── generate_artifacts.py       11 figuras + 7 tablas CSV desde el modelo
+│   ├── generate_artifacts.py       11 figuras datos + 5 conceptuales + 7 tablas CSV
+│   ├── figuras_conceptuales.py     C1–C5 (fuentes→caso, maestra, anatomía, flujo, repro)
+│   ├── estilo_figuras.py           sistema gráfico unificado (paleta + iconos técnicos)
 │   ├── derive_doc_values.py        doc_values.json (todos los valores del documento)
 │   └── out/                        figuras/, tablas/, doc_values.json, verificacion.json
-├── experimental/                   Prototipos animados (fuera de la app oficial)
 └── tests/
     ├── test_regression_canonical.py  11 tests · valores canónicos bloqueados
     ├── test_models.py                40 tests unitarios
+    ├── test_pipeline_smoke.py         5 tests · figuras conceptuales C1–C5
     └── verify_canonical.py           Script de verificación rápida
 ```
 

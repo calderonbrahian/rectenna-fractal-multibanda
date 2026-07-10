@@ -30,7 +30,6 @@ Las dependencias de terceros conservan sus respectivas licencias originales (ver
 - Plotly — MIT
 - Pandas — BSD
 - pytest — MIT
-- PyYAML — MIT
 
 Las bibliotecas se importan sin modificación; este aviso aplica únicamente al código original del autor.
 
