@@ -1,0 +1,191 @@
+"""
+SISTEMA GRÁFICO UNIFICADO — figuras conceptuales y metodológicas.
+================================================================================
+Un solo lenguaje visual para que todo el material del trabajo parezca salido
+de un mismo sistema (estética tipo paper: líneas finas, tinta sobria, un acento
+por familia, iconografía técnica de línea). Sin relleno de colores chillones.
+
+Provee: paleta, setup de lienzo, nodo con badge numerado, rieles/flechas finas
+y un set de iconos técnicos de línea (antena, red L, diodo, chip, batería,
+ondas, ciudad, código, gráfico, check, pregunta, hipótesis, alerta, pin).
+
+No produce resultados: es infraestructura de dibujo reusada por
+figuras_conceptuales.py.
+"""
+
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Arc, Circle, Polygon, Rectangle, PathPatch
+from matplotlib.path import Path
+
+# ── Paleta sobria ────────────────────────────────────────────────────────────
+INK   = "#22262e"   # tinta principal (casi negro)
+MUTE  = "#5c6672"   # texto secundario
+RAIL  = "#c4cbd4"   # líneas/conectores finos
+FILL  = "#f7f8fa"   # relleno de nodo (muy claro)
+LINE  = "#8a93a0"   # borde de nodo
+
+# Acentos por familia (desaturados, "paper")
+AC_CONCEPT = "#0b6e8f"   # conceptual (teal)
+AC_METHOD  = "#3a4a86"   # metodológica (índigo)
+AC_REPRO   = "#2f7d4f"   # reproducibilidad (verde)
+AC_A       = "#b8860b"   # topología A (Sierpinski, dorado — convención SSOT)
+AC_B       = "#2f7d4f"   # topología B (FLPDA, verde — convención SSOT)
+
+FONT = "DejaVu Sans"
+
+
+def canvas(w, h, xlim, ylim):
+    fig, ax = plt.subplots(figsize=(w, h))
+    ax.set_xlim(*xlim); ax.set_ylim(*ylim)
+    ax.set_aspect("equal"); ax.axis("off")
+    return fig, ax
+
+
+def node(ax, cx, cy, w, h, title, sub=None, idx=None, accent=INK, icon=None,
+         title_fs=9.5, sub_fs=7.4):
+    """Nodo rectangular fino con badge numerado opcional e icono opcional."""
+    ax.add_patch(FancyBboxPatch(
+        (cx - w/2, cy - h/2), w, h,
+        boxstyle="round,pad=0.01,rounding_size=0.05",
+        linewidth=1.1, edgecolor=LINE, facecolor=FILL, zorder=2))
+    # franja de acento a la izquierda (fina)
+    ax.add_patch(Rectangle((cx - w/2, cy - h/2), 0.055, h,
+                           facecolor=accent, edgecolor="none", zorder=3))
+    ty = cy
+    if icon is not None:
+        icon(ax, cx, cy + h*0.20, min(w, h)*0.30, accent)
+        ty = cy - h*0.22
+    if sub:
+        ax.text(cx, ty + (0.0 if icon else h*0.12), title, ha="center", va="center",
+                fontsize=title_fs, color=INK, fontweight="bold", family=FONT, zorder=4)
+        ax.text(cx, ty - h*0.20, sub, ha="center", va="center",
+                fontsize=sub_fs, color=MUTE, family=FONT, zorder=4)
+    else:
+        ax.text(cx, ty, title, ha="center", va="center", fontsize=title_fs,
+                color=INK, fontweight="bold", family=FONT, zorder=4)
+    if idx is not None:
+        bx, by = cx - w/2 + 0.16, cy + h/2 - 0.16
+        ax.add_patch(Circle((bx, by), 0.135, facecolor=accent, edgecolor="none", zorder=5))
+        ax.text(bx, by, str(idx), ha="center", va="center", fontsize=7.6,
+                color="white", fontweight="bold", family=FONT, zorder=6)
+
+
+def flow(ax, x0, y0, x1, y1, accent=RAIL, lw=1.6, ms=11, style="-|>"):
+    ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle=style,
+                 mutation_scale=ms, linewidth=lw, color=accent, zorder=1,
+                 shrinkA=1, shrinkB=1))
+
+
+def caption(ax, x, y, text, fs=7.8):
+    ax.text(x, y, text, ha="center", va="center", fontsize=fs, style="italic",
+            color=MUTE, family=FONT)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  ICONOS TÉCNICOS DE LÍNEA  (ax, cx, cy, s, color)  — s = radio aproximado
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _ln(ax, xs, ys, c, lw=1.5):
+    ax.plot(xs, ys, color=c, lw=lw, solid_capstyle="round", zorder=4)
+
+def ic_city(ax, cx, cy, s, c):
+    hs = [0.9, 1.4, 1.1, 1.6, 1.0]
+    n = len(hs); bw = 2*s/n
+    for i, h in enumerate(hs):
+        x = cx - s + i*bw
+        ax.add_patch(Rectangle((x, cy - s*0.7), bw*0.78, h*s*0.9,
+                     facecolor="none", edgecolor=c, lw=1.3, zorder=4))
+
+def ic_waves(ax, cx, cy, s, c):
+    for k, r in enumerate((0.45, 0.8, 1.15)):
+        ax.add_patch(Arc((cx - s*0.7, cy - s*0.2), r*s*2, r*s*2, angle=0,
+                     theta1=-55, theta2=55, edgecolor=c, lw=1.4, zorder=4))
+    ax.add_patch(Circle((cx - s*0.7, cy - s*0.2), s*0.09, facecolor=c, edgecolor="none", zorder=5))
+
+def ic_antenna(ax, cx, cy, s, c):
+    _ln(ax, [cx, cx], [cy - s, cy + s*0.2], c)                 # mástil
+    _ln(ax, [cx, cx - s*0.6], [cy + s*0.2, cy + s], c)          # brazo izq
+    _ln(ax, [cx, cx + s*0.6], [cy + s*0.2, cy + s], c)          # brazo der
+    for r in (0.5, 0.85):
+        ax.add_patch(Arc((cx, cy + s*0.2), r*s*2, r*s*2, angle=0,
+                     theta1=35, theta2=145, edgecolor=c, lw=1.1, zorder=4))
+
+def ic_match(ax, cx, cy, s, c):
+    # inductor (3 arcos) + línea
+    x0 = cx - s
+    for i in range(3):
+        ax.add_patch(Arc((x0 + i*s*0.5 + s*0.25, cy), s*0.5, s*0.7, angle=0,
+                     theta1=0, theta2=180, edgecolor=c, lw=1.4, zorder=4))
+    _ln(ax, [cx + s*0.5, cx + s], [cy, cy], c)
+    _ln(ax, [cx + s, cx + s], [cy + s*0.5, cy - s*0.5], c)      # cap placa
+    _ln(ax, [cx + s + 0.12, cx + s + 0.12], [cy + s*0.5, cy - s*0.5], c)
+
+def ic_diode(ax, cx, cy, s, c):
+    _ln(ax, [cx - s, cx - s*0.4], [cy, cy], c)
+    ax.add_patch(Polygon([[cx - s*0.4, cy - s*0.6], [cx - s*0.4, cy + s*0.6],
+                 [cx + s*0.4, cy]], closed=True, facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    _ln(ax, [cx + s*0.4, cx + s*0.4], [cy - s*0.6, cy + s*0.6], c)   # barra
+    _ln(ax, [cx + s*0.4, cx + s], [cy, cy], c)
+
+def ic_chip(ax, cx, cy, s, c):
+    ax.add_patch(Rectangle((cx - s*0.6, cy - s*0.6), s*1.2, s*1.2,
+                 facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    for i in (-0.3, 0, 0.3):
+        _ln(ax, [cx - s*0.6, cx - s*0.85], [cy + i*s*2, cy + i*s*2], c, 1.1)
+        _ln(ax, [cx + s*0.6, cx + s*0.85], [cy + i*s*2, cy + i*s*2], c, 1.1)
+
+def ic_battery(ax, cx, cy, s, c):
+    ax.add_patch(Rectangle((cx - s*0.9, cy - s*0.5), s*1.7, s, facecolor="none",
+                 edgecolor=c, lw=1.4, zorder=4))
+    ax.add_patch(Rectangle((cx + s*0.8, cy - s*0.22), s*0.18, s*0.44, facecolor=c,
+                 edgecolor="none", zorder=4))
+    _ln(ax, [cx - s*0.35, cx - s*0.35], [cy - s*0.28, cy + s*0.28], c)
+    _ln(ax, [cx + s*0.1, cx + s*0.1], [cy - s*0.28, cy + s*0.28], c)
+
+def ic_code(ax, cx, cy, s, c):
+    _ln(ax, [cx - s*0.2, cx - s*0.8, cx - s*0.2], [cy + s*0.7, cy, cy - s*0.7], c)
+    _ln(ax, [cx + s*0.2, cx + s*0.8, cx + s*0.2], [cy + s*0.7, cy, cy - s*0.7], c)
+
+def ic_chart(ax, cx, cy, s, c):
+    for i, h in enumerate((0.6, 1.1, 0.85)):
+        x = cx - s*0.7 + i*s*0.7
+        ax.add_patch(Rectangle((x, cy - s*0.7), s*0.42, h*s, facecolor="none",
+                     edgecolor=c, lw=1.3, zorder=4))
+
+def ic_check(ax, cx, cy, s, c):
+    ax.add_patch(Circle((cx, cy), s*0.95, facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    _ln(ax, [cx - s*0.45, cx - s*0.1, cx + s*0.5], [cy, cy - s*0.4, cy + s*0.45], c, 1.8)
+
+def ic_question(ax, cx, cy, s, c):
+    ax.add_patch(Circle((cx, cy), s*0.95, facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    ax.text(cx, cy, "?", ha="center", va="center", fontsize=s*24, color=c,
+            fontweight="bold", family=FONT, zorder=5)
+
+def ic_bulb(ax, cx, cy, s, c):
+    ax.add_patch(Circle((cx, cy + s*0.2), s*0.7, facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    _ln(ax, [cx - s*0.3, cx + s*0.3], [cy - s*0.55, cy - s*0.55], c)
+    _ln(ax, [cx - s*0.22, cx + s*0.22], [cy - s*0.8, cy - s*0.8], c)
+
+def ic_alert(ax, cx, cy, s, c):
+    ax.add_patch(Polygon([[cx, cy + s], [cx - s*0.9, cy - s*0.7], [cx + s*0.9, cy - s*0.7]],
+                 closed=True, facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    _ln(ax, [cx, cx], [cy + s*0.5, cy - s*0.15], c, 1.6)
+    ax.add_patch(Circle((cx, cy - s*0.4), s*0.09, facecolor=c, edgecolor="none", zorder=5))
+
+def ic_pin(ax, cx, cy, s, c):
+    ax.add_patch(Circle((cx, cy + s*0.25), s*0.7, facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    ax.add_patch(Polygon([[cx - s*0.5, cy + s*0.05], [cx + s*0.5, cy + s*0.05], [cx, cy - s]],
+                 closed=True, facecolor="none", edgecolor=c, lw=1.4, zorder=4))
+    ax.add_patch(Circle((cx, cy + s*0.28), s*0.22, facecolor=c, edgecolor="none", zorder=5))
+
+def ic_branch(ax, cx, cy, s, c):
+    # dos formas (A triángulo / B peine) para "dos topologías"
+    ax.add_patch(Polygon([[cx - s*0.75, cy - s*0.5], [cx - s*0.15, cy - s*0.5],
+                 [cx - s*0.45, cy + s*0.5]], closed=True, facecolor="none",
+                 edgecolor=AC_A, lw=1.5, zorder=4))
+    _ln(ax, [cx + s*0.5, cx + s*0.5], [cy - s*0.5, cy + s*0.5], AC_B, 1.5)
+    for dy in (-0.3, 0, 0.3):
+        _ln(ax, [cx + s*0.2, cx + s*0.5], [cy + dy*s*2, cy + dy*s*2], AC_B, 1.3)
