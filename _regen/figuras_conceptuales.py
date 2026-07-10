@@ -29,7 +29,7 @@ if _DASH not in sys.path:
 
 import matplotlib.pyplot as plt
 from configs.parametros import CANONICAL
-import estilo_figuras as E
+import estilo as E
 
 FIGS = os.path.join(_HERE, "out", "figuras")
 os.makedirs(FIGS, exist_ok=True)

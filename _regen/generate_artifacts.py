@@ -25,17 +25,17 @@ except Exception:
 # Permitir importar el paquete del dashboard (core, simulation, analysis)
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _DASH = os.path.dirname(_HERE)
-if _DASH not in sys.path:
-    sys.path.insert(0, _DASH)
+for _p in (_DASH, _HERE):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from configs.parametros import (
-    APA7_RC, CANONICAL, BANDS_A, SMS7630, COLORS,
-)
+import estilo as E
+from configs.parametros import CANONICAL, BANDS_A, SMS7630
 
 OUT = os.path.join(_HERE, "out")
 FIGS = os.path.join(OUT, "figuras")
@@ -43,11 +43,17 @@ TABS = os.path.join(OUT, "tablas")
 for d in (OUT, FIGS, TABS):
     os.makedirs(d, exist_ok=True)
 
-plt.rcParams.update(APA7_RC)
+plt.rcParams.update(E.RC)
 
-# Paleta APA7 desde el SSOT (configs.COLORS) — sin duplicar hex
-C_AZUL, C_VERDE, C_NARANJA = COLORS["azul"], COLORS["verde"], COLORS["naranja"]
-C_ROJO, C_VIOLETA, C_GRIS = COLORS["rojo"], COLORS["violeta"], COLORS["gris"]
+# Paleta unificada (estilo.COL) — misma identidad que las figuras conceptuales.
+# Convención: A=Sierpinski oro, B=FLPDA verde. Alias por compatibilidad interna.
+C_A       = E.COL["A"]        # Escenario A · Sierpinski (oro)
+C_VERDE   = E.COL["B"]        # Escenario B · FLPDA (verde)
+C_AZUL    = E.COL["accent"]   # serie neutra (teal)
+C_NARANJA = E.COL["model"]    # curva de modelo (validación)
+C_ROJO    = E.COL["warn"]     # umbrales
+C_VIOLETA = E.COL["aux"]      # violeta auxiliar
+C_GRIS    = E.COL["grid"]     # gris neutro
 
 status = []   # (figura/tabla, ok/err, detalle)
 
@@ -79,7 +85,7 @@ def fig01_s11_sierpinski():
     sw = run_sweep_freq()
     f = np.array(sw["freqs_GHz"]); s11 = np.array(sw["s11_dB"])
     fig, ax = plt.subplots(figsize=(6.4, 4.0))
-    ax.plot(f, s11, color=C_VERDE, lw=2, label="Modelo Sierpinski it.3")
+    ax.plot(f, s11, color=C_A, lw=2, label="Modelo Sierpinski it.3")
     ax.axhline(-10, color="#555", ls="--", lw=1.2, label="Umbral −10 dB")
     for name, fhz in BANDS_A.items():
         ax.axvline(fhz / 1e9, color=C_VIOLETA, ls=":", lw=0.8, alpha=0.7)
@@ -111,8 +117,8 @@ def fig02_eta_banda_A():
         s11s.append(b["s11_dB"])
     fig, ax = plt.subplots(figsize=(6.8, 4.0))
     x = np.arange(len(labels))
-    # verde: banda adaptada (S11 < -10 dB); azul: el resto
-    colors = [C_VERDE if s < -10 else C_AZUL for s in s11s]
+    # oro: banda adaptada (S11 < -10 dB) — Escenario A; gris: el resto
+    colors = [C_A if s < -10 else C_GRIS for s in s11s]
     bars = ax.bar(x, eta_tot, color=colors, alpha=0.85)
     for r, v, s in zip(bars, eta_tot, s11s):
         ax.text(r.get_x() + r.get_width() / 2, v + 0.3, f"{v:.1f}\n{s:.0f} dB",
@@ -277,7 +283,7 @@ def fig10_pce_ambos():
     fig, ax = plt.subplots(figsize=(6.6, 4.0))
     ax.plot(b["Pin_dBm"], b["PCE_pct"], color=C_VERDE, lw=2.2,
             label="Escenario B · 550 MHz")
-    ax.plot(a["Pin_dBm"], a["PCE_pct"], color=C_AZUL, lw=2.0, ls="--",
+    ax.plot(a["Pin_dBm"], a["PCE_pct"], color=C_A, lw=2.0, ls="--",
             label="Escenario A · 3,30 GHz")
     ax.axvline(CANONICAL["P_in_dBm"], color=C_ROJO, ls=":", lw=1.4,
                label=f"P_in canónico {CANONICAL['P_in_dBm']:.2f} dBm")

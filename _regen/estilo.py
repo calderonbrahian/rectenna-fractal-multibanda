@@ -1,18 +1,20 @@
 """
-SISTEMA GRÁFICO UNIFICADO — figuras conceptuales y metodológicas.
+IDENTIDAD VISUAL ÚNICA DEL PROYECTO — figuras de datos y conceptuales.
 ================================================================================
-Un solo lenguaje visual para que todo el material del trabajo parezca salido
-de un mismo sistema (estética tipo paper: líneas finas, tinta sobria, un acento
-por familia, iconografía técnica de línea). Sin relleno de colores chillones.
+Fuente única del lenguaje visual: mismo tipo de letra, misma paleta y misma
+semántica de color para TODO el material gráfico (figuras de resultados, de
+validación, conceptuales y metodológicas). Lo consumen a la vez:
 
-Provee: paleta, setup de lienzo, nodo con badge numerado, rieles/flechas finas
-y un set de iconos técnicos de línea (antena, red L, diodo, chip, batería,
-ondas, ciudad, código, gráfico, check, pregunta, hipótesis, alerta, pin).
+    _regen/generate_artifacts.py   (figuras de datos, matplotlib)
+    _regen/figuras_conceptuales.py (figuras conceptuales/metodológicas)
 
-No produce resultados: es infraestructura de dibujo reusada por
-figuras_conceptuales.py.
+Convención de color (SSOT): Escenario A · Sierpinski = ORO ; Escenario B · FLPDA = VERDE.
+
+Provee: paleta semántica (COL), rcParams unificados (RC) para las gráficas de
+datos, y las primitivas de diagrama (canvas, node, flow, iconos técnicos).
 """
 
+import os, sys
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -20,21 +22,53 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Arc, Circle, Polygon, Rectangle, PathPatch
 from matplotlib.path import Path
 
-# ── Paleta sobria ────────────────────────────────────────────────────────────
+_DASH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _DASH not in sys.path:
+    sys.path.insert(0, _DASH)
+from configs.parametros import APA7_RC
+
+# ── Neutros ───────────────────────────────────────────────────────────────────
 INK   = "#22262e"   # tinta principal (casi negro)
 MUTE  = "#5c6672"   # texto secundario
 RAIL  = "#c4cbd4"   # líneas/conectores finos
 FILL  = "#f7f8fa"   # relleno de nodo (muy claro)
 LINE  = "#8a93a0"   # borde de nodo
 
-# Acentos por familia (desaturados, "paper")
-AC_CONCEPT = "#0b6e8f"   # conceptual (teal)
-AC_METHOD  = "#3a4a86"   # metodológica (índigo)
-AC_REPRO   = "#2f7d4f"   # reproducibilidad (verde)
-AC_A       = "#b8860b"   # topología A (Sierpinski, dorado — convención SSOT)
-AC_B       = "#2f7d4f"   # topología B (FLPDA, verde — convención SSOT)
+# ── Paleta semántica ÚNICA ────────────────────────────────────────────────────
+COL = {
+    "A":      "#B8860B",   # Escenario A · Sierpinski (oro)
+    "B":      "#2F7D4F",   # Escenario B · FLPDA (verde)
+    "accent": "#0B6E8F",   # serie neutra / conceptual (teal)
+    "model":  "#EE7733",   # curva de modelo (validación, naranja)
+    "warn":   "#CC3311",   # umbrales / alertas (rojo)
+    "aux":    "#AA3377",   # violeta auxiliar
+    "ink":    INK, "mute": MUTE, "rail": RAIL, "grid": "#BBBBBB",
+}
+
+# Acentos por familia de diagrama conceptual (matices de la misma paleta)
+AC_CONCEPT = COL["accent"]   # conceptual (teal)
+AC_METHOD  = "#3a4a86"       # metodológica (índigo)
+AC_REPRO   = COL["B"]        # reproducibilidad (verde)
+AC_A       = COL["A"]        # topología A (oro)
+AC_B       = COL["B"]        # topología B (verde)
 
 FONT = "DejaVu Sans"
+
+# ── rcParams ÚNICOS para las figuras de datos (matplotlib) ────────────────────
+# Basados en APA7 pero con la misma tipografía sans y la paleta sobria de los
+# diagramas, para que gráficas y diagramas compartan identidad.
+RC = dict(APA7_RC)
+RC.update({
+    "font.family":     "sans-serif",
+    "font.sans-serif": ["DejaVu Sans", "Arial", "Helvetica"],
+    "axes.edgecolor":  LINE,
+    "axes.labelcolor": INK,
+    "text.color":      INK,
+    "xtick.color":     MUTE,
+    "ytick.color":     MUTE,
+    "grid.color":      RAIL,
+    "grid.alpha":      0.35,
+})
 
 
 def canvas(w, h, xlim, ylim):
