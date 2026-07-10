@@ -1,6 +1,6 @@
 """
 ================================================================================
-MODULO: Analisis avanzado -- Sensibilidad, Monte Carlo, Smith, BW, Link Budget
+MODULO: Analisis avanzado -- Sensibilidad, Monte Carlo, BW, Link Budget
 ================================================================================
 Herramientas complementarias para validacion y cuantificacion de incertidumbre
 del sistema de cosecha de energia RF (RFEH) fractal multibanda.
@@ -8,7 +8,6 @@ del sistema de cosecha de energia RF (RFEH) fractal multibanda.
 Contenido:
     sensitivity_tornado()   -- Analisis de sensibilidad parametrica (tornado)
     monte_carlo_pdc()       -- Propagacion de incertidumbre (Monte Carlo)
-    smith_chart_data()      -- Datos para carta de Smith
     rectifier_bandwidth()   -- Ancho de banda del rectificador a -3 dB de PCE
     link_budget_table()     -- Tabla formal de presupuesto de enlace
     supercap_sizing()       -- Dimensionamiento del supercondensador
@@ -154,42 +153,6 @@ def monte_carlo_pdc(base_params: dict,
         'p95': float(np.percentile(valid, 95)),
         'ci_95': (float(np.percentile(valid, 2.5)), float(np.percentile(valid, 97.5))),
         'cv_pct': float(np.std(valid) / max(np.mean(valid), 1e-15) * 100),
-    }
-
-
-# ── Carta de Smith ──────────────────────────────────────────────────────────
-
-def smith_chart_data(antenna, freqs_hz: np.ndarray, Z0: float = 50.0) -> dict:
-    """
-    Calcula datos para graficar en carta de Smith.
-
-    Retorna la impedancia normalizada z = Z/Z0 y el coeficiente de
-    reflexion Gamma = (Z - Z0)/(Z + Z0) para cada frecuencia.
-
-    Parametros
-    ----------
-    antenna   : instancia con metodo .impedance(freq)
-    freqs_hz  : array de frecuencias [Hz]
-    Z0        : impedancia de referencia [Ohm]
-
-    Retorna
-    -------
-    dict con 'freqs_hz', 'Z', 'z_norm', 'gamma', 'gamma_mag', 'gamma_phase_deg'
-    """
-    freqs = np.atleast_1d(freqs_hz)
-    Z = np.array([antenna.impedance(f) for f in freqs])
-    z_norm = Z / Z0
-    gamma = (Z - Z0) / (Z + Z0)
-
-    return {
-        'freqs_hz': freqs,
-        'Z': Z,
-        'z_norm': z_norm,
-        'gamma': gamma,
-        'gamma_mag': np.abs(gamma),
-        'gamma_phase_deg': np.angle(gamma, deg=True),
-        'R_norm': np.real(z_norm),
-        'X_norm': np.imag(z_norm),
     }
 
 
