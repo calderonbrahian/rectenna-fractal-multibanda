@@ -38,3 +38,15 @@ Veredicto: la arquitectura ya se justifica a sí misma (capas correctas). El tra
 
 - El `estilo_figuras.py` mantiene su propia paleta «paper» (distinta de `configs.COLORS`) — es intencional (dos sistemas: gráficas de datos vs diagramas conceptuales), no deuda.
 - El root del proyecto (fuera del repo) tiene un `_regen/` duplicado antiguo — fuera del alcance del repo; no afecta.
+
+## Iteración de unificación total (2026-07-10)
+
+| Commit | Qué |
+|---|---|
+| `9268dac` | Identidad visual ÚNICA: `estilo.py` (paleta semántica A=oro/B=verde + rcParams sans + helpers) es la fuente única; `generate_artifacts` la consume; corregida la semántica de color (Sierpinski verde→oro). |
+| `c1f75b5` | Streamlit en dos niveles: N1 Demostración (4 páginas visuales con figuras del pipeline) + N2 Laboratorio (detalle regrupado). `utils/figuras.py` = fuente gráfica única en la app. |
+| `4833037` | Eliminadas 4 páginas superseded por la Demostración; árbol de `acerca.py` y README al día. |
+
+**Fuente gráfica única confirmada:** documento, Streamlit (N1) y póster consumen los mismos PNG de `_regen/out/figuras/`. Un comando (`python _regen/generate_artifacts.py`) regenera las 16 figuras (11 datos + 5 conceptuales) con una identidad. Las figuras de datos del documento se re-embebieron para compartir esa identidad (doc CHECKPOINT_v5). SSOT y 56/56 pruebas intactas.
+
+**Frontera deliberada:** el Nivel 2 (Laboratorio) mantiene gráficas interactivas (plotly) para la *exploración* de parámetros (barridos, sensibilidades) — no son artefactos estáticos y responden a la entrada del usuario; la regla «Streamlit no genera gráficos propios» aplica a las figuras canónicas/estáticas, que sí salen todas del pipeline.
