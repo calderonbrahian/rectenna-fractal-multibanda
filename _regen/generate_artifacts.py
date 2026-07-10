@@ -34,7 +34,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from configs.parametros import (
-    APA7_RC, CANONICAL, BANDS_A, SMS7630,
+    APA7_RC, CANONICAL, BANDS_A, SMS7630, COLORS,
 )
 
 OUT = os.path.join(_HERE, "out")
@@ -45,9 +45,9 @@ for d in (OUT, FIGS, TABS):
 
 plt.rcParams.update(APA7_RC)
 
-# Paleta APA7 (coherente con el documento)
-C_AZUL, C_VERDE, C_NARANJA = "#0077BB", "#009988", "#EE7733"
-C_ROJO, C_VIOLETA, C_GRIS = "#CC3311", "#AA3377", "#BBBBBB"
+# Paleta APA7 desde el SSOT (configs.COLORS) — sin duplicar hex
+C_AZUL, C_VERDE, C_NARANJA = COLORS["azul"], COLORS["verde"], COLORS["naranja"]
+C_ROJO, C_VIOLETA, C_GRIS = COLORS["rojo"], COLORS["violeta"], COLORS["gris"]
 
 status = []   # (figura/tabla, ok/err, detalle)
 

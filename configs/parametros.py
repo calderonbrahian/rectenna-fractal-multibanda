@@ -73,7 +73,8 @@ RF_UHF = {
 URBAN_CORRECTION_DB = 6.0
 
 # ── Resultados canónicos @ 100 m, TDT DVB-T 550 MHz ─────────────────────────
-# Sincronizado con rectenna_platform/config/variables.yaml (auditoría 2026-05-28)
+# ÚNICA fuente de verdad (SSOT) de los valores canónicos del proyecto: el documento,
+# las figuras/tablas del pipeline y las pruebas de regresión leen de aquí.
 # eta_total = eta_rad * eta_mm * eta_imn * PCE * eta_pmic = 0.6715 (figura de mérito)
 # La potencia DC se calcula con cuatro factores sobre P_in: η_rad ya está embebida en G
 # P_DC = P_in · η_mm · η_imn · PCE · η_pmic  =  2.427 mW · 0.9847 · 0.9484 · 0.85 · 0.85 = 1637.6 µW
