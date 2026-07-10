@@ -151,21 +151,21 @@ def render():
         """rectenna_dashboard_st/
 ├── app.py                       # Entrada: navegación multipágina
 ├── .streamlit/config.toml       # Tema claro institucional UdeA
-├── pages/                       # Recorrido narrativo (orden de navegación)
-│   ├── presentacion.py          # Portada · el trabajo de grado
-│   ├── problema.py              # El problema del IoT (la batería como límite)
-│   ├── contexto.py              # Qué es una rectena
-│   ├── topologias.py            # Topologías evaluadas (Sierpinski / Koch)
-│   ├── escenario_a.py           # Escenario A — Sierpinski · 1,8–5,8 GHz
-│   ├── escenario_b.py           # Escenario B — FLPDA Koch · 470–900 MHz
-│   ├── comparacion.py           # Comparación de los dos escenarios
-│   ├── inicio.py                # Resultado de referencia (P_DC)
-│   ├── viabilidad_iot.py        # Aplicación al nodo IoT
-│   ├── validacion.py            # Validación con literatura (Wang 2022)
-│   ├── analisis_avanzado.py     # Análisis de incertidumbre (tornado, MC)
-│   ├── sensibilidad.py          # Sensibilidad paramétrica (Q_L, R_load, τ–σ)
-│   ├── conclusiones.py          # Conclusiones y limitaciones
-│   └── acerca.py                # Esta página (metodología y referencias)
+├── pages/                       # Dos niveles: Demostración + Laboratorio
+│   ├── demo_1_problema.py       # N1 · El problema y la pregunta
+│   ├── demo_2_metodo.py         # N1 · La metodología (el aporte)
+│   ├── demo_3_resultados.py     # N1 · Qué se demostró
+│   ├── demo_4_aporte.py         # N1 · El aporte y su alcance
+│   ├── escenario_a.py           # N2 · Escenario A — Sierpinski · 1,8–5,8 GHz
+│   ├── escenario_b.py           # N2 · Escenario B — FLPDA Koch · 470–900 MHz
+│   ├── comparacion.py           # N2 · Comparación de los dos escenarios
+│   ├── inicio.py                # N2 · Resultado de referencia (P_DC)
+│   ├── viabilidad_iot.py        # N2 · Aplicación al nodo IoT
+│   ├── validacion.py            # N2 · Validación con literatura (Wang 2022)
+│   ├── analisis_avanzado.py     # N2 · Análisis de incertidumbre (tornado, MC)
+│   ├── sensibilidad.py          # N2 · Sensibilidad paramétrica (Q_L, R_load, τ–σ)
+│   ├── conclusiones.py          # N2 · Conclusiones y limitaciones
+│   └── acerca.py                # N2 · Esta página (metodología y referencias)
 ├── core/                        # Implementaciones físicas (fuente de verdad)
 │   ├── antenna.py               # FractalAntenna (Sierpinski)
 │   ├── flpda.py                 # FLPDA_Koch (Carrel + Koch)

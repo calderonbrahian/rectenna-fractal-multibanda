@@ -183,24 +183,25 @@ Limitaciones explícitas (L1–L8):
 
 ## Páginas del dashboard
 
-Recorrido guiado de 14 páginas (`st.navigation`), en el mismo orden que la tesis. Cada página enlaza a la siguiente:
+La app tiene **dos niveles** (`st.navigation`). El Nivel 1 usa las figuras del pipeline (`_regen/out/figuras/`) — la misma fuente gráfica que el documento y el póster.
+
+**Nivel 1 · Demostración (3 min)** — recorrido para quien nunca vio el proyecto:
 
 | # | Página (`pages/…`) | Contenido |
 |---|---|---|
-| 1 | `presentacion` | Portada, objetivo, recorrido, diagrama-héroe del concepto |
-| 2 | `problema` | El problema de la batería en el IoT y la oportunidad RFEH |
-| 3 | `contexto` | Qué es una rectena: cadena antena→rectificador→DC |
-| 4 | `topologias` | Sierpinski (exploratorio) vs FLPDA Koch (cuantitativo) |
-| 5 | `escenario_a` | Sierpinski: S₁₁, impedancia, PCE, geometría, tabla |
-| 6 | `escenario_b` | FLPDA Koch: S₁₁, ganancia, geometría, presupuesto LoRa, PCE UHF |
-| 7 | `comparacion` | Comparación técnica integral (Tabla 10) |
-| 8 | `inicio` | Resultado de referencia: Sankey, bloques, tabla canónica |
-| 9 | `viabilidad_iot` | Mensajes/día, mapa EIRP×distancia, supercondensador |
-| 10 | `validacion` | Modelo vs Wang (2022) y Carrel (1961); RMSE 15,50 pp |
-| 11 | `analisis_avanzado` | Tornado, Monte Carlo, BW, link budget, supercap, estado del arte |
-| 12 | `sensibilidad` | Barridos Q_L, R_load y mapa τ–σ |
-| 13 | `conclusiones` | Hallazgos, condiciones y limitaciones (Tablas 13–14) |
-| 14 | `acerca` | Metodología, arquitectura y referencias |
+| 1 | `demo_1_problema` | El problema del IoT y la pregunta de investigación (figura de fuentes→caso) |
+| 2 | `demo_2_metodo` | La metodología = el aporte (flujo, anatomía de la rectena, reproducibilidad) |
+| 3 | `demo_3_resultados` | Qué se demostró: KPIs + cascada, PCE de ambos escenarios, validación |
+| 4 | `demo_4_aporte` | El aporte y su alcance (figura maestra); el caso colombiano como demostración |
+
+**Nivel 2 · Laboratorio** — detalle técnico e interacción:
+
+| Grupo | Página (`pages/…`) | Contenido |
+|---|---|---|
+| Escenarios | `escenario_a` · `escenario_b` · `comparacion` | S₁₁, impedancia, PCE, geometría, presupuesto, comparación integral |
+| Caso y viabilidad | `inicio` · `viabilidad_iot` | Resultado de referencia; mensajes/día, mapa EIRP×distancia, supercondensador |
+| Validación y análisis | `validacion` · `analisis_avanzado` · `sensibilidad` | Wang/Carrel; tornado, Monte Carlo, link budget; barridos Q_L, R_load, τ–σ |
+| Cierre y referencia | `conclusiones` · `acerca` | Hallazgos y limitaciones; metodología, arquitectura y referencias |
 
 ---
 
