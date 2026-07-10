@@ -384,6 +384,25 @@ def tablas_codigo():
 
 
 # ════════════════════════════════════════════════════════════════════════════
+#  FIGURAS CONCEPTUALES / METODOLÓGICAS (C1–C5) — sistema gráfico unificado
+# ════════════════════════════════════════════════════════════════════════════
+
+def figuras_conceptuales():
+    """Genera las 5 figuras conceptuales/metodológicas del documento (C1–C5).
+    Delega en figuras_conceptuales.py para que un solo comando regenere TODO
+    el material del documento (figuras de datos + conceptuales + tablas)."""
+    import importlib
+    if _HERE not in sys.path:
+        sys.path.insert(0, _HERE)
+    fc = importlib.import_module("figuras_conceptuales")
+    fns = [fc.figC1_fuentes_a_caso, fc.figC5_maestra, fc.figC3_anatomia_rectena,
+           fc.figC2_flujo_metodologico, fc.figC4_cadena_reproducible]
+    for fn in fns:
+        fn()
+    return f"{len(fns)} figuras conceptuales (C1–C5)"
+
+
+# ════════════════════════════════════════════════════════════════════════════
 #  VERIFICACIÓN contra CANONICAL
 # ════════════════════════════════════════════════════════════════════════════
 
@@ -428,6 +447,7 @@ if __name__ == "__main__":
     _do("Fig 9 · Monte Carlo", fig09_montecarlo)
     _do("Fig 10 · PCE ambos", fig10_pce_ambos)
     _do("Fig 11 · Validación Wang", fig11_wang)
+    _do("Figuras conceptuales · C1–C5", figuras_conceptuales)
     _do("Tablas (código)", tablas_codigo)
     _do("Verificación canónica", verificacion)
 
