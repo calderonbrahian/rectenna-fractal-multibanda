@@ -289,7 +289,7 @@ def fig10_pce_ambos():
                label=f"P_in canónico {CANONICAL['P_in_dBm']:.2f} dBm")
     ax.set_xlabel("P_in (dBm)"); ax.set_ylabel("PCE (%)")
     ax.set_ylim(0, 90); ax.legend(fontsize=8)
-    ax.set_title("PCE vs P_in — doblador SMS7630, R_L = 1.300 Ω", fontsize=11)
+    ax.set_title("Eficiencia de conversión RF→DC de ambos escenarios", fontsize=11)
     _save(fig, "Fig10_PCE_ambos.png")
     return f"PCE_B max={max(b['PCE_pct']):.1f}% · PCE_A max={max(a['PCE_pct']):.1f}%"
 
