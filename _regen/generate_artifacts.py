@@ -336,11 +336,11 @@ def tablas_codigo():
 
     # T2 — bandas Escenario A
     bandas = run_bandas(topology="doubler", Pin_dBm=-10.0)
-    pd.DataFrame(bandas).to_csv(os.path.join(TABS, "T2_bandas_escenarioA.csv"),
+    pd.DataFrame(bandas).to_csv(os.path.join(TABS, "E12_bandas_escenarioA.csv"),
                                 index=False, encoding="utf-8"); n += 1
 
     # T3 — SPICE SMS7630
-    _csv("T3_SPICE_SMS7630.csv", ["Parámetro", "Valor"],
+    _csv("E13_SPICE_SMS7630.csv", ["Parámetro", "Valor"],
          [["Is [A]", SMS7630["Is"]], ["n", SMS7630["n"]], ["Rs [Ω]", SMS7630["Rs"]],
           ["Cj0 [F]", SMS7630["Cj0"]], ["Vj [V]", SMS7630["Vj"]], ["M", SMS7630["M"]]]); n += 1
 
@@ -349,7 +349,7 @@ def tablas_codigo():
     rows6 = [[i + 1, round(g["res_freqs_MHz"][i], 1),
               round(g["lengths_elec_cm"][i], 1), round(g["lengths_phys_cm"][i], 1),
               round(g["positions_cm"][i], 1)] for i in range(g["n_elements"])]
-    _csv("T6_geometria_dipolos.csv",
+    _csv("E15_geometria_dipolos.csv",
          ["Dipolo", "f_res [MHz]", "L_elec [cm]", "L_fis [cm]", "Pos [cm]"], rows6); n += 1
 
     # T7 — PCE vs Pin (muestreo)
@@ -357,15 +357,15 @@ def tablas_codigo():
     idx = np.linspace(0, len(p["Pin_dBm"]) - 1, 12).astype(int)
     rows7 = [[round(p["Pin_dBm"][i], 1), round(p["PCE_pct"][i], 2),
               round(p["Vdc_mV"][i], 1)] for i in idx]
-    _csv("T7_PCE_Pin.csv", ["Pin [dBm]", "PCE [%]", "Vdc [mV]"], rows7); n += 1
+    _csv("E16_PCE_Pin.csv", ["Pin [dBm]", "PCE [%]", "Vdc [mV]"], rows7); n += 1
 
     # T8 — presupuesto de enlace
     lb = run_link_budget()
     if isinstance(lb, list) and lb and isinstance(lb[0], dict):
-        pd.DataFrame(lb).to_csv(os.path.join(TABS, "T8_link_budget.csv"),
+        pd.DataFrame(lb).to_csv(os.path.join(TABS, "E17_link_budget.csv"),
                                 index=False, encoding="utf-8")
     else:
-        _csv("T8_link_budget.csv", ["item"], [[str(x)] for x in lb])
+        _csv("E17_link_budget.csv", ["item"], [[str(x)] for x in lb])
     n += 1
 
     # T9 — cadena de potencia (CANONICAL)
@@ -373,7 +373,7 @@ def tablas_codigo():
             ("η_mm", CANONICAL["eta_mm"], "—"), ("η_IMN", CANONICAL["eta_imn"], "—"),
             ("PCE", CANONICAL["PCE"], "—"), ("η_PMIC", CANONICAL["eta_pmic"], "—"),
             ("P_DC", CANONICAL["P_dc_uW"], "µW")]
-    _csv("T9_cadena_potencia.csv", ["Etapa", "Valor", "Unidad"],
+    _csv("E18_cadena_potencia.csv", ["Etapa", "Valor", "Unidad"],
          [[a, b, c] for a, b, c in facs]); n += 1
 
     # T11 — banda a banda vs Wang (metodología canónica del documento: matching_net=None)
@@ -383,7 +383,7 @@ def tablas_codigo():
     rows11 = [[round(w["freqs_GHz"][i], 2), round(w["pce_referencia"][i], 1),
                round(w["pce_simulacion"][i], 1), round(w["error_abs_pp"][i], 1)]
               for i in range(len(w["freqs_GHz"]))]
-    _csv("T11_vs_Wang.csv", ["f [GHz]", "PCE Wang [%]", "PCE modelo [%]", "Error [pp]"],
+    _csv("E19_vs_Wang.csv", ["f [GHz]", "PCE Wang [%]", "PCE modelo [%]", "Error [pp]"],
          rows11); n += 1
 
     return f"{n} tablas derivadas del código"
