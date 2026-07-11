@@ -14,13 +14,8 @@ st.markdown(
 figura(FIG["flujo"], "El método en seis pasos, de la pregunta a los criterios de selección de topología.")
 
 st.divider()
-col1, col2 = st.columns(2)
-with col1:
-    st.markdown("#### Qué es una rectena")
-    figura(FIG["anatomia"], "Las cinco etapas de la cadena RF→DC.")
-with col2:
-    st.markdown("#### Por qué es reproducible")
-    figura(FIG["repro"], "Un sistema, tres medios (documento, app, póster), respaldado por pruebas.")
+st.markdown("#### Qué es una rectena")
+figura(FIG["anatomia"], "Las cinco etapas de la cadena RF→DC, de la onda captada a la energía utilizable.")
 
 st.markdown(
     "**¿Por qué dos topologías?** Para aprender *cuándo* sirve cada geometría: una difusa multibanda "
