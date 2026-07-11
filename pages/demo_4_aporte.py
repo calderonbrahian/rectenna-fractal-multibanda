@@ -17,7 +17,7 @@ st.markdown(
 col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown("**Verificable**")
-    st.caption("56 pruebas automáticas fijan cada valor canónico; el código es público.")
+    st.caption("Cada valor se deriva de ecuaciones y parámetros explícitos, y puede recalcularse de forma independiente.")
 with col2:
     st.markdown("**Transferible**")
     st.caption("Otras fuentes (FM, telefonía) se estudian re-escalando la misma geometría.")
