@@ -202,6 +202,35 @@ class LMatchNetwork:
             insertion_loss_dB=IL_dB, VSWR=self._vswr(gamma),
         )
 
+    def evaluate_fixed(self, freq: float, L: float, C: float,
+                       topology: str, Z_load: complex) -> tuple:
+        """
+        Evalúa una red L de componentes FIJOS (L, C) a una frecuencia distinta de
+        la de diseño. A diferencia de design(), NO reoptimiza: los valores L y C se
+        fijan (los de la red física construida) y solo cambia la frecuencia y la
+        carga Z_load(freq). Devuelve (IL_dB, eta_imn, VSWR).
+
+        Este es el modelo físicamente correcto para el límite de Bode-Fano: una red
+        L de una sola sección adapta bien solo cerca de su frecuencia de diseño y su
+        eficiencia decae hacia los extremos de la banda.
+        """
+        w      = 2 * np.pi * freq
+        Z0     = self.Z_src.real
+        Zin_fn = self._Zin_lp if topology == 'lowpass' else self._Zin_hp
+        Zin    = Zin_fn(complex(Z_load), L, C, w)
+        gamma  = self._gamma(Zin, Z0)
+        I_in   = 1.0 / (Z0 + Zin)
+        V_node = I_in * Zin
+        Z_ser  = (self._ZL(L, w) + complex(Z_load)
+                  if topology == 'lowpass'
+                  else self._ZC(C, w) + complex(Z_load))
+        I_load = V_node / Z_ser
+        P_load = 0.5 * abs(I_load) ** 2 * max(complex(Z_load).real, 0.0)
+        P_avs  = 1.0 / (8.0 * Z0)
+        IL_dB  = -10.0 * np.log10(max(P_load / P_avs, 1e-10))
+        eta_imn = 10.0 ** (-IL_dB / 10.0)
+        return IL_dB, float(np.clip(eta_imn, 0.0, 1.0)), self._vswr(gamma)
+
     def design_multiband(self, freqs: list, Z_loads: list = None) -> list:
         """
         Diseña una red L independiente por frecuencia.

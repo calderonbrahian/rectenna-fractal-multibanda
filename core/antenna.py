@@ -215,13 +215,24 @@ class FractalAntenna:
 
     def eta_rad(self, freq: float) -> float:
         """
-        Eficiencia de radiación η_rad [0–1].
-        Considera pérdidas dieléctricas (tan δ · √εr) y de conductor (skin effect).
+        Eficiencia de radiación η_rad [0–1] — modelo realista para FR-4 dispersivo.
+
+        η_rad = 1 / (1 + L_diel + L_cond), con εr(f) y tan δ(f) dependientes de la
+        frecuencia (FR-4 es un material dispersivo: εr decrece y tan δ crece con f):
+            L_diel = tan δ(f) · √εr(f) · 8 · (0,3 + f[GHz])
+            L_cond = 0,05 · √(f[GHz])
+        Resultado: η_rad ≈ 0,61 @1,84 GHz y ≈ 0,32 @5,8 GHz, coherente con las
+        altas pérdidas del FR-4 en microondas. Sustituye el modelo previo, que
+        daba η≈0,95 @5,8 GHz (físicamente irreal).
         """
+        from configs.parametros import fr4_tan_delta
+        fghz   = float(np.asarray(freq, dtype=float).ravel()[0]) / 1e9
         er_f   = self.get_er(freq)
-        loss_s = self.loss_tan * np.sqrt(er_f) * (freq / 1e9) * 0.1
-        loss_c = 0.01 * (freq / 1e9) ** 0.5
-        return float(np.clip(1 - loss_s - loss_c, 0.5, 1.0))
+        td_f   = fr4_tan_delta(freq)
+        L_diel = td_f * np.sqrt(er_f) * 8.0 * (0.3 + fghz)
+        L_cond = 0.05 * fghz ** 0.5
+        eta = 1.0 / (1.0 + L_diel + L_cond)
+        return float(np.clip(eta, 0.20, 0.85))
 
     def gain_dBi(self, freq):
         """

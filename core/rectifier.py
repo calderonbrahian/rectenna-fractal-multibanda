@@ -181,6 +181,12 @@ class RectifierCircuit:
         P_avail   = Pin_W * eta_match
 
         # Resistencia dinámica del diodo a V=0 (Rd0 = n·Vt/Is)
+        # La capacitancia de juntura Cj SÍ está modelada: entra en Re_Zd como un
+        # shunt de RF cuyo peso (ω·Rd0·Cj)² crece con la frecuencia, de modo que
+        # Re_Zd (y con ella la PCE) cae en bandas altas. El tratamiento plenamente
+        # no lineal Cj(V) requeriría balance armónico en el dominio del tiempo
+        # (limitación declarada); acoplar Cj(−V_dc/N) en el punto fijo introduce
+        # realimentación no física, por lo que se usa Cj a bias medio ≈ 0.
         ω       = 2.0 * np.pi * freq
         Rd0     = d.n * d.Vt / d.Is          # ≈ 5460 Ω para SMS7630
         Cj_val  = d.Cj(0.0)

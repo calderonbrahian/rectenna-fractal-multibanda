@@ -17,11 +17,43 @@ K_B   = 1.381e-23     # constante de Boltzmann [J/K]
 T_AMB = 300.0         # temperatura ambiente [K]
 VT    = K_B * T_AMB / Q_E   # voltaje térmico ≈ 25.85 mV [V]
 
-# ── Sustrato FR-4 (Bahl & Trivedi 1977; Pozar cap. 3) ────────────────────────
+# ── Sustrato FR-4 (Bahl & Trivedi 1977; Pozar cap. 3; datasheets Isola/Shengyi) ──
 FR4_ER_1GHZ  = 4.4    # εr @ 1 GHz
 FR4_ER_58GHZ = 4.1    # εr @ 5.8 GHz
-FR4_LOSS_TAN = 0.02   # tangente de pérdidas (tan δ)
+FR4_LOSS_TAN = 0.02   # tangente de pérdidas (tan δ) nominal @ 1 GHz
 FR4_H_M      = 1.6e-3 # espesor del sustrato [m]
+
+def fr4_er(f_hz: float) -> float:
+    """εr(f) del FR-4 (material dispersivo): 4,4 @1 GHz → 4,1 @5,8 GHz.
+    Datasheets Isola/Shengyi: εr decrece con la frecuencia en microondas."""
+    fghz = f_hz / 1e9
+    t = min(max((fghz - 1.0) / (5.8 - 1.0), 0.0), 1.0)
+    return FR4_ER_1GHZ + t * (FR4_ER_58GHZ - FR4_ER_1GHZ)
+
+def fr4_tan_delta(f_hz: float) -> float:
+    """tan δ(f) del FR-4 (dispersivo): ≈0,015 @1 GHz → ≈0,020 @5,8 GHz → ≈0,025 @10 GHz.
+    Las pérdidas dieléctricas del epoxi crecen con la frecuencia (Isola/Shengyi)."""
+    fghz = f_hz / 1e9
+    return 0.014 + 0.0011 * fghz
+
+# ── Red L de una sección: ancho de banda limitado (límite de Bode-Fano) ───────
+IMN_F0_HZ     = 550e6   # frecuencia de diseño de la red L (caso TDT)
+IMN_ETA0      = 0.9484  # η_imn en la frecuencia de diseño
+IMN_Q_LOADED  = 3.6     # Q cargado ≈ √(R_diodo/Z0 − 1); BW fraccional ≈ 1/Q ≈ 28 %
+
+def eta_imn_freq(f_hz: float, f0_hz: float = IMN_F0_HZ) -> float:
+    """
+    Eficiencia de la red L de UNA sección en función de la frecuencia.
+
+    Una red L simple es un circuito resonante de banda estrecha: adapta bien solo
+    cerca de f0 y su eficiencia decae hacia los extremos según la respuesta
+    resonante (límite de Bode-Fano; Pozar cap. 5):
+        η_imn(f) = η0 / (1 + [Q·(f/f0 − f0/f)]²)
+    Con Q≈3,6 da η_imn ≈ 0,42 @470 MHz, 0,9484 @550 MHz y ≈0,07 @900 MHz.
+    En la frecuencia de diseño devuelve exactamente η0 (caso canónico intacto).
+    """
+    x = f_hz / f0_hz - f0_hz / f_hz
+    return IMN_ETA0 / (1.0 + (IMN_Q_LOADED * x) ** 2)
 
 # ── Parámetros SPICE del diodo Skyworks SMS7630 (AN-4003) ────────────────────
 SMS7630 = {

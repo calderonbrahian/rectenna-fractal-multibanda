@@ -174,10 +174,12 @@ class TestFractalAntenna:
         assert g > 0
 
     def test_eta_rad_rango(self):
-        """eta_rad debe estar en [0.5, 1.0]."""
-        for f in [1.84e9, 2.45e9, 5.8e9]:
-            eta = self.ant.eta_rad(f)
-            assert 0.5 <= eta <= 1.0
+        """eta_rad realista FR-4 dispersivo: decrece con f, ~0.6 @1.84GHz, ~0.3 @5.8GHz."""
+        etas = [self.ant.eta_rad(f) for f in [1.84e9, 2.45e9, 5.8e9]]
+        for eta in etas:
+            assert 0.20 <= eta <= 0.85
+        # η_rad debe decrecer con la frecuencia (dispersión FR-4)
+        assert etas[0] > etas[2]
 
 
 # ═══════════════════════════════════════════════════════════════════════════

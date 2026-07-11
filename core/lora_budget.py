@@ -256,7 +256,12 @@ def harvested_uw_full(eirp_dbm: float, dist_m: float, freq_ghz: float,
             il_dB = 0.23   # valor típico stub microstrip
             gamma_imn = 0.0
     else:
-        il_dB = 0.23       # valor nominal tesis (stub microstrip UHF-FR-4)
+        # Red L de UNA sección: η_imn depende de la frecuencia (límite de Bode-Fano).
+        # En la frecuencia de diseño (550 MHz) vale 0,9484 (caso canónico); decae
+        # hacia los extremos de banda. Reemplaza el valor plano optimista anterior.
+        from configs.parametros import eta_imn_freq
+        eta_imn_val = eta_imn_freq(freq_hz)
+        il_dB = -10.0 * np.log10(max(eta_imn_val, 1e-6))
         gamma_imn = 0.0
     eta_imn = (1.0 - gamma_imn ** 2) * 10.0 ** (-il_dB / 10.0)
 
