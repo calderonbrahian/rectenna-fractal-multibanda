@@ -3,7 +3,7 @@ Escenario B — FLPDA Koch it.2, 470–900 MHz.
 Tabs: S11 · Ganancia · Geometría · Presupuesto LoRa · PCE UHF
 
 Escenario cuantitativo del proyecto: sustenta el resultado de referencia
-(P_DC = 1 637,6 µW). Conserva las visualizaciones de mecanismo (región activa
+(P_DC = 1 335,0 µW). Conserva las visualizaciones de mecanismo (región activa
 del FLPDA, doblador Greinacher por semiciclo, curva I-V del diodo), que
 corresponden a contenidos del informe.
 """
@@ -35,15 +35,15 @@ def render():
         que_es=("Página de **diagnóstico** del modelo de la antena log-periódica fractal "
                  "(FLPDA) Koch. Muestra el comportamiento del modelo en función de la "
                  "frecuencia: coeficiente de reflexión, ganancia realizada, impedancia "
-                 "de entrada, geometría de los 8 dipolos y conversión a potencia DC útil."),
+                 "de entrada, geometría de los 12 dipolos y conversión a potencia DC útil."),
         para_que_sirve=("Verificar las propiedades clave de la antena del Escenario B: "
                          "que opera en la banda 470–900 MHz, que el S₁₁ es bajo, que la "
                          "ganancia es ≈ 7 dBi en banda y entender de dónde sale el "
-                         "valor canónico de P_DC = 1 637,6 µW del escenario de referencia."),
+                         "valor canónico de P_DC = 1 335,0 µW del escenario de referencia."),
         entradas=("Controles dentro de cada pestaña: distancia al transmisor TDT (en "
                   "*Presupuesto LoRa*), selectores de frecuencia para las curvas PCE-vs-Pin "
                   "y la región activa del arreglo de dipolos."),
-        salidas=("Gráficas de S₁₁(f), ganancia(f), impedancia(f), tabla de los 8 dipolos, "
+        salidas=("Gráficas de S₁₁(f), ganancia(f), impedancia(f), tabla de los 12 dipolos, "
                   "vista de lado de la antena con la región activa resaltada, miniaturización "
                   "de Koch, curva PCE-vs-Pin, esquemático del doblador y curva I-V del diodo."),
         como_leer=("**S₁₁ < −10 dB** en banda significa que la antena está bien adaptada "
@@ -55,7 +55,7 @@ def render():
 
     badge_exploracion("Esta página es diagnóstico técnico: muestra el comportamiento "
                        "del modelo de la antena en toda la banda. El resultado de "
-                       "referencia (P_DC = 1 637,6 µW) se presenta en **Resultados de "
+                       "referencia (P_DC = 1 335,0 µW) se presenta en **Resultados de "
                        "Referencia del Proyecto**.")
 
     st.markdown(
@@ -93,7 +93,7 @@ def render():
                 ayuda="Ganancia realizada; concentra la energía hacia la torre TDT. Más "
                       "ganancia → más P_in → mayor P_DC.")
     st.caption(
-        ":material/lightbulb: **Geometría:** 8 dipolos sobre un boom de ~50 cm; la curva de "
+        ":material/lightbulb: **Geometría:** 12 dipolos sobre un boom de ~66 cm; la curva de "
         "Koch reduce −43 % la dimensión del dipolo sin cambiar su frecuencia, así que la "
         "antena resulta más compacta para el mismo rango de operación."
     )
@@ -202,7 +202,7 @@ def render():
         # ── Vista de lado del FLPDA Koch + slider de frecuencia activa ──────
         st.markdown(
             "**Vista de lado de la antena.** El boom es la línea horizontal central. "
-            "Los 8 dipolos son las barras verticales: largos a la izquierda "
+            "Los 12 dipolos son las barras verticales: largos a la izquierda "
             "(resonantes a baja frecuencia), cortos a la derecha (alta frecuencia). "
             "La región activa cambia con la frecuencia: solo los dipolos cuya "
             "longitud está cerca de λ/2 participan en la radiación."
@@ -259,7 +259,7 @@ def render():
             st.caption(
                 ":material/info: La iteración 2 (verde, adoptada en este trabajo) tiene "
                 "sólo el **56,25 %** de la extensión física del dipolo rectilíneo equivalente. "
-                "Aplicado a los 8 dipolos del FLPDA, eso reduce la silueta de la antena "
+                "Aplicado a los 12 dipolos del FLPDA, eso reduce la silueta de la antena "
                 "sin cambiar la frecuencia de operación."
             )
 
@@ -303,7 +303,7 @@ def render():
                        delta="canónico = 8" if not is_canonical else "canónico ✓",
                        delta_color="off", border=True)
             st.metric("Boom", f"{geom_param['boom_cm']:.1f} cm",
-                       delta="canónico = 50 cm" if not is_canonical else "canónico ✓",
+                       delta="canónico = 66 cm" if not is_canonical else "canónico ✓",
                        delta_color="off", border=True)
             st.metric("L_max físico", f"{geom_param['lengths_phys_cm'][0]:.1f} cm",
                        delta="canónico = 17,9 cm" if not is_canonical else "canónico ✓",
@@ -349,7 +349,7 @@ def render():
         control_interactivo(
             magnitud="**Distancia** entre la antena y la torre TDT del Cerro Nutibara, "
                      "en metros.",
-            referencia="**100 m** en el escenario de referencia (P_DC = 1 638 µW); el "
+            referencia="**100 m** en el escenario de referencia (P_DC = 1 335 µW); el "
                        "control parte de 500 m.",
             al_subir="La potencia recibida cae como 1/d² (Friis): más lejos → menos P_DC, "
                      "períodos entre mensajes más largos y, pasado cierto punto, el PMIC "
@@ -931,7 +931,7 @@ def _fig_greinacher_doubler(mode: str = "Semiciclo +"):
 
 
 def _fig_flpda_schematic(geom, freq_active_mhz):
-    """Vista de lado del FLPDA Koch: 8 dipolos sobre el boom, resaltando los
+    """Vista de lado del FLPDA Koch: 12 dipolos sobre el boom, resaltando los
     activos a la frecuencia dada (peso por proximidad, idéntico al modelo)."""
     n = geom['n_elements']
     pos = list(geom['positions_cm'])        # cm; pos[0] = 0 (dipolo más largo)

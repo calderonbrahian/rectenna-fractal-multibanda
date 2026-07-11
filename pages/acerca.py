@@ -203,7 +203,7 @@ Este es un trabajo de modelado, no una medición. Los resultados estiman órdene
 - La propagación usa Friis con una corrección urbana fija de +6 dB y no modela el desvanecimiento; en un emplazamiento real el error local puede llegar a ±10–20 dB.
 - No se fabricaron prototipos. La comparación con Wang (2022) es una verificación de orden de magnitud, no una validación punto a punto (RMSE = 15,50 pp), y además contrasta diseños sobre sustratos distintos.
 - La PCE = 0,85 es el techo del modelo del rectificador, no un valor medido. El resultado de referencia opera justo en ese máximo, así que es un mejor caso, no un valor esperado en campo.
-- El η_total = 0,6715 es una figura de mérito de cinco factores. La potencia útil se obtiene aplicando solo cuatro factores sobre P_in, porque η_rad ya está contenida en la ganancia G; multiplicar η_total por P_in contaría dos veces la pérdida de radiación.
+- El η_total = 0,4023 es una figura de mérito de cinco factores. La potencia útil se obtiene aplicando solo cuatro factores sobre P_in, porque η_rad ya está contenida en la ganancia G; multiplicar η_total por P_in contaría dos veces la pérdida de radiación.
 
 La tabla completa de limitaciones (L1–L8), con el impacto cuantitativo de cada una y su posible mitigación, está en el Apéndice E del informe de grado.
 """

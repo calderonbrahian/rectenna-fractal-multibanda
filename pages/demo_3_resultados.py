@@ -7,12 +7,12 @@ st.title("Qué se demostró")
 st.subheader("Caso de estudio: la TDT del Cerro Nutibara (Valle de Aburrá).")
 
 c1, c2, c3 = st.columns(3)
-c1.metric("Potencia DC útil @ 100 m", "1 638 µW")
-c2.metric("Eficiencia total (5 factores)", "67,15 %")
+c1.metric("Potencia DC útil @ 100 m", "1 335 µW")
+c2.metric("Eficiencia total (5 factores)", "40,23 %")
 c3.metric("Error vs. Wang (2022)", "15,50 pp")
 
 st.markdown(
-    "Con la antena dirigida (Escenario B) frente al transmisor de TDT, el modelo estima **1 638 µW** "
+    "Con la antena dirigida (Escenario B) frente al transmisor de TDT, el modelo estima **1 335 µW** "
     "de potencia útil a 100 m: suficiente para sostener un nodo IoT de bajo consumo. La difusa "
     "multibanda (Escenario A) queda como límite ilustrativo: adapta solo 1 de 7 bandas sobre FR-4."
 )

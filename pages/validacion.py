@@ -283,7 +283,7 @@ Para $f_{\text{low}}=470$ MHz, $f_{\text{high}}=900$ MHz, $\tau=0.90$:
 
 $$N = 1 + \left\lceil \frac{\log(900/470)}{\log(1/0.90)} \right\rceil = """ + str(res_c['n_elementos']) + r"""$$
 
-**Nota.** El boom (≈ 50 cm) lo fija el espaciado σ sobre longitudes **eléctricas**;
+**Nota.** El boom (≈ 66 cm) lo fija el espaciado σ sobre longitudes **eléctricas**;
 la curva de Koch reduce la dimensión **transversal** de cada dipolo, no la longitud
 del boom.
 """

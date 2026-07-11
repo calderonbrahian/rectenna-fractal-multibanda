@@ -59,7 +59,7 @@ def render():
     st.subheader("El resultado principal")
     st.markdown(
         "Bajo el escenario de referencia, el modelo estima que la rectena entrega cerca "
-        "de **1 638 µW** (alrededor de 1,6 milivatios) de potencia continua útil a 100 m "
+        "de **1 335 µW** (alrededor de 1,6 milivatios) de potencia continua útil a 100 m "
         "del transmisor del Cerro Nutibara.\n\n"
         "Es una potencia pequeña, del orden de la milésima de vatio, pero ese es "
         "justamente el rango en el que trabaja un nodo IoT de bajo consumo. Un sensor de "
@@ -150,7 +150,7 @@ def render():
         "- El rectificador transforma la señal de radio en tensión continua, y la "
         "gestión de energía (PMIC) la estabiliza y eleva hasta dejarla lista para "
         "usarse.\n"
-        "- Al final de la cadena quedan los **1 638 µW** de potencia útil que recibe el "
+        "- Al final de la cadena quedan los **1 335 µW** de potencia útil que recibe el "
         "nodo IoT, que son el resultado principal de esta página."
     )
     _ref("Propagación y la pérdida de 67,25 dB: §2.5 Propagación RF y modelo de Friis · "
@@ -165,7 +165,7 @@ def render():
         )
         st.plotly_chart(_render_size_comparison(), width="stretch")
         st.caption(
-            ":material/info: El FLPDA Koch mide aproximadamente **50 cm de boom × 32 cm "
+            ":material/info: El FLPDA Koch mide aproximadamente **66 cm de boom × 32 cm "
             "de envergadura** (el doble de la longitud del dipolo más largo). Cabe en "
             "una caja del tamaño de una laptop, lo que la hace integrable como módulo "
             "IoT en pared. Sin Koch, la envergadura sería ≈ 57 cm para la misma f_low."
@@ -339,7 +339,7 @@ def _render_sankey():
     after_mm   = P_in_uW * CANONICAL['eta_mm']         # ≈ 2390
     after_imn  = after_mm * CANONICAL['eta_imn']       # ≈ 2267
     after_pce  = after_imn * CANONICAL['PCE']          # ≈ 1927
-    after_pmic = after_pce * CANONICAL['eta_pmic']     # ≈ 1638  ≈ canonical
+    after_pmic = after_pce * CANONICAL['eta_pmic']     # ≈ 1335  ≈ canonical
 
     loss_mm   = P_in_uW - after_mm
     loss_imn  = after_mm - after_imn
@@ -479,7 +479,7 @@ def _render_block_diagram():
     # Bloques: (x_center, label_top, label_bottom, color, icon)
     blocks = [
         (1.0,  "Torre TDT",       "Cerro Nutibara<br>EIRP = 70 dBm",      "#0369A1", "📡"),
-        (3.7,  "Antena FLPDA Koch", "8 dipolos · Carrel<br>G = 7,10 dBi · η_mm = 0,9847", "#2563EB", "📶"),
+        (3.7,  "Antena FLPDA Koch", "12 dipolos · Carrel<br>G = 4,97 dBi · η_mm = 0,983", "#2563EB", "📶"),
         (6.4,  "Red de adaptación L", "Q_L = 40 · Q_C = 80<br>η_IMN = 0,9484",  "#7C3AED", "⚙️"),
         (9.1,  "Doblador Greinacher", "2× SMS7630<br>PCE = 0,85 (cap)",     "#B45309", "▷|"),
         (11.8, "PMIC BQ25504",    "Boost converter<br>η_PMIC = 0,85",     "#059669", "🔋"),
@@ -492,7 +492,7 @@ def _render_block_diagram():
         (5.05, "↓ 2,43 mW", "P_in en antena"),
         (7.75, "↓ × η_IMN",   "potencia al diodo"),
         (10.45,"↓ × PCE",     "V_DC ≈ 1 460 mV"),
-        (13.15,"↓ × η_PMIC",  "P_DC = 1 638 µW"),
+        (13.15,"↓ × η_PMIC",  "P_DC = 1 335 µW"),
     ]
 
     # Dibujar cada bloque
@@ -541,7 +541,7 @@ def _render_block_diagram():
     # Resaltar la salida final
     fig.add_annotation(
         x=14.5, y=1.4,
-        text="<b>P_DC ≈ 1 638 µW</b><br><i>545 mensajes SF12 / día</i>",
+        text="<b>P_DC ≈ 1 335 µW</b><br><i>545 mensajes SF12 / día</i>",
         showarrow=False, font=dict(color="#047857", size=12),
         bgcolor="rgba(5, 150, 105, 0.12)",
         bordercolor="#059669", borderwidth=1, borderpad=6,

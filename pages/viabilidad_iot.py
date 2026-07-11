@@ -80,7 +80,7 @@ def render():
 
     st.markdown(
         "Esta página traduce la potencia continua del escenario de referencia "
-        "(P_DC ≈ 1 638 µW) en algo tangible para un nodo IoT: cuánta energía necesita "
+        "(P_DC ≈ 1 335 µW) en algo tangible para un nodo IoT: cuánta energía necesita "
         "cada mensaje, cuánto tarda en acumularla, cuántos mensajes puede enviar al día "
         "y hasta qué distancia la operación se sostiene por sí sola."
     )

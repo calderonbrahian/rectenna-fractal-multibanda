@@ -53,7 +53,7 @@ def render():
                        "bandas urbanas una antena fractal podría captar energía, no fijar "
                        "una cifra final. Por eso sus valores se leen como **cotas "
                        "superiores** (el resultado energético firme lo aporta el "
-                       "Escenario B: TDT, 550 MHz, P_DC = 1 637,6 µW).")
+                       "Escenario B: TDT, 550 MHz, P_DC = 1 335,0 µW).")
 
     st.markdown(
         "Este escenario pone a prueba la pregunta que dejó abierta **Topologías**:"
