@@ -1,22 +1,22 @@
 {
   "S11_@550MHz_dB": {
-    "modelo": -18.158,
-    "canonico": -18.16,
-    "delta": 0.002
+    "modelo": -17.7054,
+    "canonico": -17.71,
+    "delta": 0.0046
   },
   "gain_@550MHz_dBi": {
-    "modelo": 7.0997,
-    "canonico": 7.1,
-    "delta": -0.0003
+    "modelo": 4.9699,
+    "canonico": 4.97,
+    "delta": -0.0001
   },
   "eta_total_FOM": {
-    "modelo": 0.6715,
-    "canonico": 0.6715,
+    "modelo": 0.4023,
+    "canonico": 0.4023,
     "delta": -0.0
   },
   "P_DC_identidad_uW": {
-    "modelo": 1637.5822,
-    "canonico": 1637.6,
-    "delta": -0.0178
+    "modelo": 1335.0163,
+    "canonico": 1335.0,
+    "delta": 0.0163
   }
 }

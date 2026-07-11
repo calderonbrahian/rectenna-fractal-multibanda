@@ -128,81 +128,81 @@
     {
       "d": 50,
       "FSPL_dB": 61.2,
-      "Pin_dBm": 9.9,
+      "Pin_dBm": 9.0,
       "PCE_pct": 85.0,
-      "P_RF_uW": 9708.0,
-      "P_DC_uW": 6550.6,
-      "V_dc_mV": 2918.2
+      "P_RF_uW": 7927.6,
+      "P_DC_uW": 5340.1,
+      "V_dc_mV": 2634.8
     },
     {
       "d": 100,
       "FSPL_dB": 67.2,
-      "Pin_dBm": 3.9,
+      "Pin_dBm": 3.0,
       "PCE_pct": 85.0,
-      "P_RF_uW": 2427.0,
-      "P_DC_uW": 1637.6,
-      "V_dc_mV": 1459.1
+      "P_RF_uW": 1981.9,
+      "P_DC_uW": 1335.0,
+      "V_dc_mV": 1317.4
     },
     {
       "d": 200,
       "FSPL_dB": 73.3,
-      "Pin_dBm": -2.2,
+      "Pin_dBm": -3.0,
       "PCE_pct": 85.0,
-      "P_RF_uW": 606.8,
-      "P_DC_uW": 409.4,
-      "V_dc_mV": 729.5
+      "P_RF_uW": 495.5,
+      "P_DC_uW": 333.8,
+      "V_dc_mV": 658.7
     },
     {
       "d": 400,
       "FSPL_dB": 79.3,
-      "Pin_dBm": -8.2,
+      "Pin_dBm": -9.1,
       "PCE_pct": 85.0,
-      "P_RF_uW": 151.7,
-      "P_DC_uW": 102.4,
-      "V_dc_mV": 364.8
+      "P_RF_uW": 123.9,
+      "P_DC_uW": 83.4,
+      "V_dc_mV": 329.4
     },
     {
       "d": 500,
       "FSPL_dB": 81.2,
-      "Pin_dBm": -10.1,
+      "Pin_dBm": -11.0,
       "PCE_pct": 85.0,
-      "P_RF_uW": 97.1,
-      "P_DC_uW": 65.5,
-      "V_dc_mV": 291.8
+      "P_RF_uW": 79.3,
+      "P_DC_uW": 53.4,
+      "V_dc_mV": 263.5
     },
     {
       "d": 1000,
       "FSPL_dB": 87.2,
-      "Pin_dBm": -16.1,
+      "Pin_dBm": -17.0,
       "PCE_pct": 85.0,
-      "P_RF_uW": 24.3,
-      "P_DC_uW": 16.4,
-      "V_dc_mV": 145.9
+      "P_RF_uW": 19.8,
+      "P_DC_uW": 13.4,
+      "V_dc_mV": 131.7
     }
   ],
   "tablaE8_map": [
     {
       "fuente": "TDT DVB-T (Cerro Nutibara)",
-      "eirp_dbm": 70.0,
-      "d50": 6550.6,
-      "d100": 1637.6,
-      "d200": 409.4,
-      "d500": 65.5
+      "eirp_dbm": 72.15,
+      "d50": 5340.1,
+      "d100": 1335.0,
+      "d200": 333.8,
+      "d500": 53.4
     },
     {
       "fuente": "LTE Macro 700 MHz",
       "eirp_dbm": 46.0,
-      "d50": 16.5,
-      "d100": 4.1,
-      "d200": 0.9,
+      "d50": 7.7,
+      "d100": 1.9,
+      "d200": 0.3,
       "d500": 0.0
     },
     {
       "fuente": "LTE Band 28 (700 MHz)",
       "eirp_dbm": 43.0,
-      "d50": 8.3,
-      "d100": 2.1,
-      "d200": 0.3,
+      "d50": 3.9,
+      "d100": 0.8,
+      "d200": 0.2,
       "d500": 0.0
     },
     {
@@ -221,18 +221,18 @@
     "Vmin": 1.8,
     "Vmax": 3.3,
     "E_util_mJ": 1262.2,
-    "t_carga_s": 770.8,
-    "t_carga_min": 12.8,
+    "t_carga_s": 945.5,
+    "t_carga_min": 15.8,
     "n_ciclos": 4.9
   },
   "E7_vdc": {
-    "P_dc_uW": 1637.6,
+    "P_dc_uW": 1335.0,
     "R_load_ohm": 1300.0,
-    "V_dc_mV": 1459.1
+    "V_dc_mV": 1317.4
   },
   "ganancia": {
-    "G_550_dBi": 7.1,
-    "G_media_banda_dBi": 7.17
+    "G_550_dBi": 4.97,
+    "G_media_banda_dBi": 4.83
   },
   "conteos": {
     "n_canonical_keys": 19,

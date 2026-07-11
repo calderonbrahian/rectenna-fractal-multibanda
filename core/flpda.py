@@ -79,14 +79,30 @@ class FLPDA_Koch:
 
     def _design(self):
         """
-        Diseña la red de dipolos según Carrel (1961).
-        N = 1 + ceil( log(f_high/f_low) / log(1/tau) ), mínimo 4.
+        Diseña la red de dipolos según Carrel (1961), incluyendo el ancho de
+        banda de la región activa.
+
+        El ancho de banda de diseño B_s no es solo la razón f_high/f_low: la
+        región activa (los dipolos que radian a cada frecuencia) exige un margen
+        adicional B_ar para que la antena no colapse en los extremos de banda:
+
+            cot(α) = 4·σ / (1 − τ)
+            B_ar   = 1.1 + 7.7·(1 − τ)²·cot(α)      (Carrel 1961)
+            B_s    = (f_high / f_low) · B_ar
+            N      = 1 + ceil( ln(B_s) / ln(1/τ) )
+
+        Con τ=0.90, σ=0.15 esto da B_ar≈1.56 y N≈12 (antes 8 sin el margen),
+        lo que asegura adaptación en 470 y 900 MHz.
         """
         f1 = self.f_low
         f2 = self.f_high
 
+        cot_alpha = 4.0 * self.sigma / (1.0 - self.tau)
+        self.B_ar = 1.1 + 7.7 * (1.0 - self.tau) ** 2 * cot_alpha
+        self.B_s  = (f2 / f1) * self.B_ar
+
         self.n_elements = max(
-            int(np.ceil(1 + np.log(f2 / f1) / np.log(1 / self.tau))), 4
+            int(np.ceil(1 + np.log(self.B_s) / np.log(1 / self.tau))), 4
         )
 
         # Dipolo más largo: λ/2 a f1 (longitud eléctrica) reducida por Koch
@@ -214,13 +230,24 @@ class FLPDA_Koch:
 
     def eta_rad(self, freq: float) -> float:
         """
-        Eficiencia de radiación η_rad [0–1].
-        Pérdidas dieléctricas (FR-4) + conductor (skin effect).
-        A 700 MHz las pérdidas son mínimas: η≈0.99.
+        Eficiencia de radiación η_rad [0–1] — modelo realista para FR-4.
+
+        η_rad = 1 / (1 + L_diel + L_cond), con las pérdidas expresadas como
+        cociente pérdida/radiación:
+            L_diel = tan δ · k_d · (0.5 + f[GHz])   (dieléctrico, domina en FR-4)
+            L_cond = k_c · √(f[GHz])                 (conductor, efecto pelicular)
+        Calibrado a η_rad ≈ 0.60 @ 550 MHz, dentro del rango típico de antenas
+        impresas sobre FR-4 en UHF (0.50–0.70). El valor decae con la frecuencia
+        por el aumento de las pérdidas dieléctricas y de conductor.
+
+        NOTA (revisión de modelo, 2026-07): sustituye el modelo previo, que
+        subestimaba las pérdidas (η≈0.99), físicamente inconsistente con tan δ=0.02.
         """
-        loss_s = self.loss_tan * (freq / 1e9) * 0.1
-        loss_c = 0.005 * (freq / 1e9) ** 0.5
-        return float(np.clip(1 - loss_s - loss_c, 0.7, 1.0))
+        fghz = float(np.asarray(freq, dtype=float).ravel()[0]) / 1e9
+        L_diel = self.loss_tan * 30.0 * (0.5 + fghz)
+        L_cond = 0.06 * fghz ** 0.5
+        eta = 1.0 / (1.0 + L_diel + L_cond)
+        return float(np.clip(eta, 0.30, 0.85))
 
     def radiation_pattern_dB(self, freq: float, theta_deg):
         """

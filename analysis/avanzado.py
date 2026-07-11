@@ -30,7 +30,7 @@ def _compute_pdc(params: dict) -> float:
 
 
 @st.cache_data(show_spinner=False)
-def run_tornado(eirp_dbm: float = 70.0, dist_m: float = 100.0,
+def run_tornado(eirp_dbm: float = 72.15, dist_m: float = 100.0,
                 freq_ghz: float = 0.55, R_load: float = 1300.0) -> dict:
     """Análisis de sensibilidad tipo tornado sobre P_DC."""
     base   = {'eirp_dbm': eirp_dbm, 'dist_m': dist_m, 'freq_ghz': freq_ghz, 'R_load': R_load}
@@ -45,15 +45,21 @@ MC_SEED = 42
 
 
 @st.cache_data(show_spinner=False)
-def run_monte_carlo(eirp_dbm: float = 70.0, dist_m: float = 100.0,
+def run_monte_carlo(eirp_dbm: float = 72.15, dist_m: float = 100.0,
                     freq_ghz: float = 0.55, R_load: float = 1300.0,
                     n_samples: int = 2000) -> dict:
-    """Propagación de incertidumbre Monte Carlo sobre P_DC (determinista, MC_SEED)."""
+    """Propagación de incertidumbre Monte Carlo sobre P_DC (determinista, MC_SEED).
+
+    La frecuencia NO se trata como portadora con deriva gaussiana: la señal
+    DVB-T2 es un bloque OFDM de 6 MHz, por lo que se modela como canal uniforme
+    de ±3 MHz (revisión de modelo, ítem 7). La incertidumbre dominante es la
+    EIRP y la distancia.
+    """
     base = {'eirp_dbm': eirp_dbm, 'dist_m': dist_m, 'freq_ghz': freq_ghz, 'R_load': R_load}
     uncertainties = {
         'eirp_dbm': {'type': 'normal',  'std': 2.0},
         'dist_m':   {'type': 'uniform', 'half_range': 15.0},
-        'freq_ghz': {'type': 'normal',  'std': 0.01},
+        'freq_ghz': {'type': 'uniform', 'half_range': 0.003},  # canal 6 MHz DVB-T2
     }
     np.random.seed(MC_SEED)
     result = monte_carlo_pdc(base, uncertainties, _compute_pdc, n_samples=n_samples)
@@ -76,7 +82,7 @@ def run_rectifier_bw(Pin_dBm: float = -10.0, freq_center_mhz: float = 550.0,
 
 
 @st.cache_data(show_spinner=False)
-def run_link_budget(eirp_dbm: float = 70.0, dist_m: float = 100.0,
+def run_link_budget(eirp_dbm: float = 72.15, dist_m: float = 100.0,
                     freq_ghz: float = 0.55) -> list:
     """Tabla de presupuesto de enlace con valores canónicos."""
     return link_budget_table(

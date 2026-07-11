@@ -63,7 +63,7 @@ FLPDA_KOCH_ITER = 2
 
 # ── Fuentes RF UHF 470–900 MHz ────────────────────────────────────────────────
 RF_UHF = {
-    'TV UHF (DVB-T)':        {'eirp_dbm': 70.0, 'freq_ghz': 0.550, 'color': '#6d28d9'},
+    'TV UHF (DVB-T)':        {'eirp_dbm': 72.15, 'freq_ghz': 0.550, 'color': '#6d28d9'},  # 10 kW ERP + 2.15 dB = EIRP
     'LTE Macro 700 MHz':     {'eirp_dbm': 46.0, 'freq_ghz': 0.700, 'color': '#b45309'},
     'LTE Band 28 (700 MHz)': {'eirp_dbm': 43.0, 'freq_ghz': 0.700, 'color': '#ea580c'},
     'LoRa Gateway (Colombia)':   {'eirp_dbm': 27.0, 'freq_ghz': 0.915, 'color': '#0369a1'},
@@ -72,30 +72,38 @@ RF_UHF = {
 # ── Corrección de propagación urbana (ITU-R P.1546) ──────────────────────────
 URBAN_CORRECTION_DB = 6.0
 
+# ── Pérdidas explícitas del enlace (revisión de modelo 2026-07) ──────────────
+# Antes embebidas en la corrección urbana; ahora se restan por separado.
+POL_LOSS_DB  = 0.5   # desajuste de polarización (Koch it.2, cross-pol ≈ −15 dB)
+HARM_LOSS_DB = 0.4   # reflexión de armónicos del doblador sin filtro paso-bajo
+
 # ── Resultados canónicos @ 100 m, TDT DVB-T 550 MHz ─────────────────────────
 # ÚNICA fuente de verdad (SSOT) de los valores canónicos del proyecto: el documento,
 # las figuras/tablas del pipeline y las pruebas de regresión leen de aquí.
-# eta_total = eta_rad * eta_mm * eta_imn * PCE * eta_pmic = 0.6715 (figura de mérito)
-# La potencia DC se calcula con cuatro factores sobre P_in: η_rad ya está embebida en G
-# P_DC = P_in · η_mm · η_imn · PCE · η_pmic  =  2.427 mW · 0.9847 · 0.9484 · 0.85 · 0.85 = 1637.6 µW
+# REVISIÓN DE MODELO 2026-07 (comité): η_rad realista en FR-4 (0.5972, antes 0.9952);
+# EIRP = 72.15 dBm (10 kW ERP + 2.15 dB, antes 70.0); pérdidas explícitas de
+# polarización (0.5 dB) y armónicos (0.4 dB); Carrel con región activa → N=12 dipolos.
+# eta_total = eta_rad * eta_mm * eta_imn * PCE * eta_pmic = 0.4023 (figura de mérito)
+# La potencia DC se calcula con cuatro factores sobre P_in (η_rad ya embebida en G):
+# P_DC = P_in · η_mm · η_imn · PCE · η_pmic = 1.982 mW · 0.983 · 0.9484 · 0.85 · 0.85 = 1335.0 µW
 CANONICAL = {
-    'P_dc_uW':    1637.6,   # potencia DC útil [µW]
-    'V_dc_mV':    1459.1,   # voltaje DC de salida [mV]
-    'T_ciclo_s':  158.3,    # tiempo de ciclo LoRa SF12 [s]
+    'P_dc_uW':    1335.0,   # potencia DC útil [µW]
+    'V_dc_mV':    1317.4,   # voltaje DC de salida [mV]
+    'T_ciclo_s':  194.2,    # tiempo de ciclo LoRa SF12 [s]
     'E_ciclo_mJ': 259.25,   # energía por ciclo LoRa SF12 [mJ]
-    'P_in_dBm':   3.85,     # potencia disponible en antena @ 100m, 550 MHz, EIRP 70 dBm
-    'P_in_mW':    2.427,    # idem en mW
+    'P_in_dBm':   2.97,     # potencia disponible en antena @ 100m, 550 MHz, EIRP 72.15 dBm
+    'P_in_mW':    1.982,    # idem en mW
     'FSPL_dB':    67.25,    # pérdida de espacio libre @ 100m, 550 MHz
     'L_urb_dB':   6.0,      # corrección urbana ITU-R P.1546
-    'gain_dBi':   7.10,     # ganancia realizada FLPDA Koch @ 550 MHz [dBi]
-    'S11_dB':     -18.16,   # coef. reflexión @ 550 MHz
-    'eta_rad':    0.9952,   # eficiencia de radiación (corregido auditoría)
-    'eta_mm':     0.9847,   # eficiencia de adaptación (S11 = -18.16 dB)
-    'eta_imn':    0.9484,   # eficiencia red L (IL = 0.23 dB nominal)
+    'gain_dBi':   4.97,     # ganancia realizada FLPDA Koch @ 550 MHz [dBi] (η_rad realista)
+    'S11_dB':     -17.71,   # coef. reflexión @ 550 MHz (N=12)
+    'eta_rad':    0.5972,   # eficiencia de radiación realista FR-4 @ 550 MHz
+    'eta_mm':     0.983,    # eficiencia de adaptación (S11 = -17.71 dB)
+    'eta_imn':    0.9484,   # eficiencia red L (IL = 0.23 dB nominal, punto de diseño)
     'PCE':        0.85,     # PCE máxima Shockley doubler (cap del modelo)
     'eta_pmic':   0.85,     # eficiencia boost converter BQ25504
-    'eta_total':  0.6715,   # FOM de cinco factores (corregido auditoría)
-    'RMSE_wang':  15.50,    # RMSE validación Wang 2022 [pp]
+    'eta_total':  0.4023,   # FOM de cinco factores (η_rad realista)
+    'RMSE_wang':  15.50,    # RMSE validación Wang 2022 [pp] (rectificador, sin cambio)
     'V_cs_mV':    130.0,    # umbral cold-start BQ25504 [mV]
     'R_load_ohm': 1300.0,   # resistencia de carga (BQ25504 input)
 }

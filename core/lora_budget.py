@@ -61,6 +61,8 @@ import numpy as np
 from configs.parametros import (
     C0,                                  # velocidad de la luz [m/s]
     URBAN_CORRECTION_DB,                 # ITU-R P.1546, entorno urbano denso [dB]
+    POL_LOSS_DB,                         # pérdida por desajuste de polarización [dB]
+    HARM_LOSS_DB,                        # pérdida por reflexión de armónicos [dB]
     R_LOAD as RL_EQUIV,                  # resistencia de carga equivalente [Ω]
     BQ25504_ETA_PMIC as ETA_PMIC,        # eficiencia del boost converter DC-DC
     BQ25504_V_COLDSTART as V_COLDSTART_MIN_V,  # arranque en frío [V] = 130 mV
@@ -69,7 +71,7 @@ from configs.parametros import (
 
 # ── Fuentes RF en banda UHF (470–900 MHz) ─────────────────────────────────────
 RF_SOURCES_UHF = {
-    'TV UHF (DVB-T)':          {'eirp_dbm': 70.0, 'freq_ghz': 0.550, 'color': '#8b5cf6'},  # ej. Cerro Nutibara 10kW
+    'TV UHF (DVB-T)':          {'eirp_dbm': 72.15, 'freq_ghz': 0.550, 'color': '#8b5cf6'},  # Cerro Nutibara 10 kW ERP = 72.15 dBm EIRP
     'LTE Macro 700 MHz':       {'eirp_dbm': 46.0, 'freq_ghz': 0.700, 'color': '#f59e0b'},
     'LTE Band 28 (700 MHz)':   {'eirp_dbm': 43.0, 'freq_ghz': 0.700, 'color': '#f97316'},
     'LoRa Gateway (Colombia)':     {'eirp_dbm': 27.0, 'freq_ghz': 0.915, 'color': '#06b6d4'},
@@ -128,13 +130,15 @@ def fspl_dB(dist_m: float, freq_ghz: float) -> float:
 
 
 def received_power_dBm(eirp_dbm: float, dist_m: float, freq_ghz: float,
-                       ant_gain_dBi: float = 7.5) -> float:
+                       ant_gain_dBi: float = 4.9) -> float:
     """
-    Potencia recibida [dBm] (Friis).
-    Incluye corrección de entorno urbano (ITU-R P.1546) sobre espacio libre.
-    Ganancia por defecto = 7.5 dBi (FLPDA Koch it.2 media).
+    Potencia disponible en la antena [dBm] (Friis).
+    Incluye corrección urbana (ITU-R P.1546) y las pérdidas explícitas de
+    polarización y armónicos, de modo que coincide con la cadena canónica.
+    Ganancia por defecto ≈ 4.9 dBi (FLPDA Koch it.2 media, η_rad realista).
     """
-    return eirp_dbm - fspl_dB(dist_m, freq_ghz) - URBAN_CORRECTION_DB + ant_gain_dBi
+    return (eirp_dbm - fspl_dB(dist_m, freq_ghz) - URBAN_CORRECTION_DB
+            - POL_LOSS_DB - HARM_LOSS_DB + ant_gain_dBi)
 
 
 # ── Modelado del cosechador RF-DC ─────────────────────────────────────────────
@@ -232,7 +236,8 @@ def harvested_uw_full(eirp_dbm: float, dist_m: float, freq_ghz: float,
     eta_r = float(antenna.eta_rad(freq_hz))
 
     # 2. Potencia recibida (Friis + corrección urbana)
-    P_rf_dBm = eirp_dbm - fspl_dB(dist_m, freq_ghz) - URBAN_CORRECTION_DB + gain
+    P_rf_dBm = (eirp_dbm - fspl_dB(dist_m, freq_ghz) - URBAN_CORRECTION_DB
+                - POL_LOSS_DB - HARM_LOSS_DB + gain)
     P_rf_W   = 10.0 ** (P_rf_dBm / 10.0) * 1e-3
 
     # 3. η_mm = 1 − |Γ_ant|² desde S11 de la antena

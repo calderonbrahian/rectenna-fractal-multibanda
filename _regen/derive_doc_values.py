@@ -61,7 +61,7 @@ out['tabla11_wang'] = {
 # ── TABLA 9 / E.8 — cadena de potencia vs distancia (TDT 70 dBm, 550 MHz) ─────
 flpda = FLPDA_Koch(tau=FLPDA_TAU, sigma=FLPDA_SIGMA, f_low=FLPDA_F_LOW_HZ, f_high=FLPDA_F_HIGH_HZ)
 rect = RectifierCircuit("doubler")
-def chain_at(dist_m, eirp_dbm=70.0, f_ghz=0.550):
+def chain_at(dist_m, eirp_dbm=72.15, f_ghz=0.550):
     r = harvested_uw_full(eirp_dbm, dist_m, f_ghz, flpda, rect, matching_net=None)
     fspl = fspl_dB(dist_m, f_ghz)
     return {'d': dist_m, 'FSPL_dB': round(fspl, 1), 'Pin_dBm': round(r['P_rf_dBm'], 1),
@@ -69,7 +69,7 @@ def chain_at(dist_m, eirp_dbm=70.0, f_ghz=0.550):
             'P_DC_uW': round(r['P_dc_uW'], 1), 'V_dc_mV': round(r['V_dc_mV'], 1)}
 out['tabla9_chain'] = [chain_at(d) for d in (50, 100, 200, 400, 500, 1000)]
 # E.8 mapa EIRP x dist
-src = [('TDT DVB-T (Cerro Nutibara)', 70.0, 0.550), ('LTE Macro 700 MHz', 46.0, 0.700),
+src = [('TDT DVB-T (Cerro Nutibara)', 72.15, 0.550), ('LTE Macro 700 MHz', 46.0, 0.700),
        ('LTE Band 28 (700 MHz)', 43.0, 0.700), ('LoRa Gateway (Colombia)', 27.0, 0.915)]
 e8 = []
 for name, eirp, f in src:

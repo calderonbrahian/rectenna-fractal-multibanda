@@ -86,9 +86,9 @@ def test_flpda_diseno_carrel():
     flpda = FLPDA_Koch(tau=FLPDA_TAU, sigma=FLPDA_SIGMA,
                        f_low=FLPDA_F_LOW_HZ, f_high=FLPDA_F_HIGH_HZ,
                        koch_iter=2)
-    assert flpda.n_elements == 8, f'n_elementos = {flpda.n_elements} (esperado 8)'
+    assert flpda.n_elements == 12, f'n_elementos = {flpda.n_elements} (esperado 12, Carrel región activa)'
     boom_cm = flpda.boom_length_m * 100
-    assert abs(boom_cm - 50.0) < 5.0, f'boom = {boom_cm:.1f} cm (esperado ~50)'
+    assert abs(boom_cm - 65.7) < 5.0, f'boom = {boom_cm:.1f} cm (esperado ~66)'
     red = (1 - flpda.k_red) * 100
     assert abs(red - 43.75) < 0.1, f'reducción Koch = {red:.2f}% (esperado 43,75)'
     print(f'  [OK] FLPDA: n_el={flpda.n_elements}, boom={boom_cm:.1f}cm, red Koch={red:.2f}%')
@@ -116,10 +116,11 @@ def test_fspl_550mhz_100m():
 
 
 def test_p_in_cerro_nutibara_100m():
-    """Bloquea P_in @ 100 m de TDT 10 kW = +3,85 dBm."""
-    P_in = received_power_dBm(eirp_dbm=70.0, dist_m=100.0,
-                              freq_ghz=0.550, ant_gain_dBi=7.10)
-    assert abs(P_in - 3.85) < 0.1, f'P_in = {P_in:.2f} dBm (esperado +3,85)'
+    """Bloquea P_in @ 100 m de TDT 10 kW ERP (72,15 dBm EIRP) = +2,97 dBm."""
+    P_in = received_power_dBm(eirp_dbm=72.15, dist_m=100.0,
+                              freq_ghz=0.550, ant_gain_dBi=CANONICAL['gain_dBi'])
+    assert abs(P_in - CANONICAL['P_in_dBm']) < 0.1, \
+        f'P_in = {P_in:.2f} dBm (esperado {CANONICAL["P_in_dBm"]})'
     print(f'  [OK] P_in @ 100 m, 10 kW TDT = {P_in:.2f} dBm')
 
 
@@ -135,8 +136,8 @@ def test_correccion_urbana_itu():
 def test_cadena_potencia_canonica():
     """
     Bloquea TODA la cadena de potencia @ 100 m del Cerro Nutibara:
-      EIRP +70 dBm → FSPL → urbano → η_mm → η_imn → PCE → η_PMIC → P_DC
-    Resultado esperado: P_DC = 1.637,6 µW
+      EIRP 72,15 dBm → FSPL → urbano → pol → armónicos → η_mm → η_imn → PCE → η_PMIC → P_DC
+    Resultado esperado: P_DC = 1.335,0 µW
     """
     flpda     = FLPDA_Koch(tau=FLPDA_TAU, sigma=FLPDA_SIGMA,
                            f_low=FLPDA_F_LOW_HZ, f_high=FLPDA_F_HIGH_HZ,
@@ -144,7 +145,7 @@ def test_cadena_potencia_canonica():
     rectifier = RectifierCircuit(topology='doubler', R_load=1300.0)
 
     res = harvested_uw_full(
-        eirp_dbm=70.0, dist_m=100.0, freq_ghz=0.550,
+        eirp_dbm=72.15, dist_m=100.0, freq_ghz=0.550,
         antenna=flpda, rectifier=rectifier, matching_net=None,
     )
 

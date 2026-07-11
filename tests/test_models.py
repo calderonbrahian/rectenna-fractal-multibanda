@@ -225,9 +225,9 @@ class TestFLPDA:
         assert g_real <= g_dir + 0.01  # tolerancia numerica
 
     def test_eta_rad_uhf(self):
-        """eta_rad ~ 0.99 a 700 MHz (perdidas minimas)."""
+        """eta_rad realista en FR-4 a 700 MHz: rango 0.50-0.70 (no ~0.99)."""
         eta = self.flpda.eta_rad(700e6)
-        assert eta > 0.95
+        assert 0.50 <= eta <= 0.70
 
     def test_impedancia_en_banda(self):
         """Parte real de Z_in debe ser > 0 en banda."""

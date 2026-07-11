@@ -191,7 +191,7 @@ def fig05_cascada():
                  f"{CANONICAL['eta_total']*100:.2f}%", fontsize=11)
     ax.set_ylim(0, 105)
     _save(fig, "Fig05_cascada_RFDC.png")
-    return f"η_total={CANONICAL['eta_total']:.4f} (esperado 0.6715)"
+    return f"η_total={CANONICAL['eta_total']:.4f} (η_total FOM con η_rad realista)"
 
 
 def fig06_pdc_dist():
@@ -232,7 +232,7 @@ def fig07_tciclo_dist():
     _save(fig, "Fig07_Tciclo_distancia.png")
     # verificación: a 100 m T debe ≈ 158 s
     i100 = int(np.argmin(np.abs(dist - 100)))
-    return f"T_ciclo @ {dist[i100]:.0f} m ≈ {t_ciclo[i100]:.0f} s (canónico 158.3 s @100m)"
+    return f"T_ciclo @ {dist[i100]:.0f} m ≈ {t_ciclo[i100]:.0f} s (canónico ~194 s @100m)"
 
 
 def fig08_tornado():
