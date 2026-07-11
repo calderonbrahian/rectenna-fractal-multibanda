@@ -66,7 +66,7 @@ def figC5_maestra():
         ("Problema", "energía IoT", E.ic_alert),
         ("Pregunta", "¿RF viable?", E.ic_question),
         ("Hipótesis", "sí, y medible", E.ic_bulb),
-        ("Metodología", "modelo + código", E.ic_code),
+        ("Metodología", "modelo analítico", E.ic_model),
         ("Dos topologías", "Sierpinski · FLPDA", E.ic_branch),
         ("Simulación", "cadena RF→DC", E.ic_waves),
         ("Resultados", "viabilidad", E.ic_chart),
@@ -98,15 +98,15 @@ def figC1_fuentes_a_caso():
     n = 5
     fig, ax = E.canvas(n * 1.5, 3.1, (0, n), (0, 2.5))
     etapas = [
-        ("Entorno urbano", "AM·FM·TDT·LTE·5G", E.ic_city),
+        ("Entorno\nurbano", "AM·FM·TDT·LTE·5G", E.ic_city),
         ("Campo EM", "densidad RF", E.ic_waves),
         ("Rectena", "antena + diodo", E.ic_antenna),
-        ("Modelo", "reproducible", E.ic_code),
+        ("Modelo", "analítico", E.ic_model),
         ("Viabilidad", "energía útil", E.ic_chart),
     ]
     for i, (t, s, ic) in enumerate(etapas):
         cx = i + 0.5
-        E.node(ax, cx, 1.45, 0.92, 1.3, t, sub=s, icon=ic, accent=E.AC_CONCEPT,
+        E.node(ax, cx, 1.45, 0.92, 1.3, t, sub=s, icon=ic, accent=E.AC_METHOD,
                title_fs=8.4, sub_fs=6.4)
         if i < n - 1:
             E.flow(ax, cx + 0.46, 1.45, cx + 0.54, 1.45, accent=E.RAIL)
@@ -127,7 +127,7 @@ def figC3_anatomia_rectena():
         ("Gestor\n(PMIC)", "acondiciona", E.ic_chip),
         ("Carga IoT", "consume", E.ic_battery),
     ]
-    fig = _hflow(nodes, E.AC_CONCEPT, w=0.9, h=1.15, title_fs=8.4, sub_fs=6.6)
+    fig = _hflow(nodes, E.AC_METHOD, w=0.9, h=1.15, title_fs=8.4, sub_fs=6.6)
     return _save(fig, "FigC3_anatomia_rectena.png"), "C3 · anatomía (5 etapas, conceptual)"
 
 
@@ -136,7 +136,7 @@ def figC2_flujo_metodologico():
     nodes = [
         ("Pregunta", "¿RF viable?", E.ic_question),
         ("Escenario", "fuente · f", E.ic_pin),
-        ("Modelado", "antena · diodo", E.ic_code),
+        ("Modelado", "antena · diodo", E.ic_model),
         ("Validación", "Wang · P-B.", E.ic_check),
         ("Resultados", "P_DC · η · T", E.ic_chart),
         ("Criterios", "topología", E.ic_branch),

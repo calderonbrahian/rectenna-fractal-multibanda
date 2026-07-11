@@ -183,6 +183,14 @@ def ic_code(ax, cx, cy, s, c):
     _ln(ax, [cx - s*0.2, cx - s*0.8, cx - s*0.2], [cy + s*0.7, cy, cy - s*0.7], c)
     _ln(ax, [cx + s*0.2, cx + s*0.8, cx + s*0.2], [cy + s*0.7, cy, cy - s*0.7], c)
 
+def ic_model(ax, cx, cy, s, c):
+    # ejes + curva analítica saturante (modelo de forma cerrada)
+    import math
+    _ln(ax, [cx - s*0.8, cx - s*0.8, cx + s*0.85], [cy + s*0.85, cy - s*0.7, cy - s*0.7], c, 1.2)
+    xs = [cx - s*0.7 + (k/40.0)*s*1.5 for k in range(41)]
+    ys = [cy - s*0.55 + s*1.1*(1 - math.exp(-3.0*(k/40.0))) for k in range(41)]
+    ax.plot(xs, ys, color=c, lw=1.7, solid_capstyle="round", zorder=4)
+
 def ic_chart(ax, cx, cy, s, c):
     for i, h in enumerate((0.6, 1.1, 0.85)):
         x = cx - s*0.7 + i*s*0.7
