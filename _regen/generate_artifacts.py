@@ -159,16 +159,46 @@ def fig04_geom_flpda():
     fig, ax = plt.subplots(figsize=(6.8, 3.8))
     ax.plot([pos[0] - 3, pos[-1] + 3], [0, 0], color="#444", lw=2)  # boom
     for i in range(len(pos)):
-        ax.plot([pos[i], pos[i]], [-Lp[i] / 2, Lp[i] / 2], color=C_AZUL, lw=3)
+        ax.plot([pos[i], pos[i]], [-Lp[i] / 2, Lp[i] / 2], color=C_VERDE, lw=3)
         ax.text(pos[i], -Lp[i] / 2 - 1.5, f"#{i+1}\n{res[i]:.0f}", fontsize=7,
                 ha="center", va="top", color="#333")
     ax.set_xlabel("Posición a lo largo del boom (cm)")
     ax.set_ylabel("Extensión del dipolo (cm)")
-    ax.set_title(f"FLPDA Koch it.2 — τ=0,90, σ=0,15, N={g['n_elements']} "
+    ax.set_title(f"FLPDA Koch it.2 · τ=0,90, σ=0,15, N={g['n_elements']} "
                  f"(boom {g['boom_cm']} cm)", fontsize=10)
     ax.set_aspect("equal", adjustable="datalim")
     _save(fig, "Fig04_geometria_FLPDA.png")
     return f"N={g['n_elements']} · boom={g['boom_cm']} cm · red. Koch −{g['reduccion_pct']}%"
+
+
+def fig12_geom_sierpinski():
+    """Geometría física del triángulo de Sierpinski it.3 (Escenario A), con cotas."""
+    from core.antenna import FractalAntenna
+    from configs.parametros import FR4_ER_1GHZ
+    from matplotlib.patches import Polygon as MplPoly
+    ant = FractalAntenna("sierpinski", iterations=3)
+    tris = ant.geometry_points()
+    # lado con εr=4,4 (consistente con §3.4.1 del documento: L_lado = 38,86 mm)
+    L = (3e8 / (ant.base_freq * np.sqrt(FR4_ER_1GHZ)) / 2.0) * 1000.0
+    H = L * np.sqrt(3) / 2.0           # altura [mm]
+    fig, ax = plt.subplots(figsize=(5.4, 4.8))
+    for tri in tris:
+        pts = [(p[0] * L, p[1] * L) for p in tri]
+        ax.add_patch(MplPoly(pts, closed=True, facecolor=C_A, edgecolor=C_A, lw=0.2))
+    ax.annotate("", xy=(0, -3), xytext=(L, -3),
+                arrowprops=dict(arrowstyle="<->", color="#444", lw=1))
+    ax.text(L / 2, -6, f"lado = {L:.2f} mm", ha="center", fontsize=8, color="#333")
+    ax.annotate("", xy=(L + 3, 0), xytext=(L + 3, H),
+                arrowprops=dict(arrowstyle="<->", color="#444", lw=1))
+    ax.text(L + 5, H / 2, f"altura = {H:.2f} mm", va="center", rotation=90, fontsize=8, color="#333")
+    ax.set_xlim(-5, L + 16)
+    ax.set_ylim(-9, H + 4)
+    ax.set_aspect("equal")
+    ax.set_xlabel("mm"); ax.set_ylabel("mm")
+    ax.grid(False)
+    ax.set_title(f"Triángulo de Sierpinski it.3 · lado {L:.2f} mm (f₀ = 1,84 GHz)", fontsize=10)
+    _save(fig, "Fig12_geom_sierpinski.png")
+    return f"Sierpinski it.3 · lado {L:.1f} mm · altura {H:.1f} mm · {len(tris)} triángulos"
 
 
 def fig05_cascada():
@@ -446,6 +476,7 @@ if __name__ == "__main__":
     _do("Fig 2 · η por banda A", fig02_eta_banda_A)
     _do("Fig 3 · S11 FLPDA", fig03_s11_flpda)
     _do("Fig 4 · Geometría FLPDA", fig04_geom_flpda)
+    _do("Fig 12 · Geometría Sierpinski", fig12_geom_sierpinski)
     _do("Fig 5 · Cascada RF→DC", fig05_cascada)
     _do("Fig 6 · P_DC vs distancia", fig06_pdc_dist)
     _do("Fig 7 · T_ciclo vs distancia", fig07_tciclo_dist)
