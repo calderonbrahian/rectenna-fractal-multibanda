@@ -99,7 +99,7 @@ def run_link_budget(eirp_dbm: float = 72.15, dist_m: float = 100.0,
 @st.cache_data(show_spinner=False)
 def run_supercap(P_dc_uW: float = None, E_ciclo_mJ: float = 259.25,
                  C_mF: float = 330.0, V_max: float = 3.3, V_min: float = 1.8,
-                 ESR_ohm: float = 50.0, I_leak_uA: float = 1.0) -> dict:
+                 ESR_ohm: float = 0.0, I_leak_uA: float = 0.0) -> dict:
     """Dimensionamiento del supercondensador."""
     if P_dc_uW is None:
         P_dc_uW = CANONICAL['P_dc_uW']

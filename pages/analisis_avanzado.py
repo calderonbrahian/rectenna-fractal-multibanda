@@ -288,7 +288,9 @@ cap de PCE = 0,85.
             V_max_sc = st.number_input("V_max [V]", 1.5, 5.5, 3.3, 0.1)
         with col3:
             V_min_sc = st.number_input("V_min [V]", 0.5, 3.0, 1.8, 0.1)
-            ESR_sc   = st.number_input("ESR [Ω]", 1.0, 500.0, 50.0, 5.0)
+            ESR_sc   = st.number_input("ESR [Ω]", 0.0, 500.0, 0.0, 5.0,
+                                       help="0 Ω reproduce el Anexo B.9 del documento "
+                                            "(sin pérdidas óhmicas de carga).")
 
         with st.spinner("Calculando supercondensador..."):
             sc = run_supercap(P_dc_uW=P_dc_input, E_ciclo_mJ=E_ciclo_mj,

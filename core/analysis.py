@@ -329,10 +329,16 @@ class SupercapResult:
 
 def supercap_sizing(P_dc_uW: float, E_ciclo_J: float,
                     C_F: float = 0.33, V_max: float = 3.3,
-                    V_min: float = 1.8, ESR_ohm: float = 50.0,
-                    I_leak_uA: float = 1.0) -> SupercapResult:
+                    V_min: float = 1.8, ESR_ohm: float = 0.0,
+                    I_leak_uA: float = 0.0) -> SupercapResult:
     """
     Dimensionamiento completo del supercondensador.
+
+    Por defecto (ESR_ohm=0, I_leak_uA=0) reproduce exactamente la caracterización
+    temporal del Anexo B.9 del documento: t_carga = E_util / P_DC, sin pérdidas
+    adicionales. ESR_ohm/I_leak_uA > 0 son un refinamiento opcional (pérdidas
+    óhmicas de carga y autodescarga) para exploración fuera del caso canónico,
+    no parte del modelo documentado.
 
     Parametros
     ----------
