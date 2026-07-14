@@ -1,6 +1,6 @@
 """
 Sección 11 · Conclusiones.
-Narrativa derivada de §5.1 (Conclusiones) y §5.3 / Tabla 13 (Limitaciones) del
+Narrativa derivada de §6.1 (Conclusiones) y §6.3 / Tabla 4 (Limitaciones) del
 informe de grado. Página de lectura.
 """
 
@@ -18,7 +18,7 @@ def render():
         para_que_sirve=("Quedarse con las conclusiones de fondo y con la lectura honesta de "
                         "su alcance."),
         entradas="Ninguna; es una página de lectura.",
-        salidas="Los hallazgos principales (§5.1) y la tabla de limitaciones (Tabla 13).",
+        salidas="Los hallazgos principales (§6.1) y la tabla de limitaciones (Tabla 4).",
     )
 
     st.subheader("Hallazgos principales")
@@ -44,7 +44,7 @@ def render():
         "demasiado bajas para alimentar cargas reales."
     )
 
-    _ref("§5.1 Conclusiones · §5.2 Aportaciones del trabajo")
+    _ref("§6.1 Conclusiones · §6.2 Características del trabajo realizado")
 
     st.divider()
 
@@ -67,12 +67,12 @@ def render():
         "validación experimental. Difiere de sustrato (FR-4 frente a Duroid 5880) y arroja un "
         "RMSE de 15,50 pp. El trabajo es de modelado; no incluye un prototipo medido."
     )
-    _ref("§1.3 Alcance y limitaciones del estudio · §4.5 Validación cruzada · "
-         "§5.1 Conclusiones")
+    _ref("§1.2 Alcance y limitaciones del estudio · §5.5 Validación cruzada · "
+         "§6.1 Conclusiones")
 
     st.divider()
 
-    st.subheader("Limitaciones del estudio (Tabla 13)")
+    st.subheader("Limitaciones del estudio (Tabla 4)")
     st.markdown(
         "Los resultados deben leerse junto con sus limitaciones declaradas. El trabajo es "
         "**de modelado**, no experimental:"
@@ -98,9 +98,9 @@ def render():
         "resultados es la de un trabajo de modelado reproducible, no de medición."
     )
 
-    _ref("§5.3 Limitaciones del estudio · §5.4 Trabajo futuro · "
-         "Tabla 13 (limitaciones y soluciones) · Tabla 14 (resumen estructural) · "
-         "Apéndice E.11 Tabla canónica de limitaciones (L1–L8)")
+    _ref("§6.3 Limitaciones del estudio · §6.4 Recomendaciones y trabajo futuro · "
+         "Tabla 4 (limitaciones y soluciones) · Anexo B.20 (resumen estructural) · "
+         "Anexo B.11 Tabla canónica de limitaciones (L1–L8)")
 
     st.divider()
     st.page_link("pages/acerca.py",

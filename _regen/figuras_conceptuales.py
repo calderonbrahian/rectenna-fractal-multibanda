@@ -70,7 +70,7 @@ def figC5_maestra():
         ("Dos topologías", "Sierpinski · FLPDA", E.ic_branch),
         ("Simulación", "cadena RF→DC", E.ic_waves),
         ("Resultados", "viabilidad", E.ic_chart),
-        ("Conclusiones", "método reusable", E.ic_check),
+        ("Conclusiones", "viabilidad demostrada", E.ic_check),
     ]
     fig, ax = E.canvas(9.2, 5.0, (0, 4.4), (0, 2.7))
     top_y, bot_y = 1.85, 0.72

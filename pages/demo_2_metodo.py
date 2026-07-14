@@ -1,9 +1,9 @@
-"""NIVEL 1 · Demostración — 2/4 · La metodología (el aporte)."""
+"""NIVEL 1 · Demostración — 2/4 · La metodología del estudio."""
 import streamlit as st
 from utils.figuras import figura, FIG
 
 st.title("La metodología")
-st.subheader("El aporte no es un dispositivo: es un método reproducible para estudiar el aprovechamiento de RF.")
+st.subheader("El foco no es un dispositivo, sino un modelo analítico y computacional para evaluar el aprovechamiento de RF.")
 
 st.markdown(
     "Toda la cadena de cálculo está implementada en **Python con bibliotecas de código abierto**, "

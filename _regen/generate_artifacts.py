@@ -201,6 +201,117 @@ def fig12_geom_sierpinski():
     return f"Sierpinski it.3 · lado {L:.1f} mm · altura {H:.1f} mm · {len(tris)} triángulos"
 
 
+def fig13_sierpinski_iteraciones():
+    """Progresión it.0→it.3 del Sierpinski Gasket: qué cambia en cada paso."""
+    from core.antenna import FractalAntenna
+    from matplotlib.patches import Polygon as MplPoly
+    fig, axes = plt.subplots(1, 4, figsize=(9.6, 2.6))
+    for k, ax in enumerate(axes):
+        ant = FractalAntenna("sierpinski", iterations=k)
+        tris = ant.geometry_points(iterations=k)
+        for tri in tris:
+            ax.add_patch(MplPoly(tri, closed=True, facecolor=C_A, edgecolor=C_A, lw=0.15))
+        ax.set_xlim(-0.05, 1.05); ax.set_ylim(-0.05, 0.92)
+        ax.set_aspect("equal"); ax.axis("off")
+        D_H = np.log(3) / np.log(2)
+        ax.set_title(f"it.{k}\n{len(tris)} triáng.", fontsize=9)
+    fig.tight_layout(rect=[0, 0, 1, 0.86])
+    fig.suptitle(f"Sierpinski: autosimilitud por iteración (D_H = log 3 / log 2 ≈ {np.log(3)/np.log(2):.3f})",
+                 fontsize=10, y=1.06)
+    _save(fig, "Fig13_sierpinski_iteraciones.png")
+    return "it.0→it.3 · 1→81 triángulos · D_H≈1,585"
+
+
+def fig14_koch_geometria():
+    """Progresión k=0→k=2 de la curva de Koch aplicada a un dipolo recto."""
+    from core.antenna import FractalAntenna
+    fig, axes = plt.subplots(1, 3, figsize=(9.0, 2.4))
+    reducciones = {0: 0.0, 1: 25.0, 2: 43.75}
+    for k, ax in enumerate(axes):
+        ant = FractalAntenna("koch", iterations=k)
+        pts = np.array(ant.geometry_points(iterations=k))
+        ax.plot(pts[:, 0], pts[:, 1], color=C_VERDE, lw=1.8)
+        ax.plot([0, 1], [-0.06, -0.06], color="#999", lw=0.8, ls="--")
+        ax.set_xlim(-0.05, 1.05); ax.set_ylim(-0.12, 0.35)
+        ax.set_aspect("equal"); ax.axis("off")
+        ax.set_title(f"k={k}\n−{reducciones[k]:.2f} % long. física", fontsize=9)
+    fig.suptitle("Curva de Koch: el dipolo se pliega y reduce su longitud física sin cambiar la eléctrica",
+                 fontsize=10, y=1.06)
+    _save(fig, "Fig14_koch_geometria.png")
+    return "k=0→k=2 · reducción por dipolo 0→43,75 %"
+
+
+def fig15_flpda_completa():
+    """
+    Figura única del FLPDA: geometría física (Koch) superpuesta a la envolvente LPDA
+    euclidiana equivalente, con τ, σ, ángulo de vértice α, boom y frecuencia de
+    resonancia por dipolo. Sustituye a las antiguas Fig15 (comparación) + Fig16
+    (dimensiones) + la geometría de la Fig04/antigua Figura 11, evitando repetir
+    tres veces el mismo boom con distintas anotaciones.
+    """
+    from simulation.escenario_b import run_geometry_b
+    from configs.parametros import FLPDA_TAU, FLPDA_SIGMA
+    g = run_geometry_b()
+    pos = np.array(g["positions_cm"])
+    Lp = np.array(g["lengths_phys_cm"])   # FLPDA Koch (físico)
+    Le = np.array(g["lengths_elec_cm"])   # LPDA euclidiana equivalente (eléctrico)
+    res = g["res_freqs_MHz"]
+    boom = g["boom_cm"]; N = g["n_elements"]
+    alpha_deg = np.degrees(np.arctan((1 - FLPDA_TAU) / (4 * FLPDA_SIGMA)))
+    ahorro = (1 - Lp.max() / Le.max()) * 100
+
+    Hmax = Le.max()
+    fig, ax = plt.subplots(figsize=(9.0, 4.6))
+    # envolvente LPDA euclidiana (referencia, fantasma gris) detrás del Koch físico
+    for i in range(len(pos)):
+        ax.plot([pos[i], pos[i]], [-Le[i] / 2, Le[i] / 2], color=C_GRIS, lw=5, alpha=0.55,
+                solid_capstyle="butt", zorder=1)
+    ax.plot([], [], color=C_GRIS, lw=5, alpha=0.55, label=f"LPDA euclidiana (envolvente máx. {Le.max():.1f} cm)")
+    # boom
+    ax.plot([pos[0] - 2, pos[-1] + 2], [0, 0], color="#444", lw=2.2, zorder=3)
+    # dipolos Koch físicos + etiqueta de frecuencia (alternando altura para no chocar)
+    for i in range(len(pos)):
+        ax.plot([pos[i], pos[i]], [-Lp[i] / 2, Lp[i] / 2], color=C_VERDE, lw=3, zorder=4)
+        y0 = -Hmax / 2 - (1.8 if i % 2 == 0 else 4.2)
+        ax.text(pos[i], y0, f"#{i+1}", fontsize=6.5, ha="center", va="top", color="#333")
+        ax.text(pos[i], y0 - 1.6, f"{res[i]:.0f}", fontsize=6, ha="center", va="top", color="#666")
+    ax.plot([], [], color=C_VERDE, lw=3, label=f"FLPDA Koch it.2 (envolvente máx. {Lp.max():.1f} cm)")
+
+    # indicador compacto del ángulo de vértice α (no se extiende hasta el vértice geométrico real)
+    ray_len = (pos[1] - pos[0]) * 1.3
+    for sgn in (1, -1):
+        ax.plot([pos[0] - ray_len, pos[0]], [sgn * (Le[0] / 2) * 0.35, 0],
+                color=C_ROJO, lw=0.9, ls=":", zorder=2)
+    ax.text(pos[0] - ray_len - 0.8, 0, f"α≈{alpha_deg:.1f}°", color=C_ROJO, fontsize=8, ha="right", va="center")
+
+    # τ y σ en su propia fila, por encima de la envolvente, sin solaparse
+    y_tau = Hmax / 2 + 2.0
+    ax.plot([pos[0], pos[0]], [Le[0] / 2, y_tau - 0.3], color="#999", lw=0.5, ls="-")
+    ax.plot([pos[1], pos[1]], [Le[1] / 2, y_tau - 0.3], color="#999", lw=0.5, ls="-")
+    ax.text(pos[0], y_tau, f"τ = L₂/L₁ = {FLPDA_TAU:.2f}", fontsize=8, ha="left", va="bottom", color="#333")
+    y_sigma = Hmax / 2 + 0.6
+    ax.annotate("", xy=(pos[0], y_sigma), xytext=(pos[1], y_sigma),
+                arrowprops=dict(arrowstyle="<->", color="#333", lw=0.8))
+    ax.text((pos[0] + pos[1]) / 2, y_sigma + 0.3, f"σ = d/(2L) = {FLPDA_SIGMA:.2f}",
+            fontsize=7, ha="center", va="bottom", color="#333")
+
+    # boom, en su propia fila muy por debajo de las etiquetas de frecuencia
+    y_boom = -Hmax / 2 - 7.4
+    ax.annotate("", xy=(pos[0], y_boom), xytext=(pos[-1], y_boom),
+                arrowprops=dict(arrowstyle="<->", color="#444", lw=1))
+    ax.text((pos[0] + pos[-1]) / 2, y_boom - 0.9, f"boom = {boom} cm", fontsize=8, ha="center", va="top")
+
+    ax.set_xlim(pos[0] - ray_len - 6, pos[-1] + 4)
+    ax.set_ylim(y_boom - 2.5, y_tau + 2.0)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.legend(loc="upper right", fontsize=7.5, frameon=False, bbox_to_anchor=(1.0, 1.15))
+    ax.set_title(f"FLPDA Koch it.2 · N={N} · τ={FLPDA_TAU:.2f} · σ={FLPDA_SIGMA:.2f} · α≈{alpha_deg:.1f}° · "
+                 f"reduce la envolvente {ahorro:.1f} % frente a la LPDA euclidiana equivalente", fontsize=9.5)
+    _save(fig, "Fig15_flpda_completa.png")
+    return f"N={N} · boom={boom} cm · τ={FLPDA_TAU:.2f} · σ={FLPDA_SIGMA:.2f} · α≈{alpha_deg:.1f}° · ahorro {ahorro:.1f} %"
+
+
 def fig05_cascada():
     etapas = ["η_rad", "η_mm", "η_IMN", "PCE", "η_PMIC"]
     facs = [CANONICAL["eta_rad"], CANONICAL["eta_mm"], CANONICAL["eta_imn"],
@@ -364,56 +475,56 @@ def tablas_codigo():
     from analysis.avanzado import run_link_budget
     n = 0
 
-    # T2 — bandas Escenario A
+    # Anexo B.11 — bandas Escenario A
     bandas = run_bandas(topology="doubler", Pin_dBm=-10.0)
-    pd.DataFrame(bandas).to_csv(os.path.join(TABS, "E12_bandas_escenarioA.csv"),
+    pd.DataFrame(bandas).to_csv(os.path.join(TABS, "B11_bandas_escenarioA.csv"),
                                 index=False, encoding="utf-8"); n += 1
 
-    # T3 — SPICE SMS7630
-    _csv("E13_SPICE_SMS7630.csv", ["Parámetro", "Valor"],
+    # Anexo B.12 — SPICE SMS7630
+    _csv("B12_SPICE_SMS7630.csv", ["Parámetro", "Valor"],
          [["Is [A]", SMS7630["Is"]], ["n", SMS7630["n"]], ["Rs [Ω]", SMS7630["Rs"]],
           ["Cj0 [F]", SMS7630["Cj0"]], ["Vj [V]", SMS7630["Vj"]], ["M", SMS7630["M"]]]); n += 1
 
-    # T6 — geometría dipolos Koch
+    # Anexo B.14 — geometría dipolos Koch
     g = run_geometry_b()
     rows6 = [[i + 1, round(g["res_freqs_MHz"][i], 1),
               round(g["lengths_elec_cm"][i], 1), round(g["lengths_phys_cm"][i], 1),
               round(g["positions_cm"][i], 1)] for i in range(g["n_elements"])]
-    _csv("E15_geometria_dipolos.csv",
+    _csv("B14_geometria_dipolos.csv",
          ["Dipolo", "f_res [MHz]", "L_elec [cm]", "L_fis [cm]", "Pos [cm]"], rows6); n += 1
 
-    # T7 — PCE vs Pin (muestreo)
+    # Anexo B.15 — PCE vs Pin (muestreo)
     p = run_pce_uhf_curve(f_hz=550e6)
     idx = np.linspace(0, len(p["Pin_dBm"]) - 1, 12).astype(int)
     rows7 = [[round(p["Pin_dBm"][i], 1), round(p["PCE_pct"][i], 2),
               round(p["Vdc_mV"][i], 1)] for i in idx]
-    _csv("E16_PCE_Pin.csv", ["Pin [dBm]", "PCE [%]", "Vdc [mV]"], rows7); n += 1
+    _csv("B15_PCE_Pin.csv", ["Pin [dBm]", "PCE [%]", "Vdc [mV]"], rows7); n += 1
 
-    # T8 — presupuesto de enlace
+    # Anexo B.16 — presupuesto de enlace
     lb = run_link_budget()
     if isinstance(lb, list) and lb and isinstance(lb[0], dict):
-        pd.DataFrame(lb).to_csv(os.path.join(TABS, "E17_link_budget.csv"),
+        pd.DataFrame(lb).to_csv(os.path.join(TABS, "B16_link_budget.csv"),
                                 index=False, encoding="utf-8")
     else:
-        _csv("E17_link_budget.csv", ["item"], [[str(x)] for x in lb])
+        _csv("B16_link_budget.csv", ["item"], [[str(x)] for x in lb])
     n += 1
 
-    # T9 — cadena de potencia (CANONICAL)
+    # Anexo B.17 — cadena de potencia (CANONICAL)
     facs = [("P_in", CANONICAL["P_in_mW"] * 1000, "µW"),
             ("η_mm", CANONICAL["eta_mm"], "—"), ("η_IMN", CANONICAL["eta_imn"], "—"),
             ("PCE", CANONICAL["PCE"], "—"), ("η_PMIC", CANONICAL["eta_pmic"], "—"),
             ("P_DC", CANONICAL["P_dc_uW"], "µW")]
-    _csv("E18_cadena_potencia.csv", ["Etapa", "Valor", "Unidad"],
+    _csv("B17_cadena_potencia.csv", ["Etapa", "Valor", "Unidad"],
          [[a, b, c] for a, b, c in facs]); n += 1
 
-    # T11 — banda a banda vs Wang (metodología canónica del documento: matching_net=None)
+    # Anexo B.18 — banda a banda vs Wang (metodología canónica del documento: matching_net=None)
     from core.comparacion import validate_wang2022
     from core.rectifier import RectifierCircuit
     w = validate_wang2022(RectifierCircuit("doubler"), matching_net=None)
     rows11 = [[round(w["freqs_GHz"][i], 2), round(w["pce_referencia"][i], 1),
                round(w["pce_simulacion"][i], 1), round(w["error_abs_pp"][i], 1)]
               for i in range(len(w["freqs_GHz"]))]
-    _csv("E19_vs_Wang.csv", ["f [GHz]", "PCE Wang [%]", "PCE modelo [%]", "Error [pp]"],
+    _csv("B18_vs_Wang.csv", ["f [GHz]", "PCE Wang [%]", "PCE modelo [%]", "Error [pp]"],
          rows11); n += 1
 
     return f"{n} tablas derivadas del código"
@@ -477,6 +588,9 @@ if __name__ == "__main__":
     _do("Fig 3 · S11 FLPDA", fig03_s11_flpda)
     _do("Fig 4 · Geometría FLPDA", fig04_geom_flpda)
     _do("Fig 12 · Geometría Sierpinski", fig12_geom_sierpinski)
+    _do("Fig 13 · Iteraciones Sierpinski", fig13_sierpinski_iteraciones)
+    _do("Fig 14 · Geometría Koch", fig14_koch_geometria)
+    _do("Fig 15 · FLPDA completa (vs LPDA + dimensiones)", fig15_flpda_completa)
     _do("Fig 5 · Cascada RF→DC", fig05_cascada)
     _do("Fig 6 · P_DC vs distancia", fig06_pdc_dist)
     _do("Fig 7 · T_ciclo vs distancia", fig07_tciclo_dist)

@@ -87,36 +87,7 @@ def run_pce_vs_pin(f_GHz: float = 2.45, topology: str = 'doubler',
 
 
 @st.cache_data(show_spinner=False)
-def run_pce_topologias(f_GHz: float = 2.45, Pin_range: tuple = (-30.0, 0.0),
-                       n_pts: int = 60) -> dict:
-    """Compara PCE de las 3 topologías a la misma frecuencia."""
-    f    = f_GHz * 1e9
-    pins = np.linspace(Pin_range[0], Pin_range[1], n_pts)
-    out  = {'Pin_dBm': pins.tolist()}
-    for topo in ('halfwave', 'doubler', 'dickson3'):
-        rec  = RectifierCircuit(topology=topo)
-        imn  = LMatchNetwork(Z_src=50.0)
-        zd   = rec.diode.impedance(f)
-        res  = imn.design(f, Z_load=zd)
-        gam  = (res.VSWR - 1) / (res.VSWR + 1)
-        out[topo] = [
-            rec.PCE(p, f, IL_dB=res.insertion_loss_dB, gamma=gam) * 100
-            for p in pins
-        ]
-    return out
-
-
-@st.cache_data(show_spinner=False)
 def run_geometry(iterations: int = 3) -> list:
     """Puntos de la geometría Sierpinski para visualización."""
     ant = FractalAntenna('sierpinski', iterations=iterations)
     return ant.geometry_points(iterations)
-
-
-@st.cache_data(show_spinner=False)
-def run_radiation_pattern(f_GHz: float = 2.45) -> dict:
-    """Patrón de radiación normalizado en el plano E."""
-    ant   = FractalAntenna('sierpinski', iterations=3)
-    theta = np.linspace(0, 360, 361)
-    pat   = ant.radiation_pattern_dB(f_GHz * 1e9, theta)
-    return {'theta_deg': theta.tolist(), 'pattern_dB': pat.tolist()}

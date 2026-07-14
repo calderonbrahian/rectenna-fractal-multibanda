@@ -85,17 +85,6 @@ CRITERIOS: dict[str, str] = {
 }
 
 
-# ── Término con definición en hover (HTML <abbr>) ───────────────────────────
-def termino(clave: str, texto: str | None = None) -> str:
-    """Devuelve el término con su definición en **hover** (HTML <abbr>), subrayado
-    punteado para indicar que es consultable. `texto` permite mostrar una etiqueta
-    distinta de la clave (p. ej. capitalizada). Usar dentro de una cadena pasada a
-    st.markdown(..., unsafe_allow_html=True). Fuente única: GLOSARIO."""
-    d = GLOSARIO.get(clave, "").replace('"', "'")
-    label = texto if texto is not None else clave
-    return (f'<abbr title="{d}" style="text-decoration:underline dotted; '
-            f'cursor:help;">{label}</abbr>')
-
 
 # ── Glosario por página (colapsable, solo términos relevantes) ──────────────
 def glosario_pagina(*claves: str):

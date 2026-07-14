@@ -249,16 +249,6 @@ class FLPDA_Koch:
         eta = 1.0 / (1.0 + L_diel + L_cond)
         return float(np.clip(eta, 0.30, 0.85))
 
-    def radiation_pattern_dB(self, freq: float, theta_deg):
-        """
-        Patrón normalizado [dB] en el plano E — endfire (LPDA).
-        Patrón tipo cardioid con componente endfire dominante.
-        """
-        theta = np.radians(np.asarray(theta_deg, dtype=float))
-        p     = np.abs(np.cos(theta)) ** 2 * (1 + 0.5 * np.abs(np.sin(theta)))
-        p     = p / np.max(p)
-        return 10 * np.log10(p + 1e-10)
-
     # ── Propiedades de la geometría física ────────────────────────────────────
 
     @property
@@ -287,19 +277,3 @@ class FLPDA_Koch:
             f'  k_red       : (3/4)^{self.koch_iter} = {self.k_red:.4f}',
         ]
         return '\n'.join(lines)
-
-    def table_elements(self) -> str:
-        """Tabla de geometría de dipolos en formato de texto."""
-        hdr = (f'  {"#":>3s}  {"f_res(MHz)":>10s}  {"L_elec(mm)":>10s}'
-               f'  {"L_phys(mm)":>10s}  {"Pos(mm)":>8s}')
-        sep = '  ' + '-' * 50
-        rows = [hdr, sep]
-        for i in range(self.n_elements):
-            rows.append(
-                f'  {i+1:>3d}  {self.resonant_freqs[i]/1e6:>10.1f}'
-                f'  {self.lengths_elec[i]*1000:>10.1f}'
-                f'  {self.lengths_phys[i]*1000:>10.1f}'
-                f'  {self.positions[i]*1000:>8.1f}'
-            )
-        rows.append(sep)
-        return '\n'.join(rows)

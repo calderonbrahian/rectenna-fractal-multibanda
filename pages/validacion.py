@@ -5,7 +5,7 @@ Validación cruzada — Modelo analítico vs Wang et al. (2022) IEEE TAP
 Doubler fijo (topología canónica del proyecto). Pin = -10 dBm declarado.
 Caveats de sustrato (FR-4 vs Duroid 5880) y de punto de potencia visibles arriba.
 
-Corresponde a §3.7 (Estrategia de validación cruzada) y §4.5 (Validación
+Corresponde a §4.7 (Estrategia de validación cruzada) y §5.5 (Validación
 cruzada y análisis del error, RMSE = 15,50 pp) del informe de grado.
 """
 
@@ -141,8 +141,8 @@ def render():
                 "sobreestima a baja frecuencia, subestima a alta (C_j parásita)."
             )
 
-    _ref("§3.7 Estrategia de validación cruzada · "
-         "§4.5 Validación cruzada y análisis del error (RMSE = 15,50 pp)")
+    _ref("§4.7 Estrategia de validación cruzada · "
+         "§5.5 Validación cruzada y análisis del error (RMSE = 15,50 pp)")
 
     st.divider()
 
@@ -211,9 +211,9 @@ orden de magnitud.
         st.caption(
             ":material/info: Topología fija: **doubler** (la canónica del proyecto)."
         )
-        _ref("§3.7 Estrategia de validación cruzada · "
-             "§4.5 Validación cruzada y análisis del error · "
-             "Figura 11 (modelo vs Wang) · Tabla 11 (comparación banda a banda) · "
+        _ref("§4.7 Estrategia de validación cruzada · "
+             "§5.5 Validación cruzada y análisis del error · "
+             "Figura 14 (modelo vs Wang) · Anexo B.18 (comparación banda a banda) · "
              "Referencia: Wang et al. (2022), IEEE TAP")
 
     # ── Carrel (1961) ───────────────────────────────────────────────────────
@@ -288,8 +288,8 @@ la curva de Koch reduce la dimensión **transversal** de cada dipolo, no la long
 del boom.
 """
             )
-        _ref("§3.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
-             "§4.5 Validación cruzada · Referencia: Carrel (1961)")
+        _ref("§4.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
+             "§5.5 Validación cruzada · Referencia: Carrel (1961)")
 
     st.divider()
     st.page_link("pages/analisis_avanzado.py",

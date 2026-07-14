@@ -95,7 +95,7 @@ def test_flpda_diseno_carrel():
 
 
 def test_flpda_ganancia_550mhz():
-    """Bloquea ganancia FLPDA Koch @ 550 MHz = 7,10 dBi (CANONICAL)."""
+    """Bloquea ganancia FLPDA Koch @ 550 MHz = 4,97 dBi (CANONICAL)."""
     flpda = FLPDA_Koch(tau=FLPDA_TAU, sigma=FLPDA_SIGMA,
                        f_low=FLPDA_F_LOW_HZ, f_high=FLPDA_F_HIGH_HZ,
                        koch_iter=2)

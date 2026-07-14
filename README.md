@@ -28,17 +28,17 @@ Proyecto computacional de simulación de **rectenas fractales multibanda** para 
 
 ## Resultado canónico defendido
 
-Escenario: TDT Cerro Nutibara, Medellín · 100 m · EIRP 70 dBm · FR-4 · diodo Schottky SMS7630 · PMIC BQ25504.
+Escenario: TDT Cerro Nutibara, Medellín · 100 m · EIRP 72,15 dBm (10 kW ERP) · FR-4 · diodo Schottky SMS7630 · PMIC BQ25504.
 
 | Magnitud | Valor | Test que la bloquea |
 |---|---|---|
-| Potencia DC útil — **P_DC** | **1 637,6 µW** | `test_cadena_potencia_canonica` |
-| Voltaje DC de salida — **V_DC** | 1 459,1 mV | `test_output_voltage_positivo` |
-| Eficiencia total — **η_total** (FOM 5 factores) | 0,6715 | `test_eta_total_producto` |
-| Ganancia FLPDA Koch @ 550 MHz | 7,10 dBi | `test_flpda_ganancia_550mhz` |
+| Potencia DC útil — **P_DC** | **1 335,0 µW** | `test_cadena_potencia_canonica` |
+| Voltaje DC de salida — **V_DC** | 1 317,4 mV | `test_output_voltage_positivo` |
+| Eficiencia total — **η_total** (FOM 5 factores) | 0,4023 | `test_eta_total_producto` |
+| Ganancia FLPDA Koch @ 550 MHz | 4,97 dBi | `test_flpda_ganancia_550mhz` |
 | PCE máxima (cap) | 0,85 | `test_pce_clip_85pct` |
 | RMSE vs Wang (2022) | 15,50 pp | `test_validacion_wang2022_rmse` |
-| T_ciclo LoRa SF12 | 158,3 s | derivado E_ciclo/P_DC |
+| T_ciclo LoRa SF12 | 194,2 s | derivado E_ciclo/P_DC |
 
 Identidades canónicas:
 - `P_DC = P_in · η_mm · η_IMN · PCE · η_PMIC` (4 factores; η_rad ya está embebido en G realizada)
@@ -105,7 +105,7 @@ Cualquier cambio en `core/` o `configs/parametros.py` que altere los 19 valores 
 Todas las figuras y tablas del trabajo de grado se regeneran desde el modelo actual, sin intervención manual. Fuente única de verdad: `configs/parametros.py` → pipeline → artefactos.
 
 ```bash
-# 1. Regenera 11 figuras de datos + 5 conceptuales (PNG 300 dpi) + 7 tablas CSV + verificación
+# 1. Regenera 15 figuras de datos + 5 conceptuales (PNG 300 dpi) + 7 tablas CSV + verificación
 python _regen/generate_artifacts.py
 #    Salida: _regen/out/figuras/  _regen/out/tablas/  _regen/out/verificacion.json
 
@@ -145,11 +145,11 @@ rectenna-fractal-multibanda/
 │   └── lora_budget.py              E_ciclo, T_ciclo, mensajes/día
 ├── analysis/                       Runners cacheados (avanzado, sensibilidad)
 ├── simulation/                     Runners cacheados (escenarios A, B)
-├── pages/                          14 páginas Streamlit (recorrido guiado)
+├── pages/                          14 páginas Streamlit (Nivel 1 demostración + Nivel 2 laboratorio)
 ├── plots/charts.py                 Templates Plotly simple_white
-├── utils/                          pagina, glosario, circuit_drawing, exportar
+├── utils/                          pagina, glosario, exportar
 ├── _regen/                         Pipeline de regeneración de artefactos
-│   ├── generate_artifacts.py       11 figuras datos + 5 conceptuales + 7 tablas CSV
+│   ├── generate_artifacts.py       15 figuras datos + 5 conceptuales + 7 tablas CSV
 │   ├── figuras_conceptuales.py     C1–C5 (fuentes→caso, maestra, anatomía, flujo, repro)
 │   ├── estilo_figuras.py           sistema gráfico unificado (paleta + iconos técnicos)
 │   ├── derive_doc_values.py        doc_values.json (todos los valores del documento)
@@ -190,9 +190,9 @@ La app tiene **dos niveles** (`st.navigation`). El Nivel 1 usa las figuras del p
 | # | Página (`pages/…`) | Contenido |
 |---|---|---|
 | 1 | `demo_1_problema` | El problema del IoT y la pregunta de investigación (figura de fuentes→caso) |
-| 2 | `demo_2_metodo` | La metodología = el aporte (flujo, anatomía de la rectena, reproducibilidad) |
+| 2 | `demo_2_metodo` | La metodología del estudio (flujo, anatomía de la rectena, transparencia del cálculo) |
 | 3 | `demo_3_resultados` | Qué se demostró: KPIs + cascada, PCE de ambos escenarios, validación |
-| 4 | `demo_4_aporte` | El aporte y su alcance (figura maestra); el caso colombiano como demostración |
+| 4 | `demo_4_aporte` | El estudio y su alcance (figura maestra); el caso colombiano como caso de estudio |
 
 **Nivel 2 · Laboratorio** — detalle técnico e interacción:
 

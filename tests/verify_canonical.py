@@ -10,7 +10,7 @@ from configs.parametros import CANONICAL, FLPDA_TAU, FLPDA_SIGMA, FLPDA_F_LOW_HZ
 flpda = FLPDA_Koch(tau=FLPDA_TAU, sigma=FLPDA_SIGMA,
                    f_low=FLPDA_F_LOW_HZ, f_high=FLPDA_F_HIGH_HZ, koch_iter=2)
 rect  = RectifierCircuit('doubler', R_load=1300.0)
-r     = harvested_uw_full(70.0, 100, 0.55, flpda, rect)
+r     = harvested_uw_full(72.15, 100, 0.55, flpda, rect)
 
 print(f"P_DC:  {r['P_dc_uW']:.1f} uW  (expected ~{CANONICAL['P_dc_uW']:.0f})")
 print(f"gain:  {r['gain_dBi']:.2f} dBi (expected {CANONICAL['gain_dBi']:.2f})")

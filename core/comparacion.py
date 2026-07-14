@@ -35,42 +35,6 @@ CARREL1961 = {
 }
 
 
-def compare_scenarios(antenna_a, flpda_b, rectifier_a) -> dict:
-    """
-    Compara métricas clave globales: Escenario A vs Escenario B.
-    """
-    freqs_a = np.array(WANG2022['freqs_GHz']) * 1e9
-    freqs_b = np.linspace(flpda_b.f_low, flpda_b.f_high, 9)
-
-    s11_a  = np.array([float(antenna_a.S11_dB(f))  for f in freqs_a])
-    gain_a = np.array([float(antenna_a.gain_dBi(f)) for f in freqs_a])
-    pce_a  = np.array([rectifier_a.PCE(-10.0, f) * 100 for f in freqs_a])
-
-    s11_b  = np.array([float(flpda_b.S11_dB(f))  for f in freqs_b])
-    gain_b = np.array([float(flpda_b.gain_dBi(f)) for f in freqs_b])
-
-    return {
-        'escenario_A': {
-            'freqs_GHz': freqs_a / 1e9,
-            'S11_dB': s11_a,
-            'gain_dBi': gain_a,
-            'PCE_percent': pce_a,
-            'mean_PCE': float(np.mean(pce_a)),
-            'min_S11': float(np.min(s11_a)),
-        },
-        'escenario_B': {
-            'freqs_GHz': freqs_b / 1e9,
-            'S11_dB': s11_b,
-            'gain_dBi': gain_b,
-            'mean_gain': float(np.mean(gain_b)),
-            'min_S11': float(np.min(s11_b)),
-            'boom_m': flpda_b.boom_length_m,
-            'max_element_cm': flpda_b.max_element_length_m * 100,
-            'n_elementos': flpda_b.n_elements,
-        },
-    }
-
-
 def validate_wang2022(rectifier, matching_net=None) -> dict:
     """
     Validación de PCE del modelo analítico vs mediciones de Wang et al. (2022).

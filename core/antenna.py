@@ -1,12 +1,20 @@
 """
 ================================================================================
-MÓDULO: Antena Fractal — Sierpinski Gasket (Esc. A) y FLPDA Koch (Esc. B)
+MÓDULO: Antena Fractal — Sierpinski Gasket (Escenario A)
 ================================================================================
 Modelo analítico de antena fractal para RF Energy Harvesting multibanda.
 
 Sustrato: FR-4 con permitividad dinámica εr(f): 4.4 @ 1 GHz → 4.1 @ 5.8 GHz.
 Modelo de impedancia: resonancias RLC en paralelo + fondo inductivo.
 S11 calculado desde Γ = (Za − Z0)/(Za + Z0).
+
+IMPORTANTE — soporte de 'koch' limitado a geometría:
+    FractalAntenna admite fractal_type='koch' únicamente para generar la curva
+    de Koch con geometry_points() (usada en la figura pedagógica de plegado
+    del dipolo, Cap. 3). Los métodos físicos (S11_dB, impedance, eta_rad,
+    gain_dBi) NO están calibrados para 'koch' y no deben usarse con ese tipo:
+    el modelo físico real del Escenario B (FLPDA Koch) vive en core/flpda.py
+    (clase FLPDA_Koch), que sí reproduce los valores canónicos del documento.
 
 IMPORTANTE — Interpretación del S11 calculado:
     S11_dB() retorna el coeficiente de reflexión de la antena SOLA (sin IMN).
@@ -172,6 +180,11 @@ class FractalAntenna:
             C_k = 1/(ω_k²·L_k)
         Las ramas se combinan en paralelo. El fondo incluye Rbg e inductancia base.
         """
+        if self.fractal_type != 'sierpinski':
+            raise NotImplementedError(
+                "impedance()/S11_dB() solo están calibrados para fractal_type="
+                "'sierpinski'. Para el Escenario B (FLPDA Koch) use core.flpda.FLPDA_Koch."
+            )
         freq  = np.atleast_1d(np.asarray(freq, dtype=float))
         Z     = np.zeros(len(freq), dtype=complex)
         ω0    = 2.0 * np.pi * self.base_freq
@@ -225,6 +238,11 @@ class FractalAntenna:
         altas pérdidas del FR-4 en microondas. Sustituye el modelo previo, que
         daba η≈0,95 @5,8 GHz (físicamente irreal).
         """
+        if self.fractal_type != 'sierpinski':
+            raise NotImplementedError(
+                "eta_rad() solo está calibrado para fractal_type='sierpinski'. "
+                "Para el Escenario B (FLPDA Koch) use core.flpda.FLPDA_Koch.eta_rad()."
+            )
         from configs.parametros import fr4_tan_delta
         fghz   = float(np.asarray(freq, dtype=float).ravel()[0]) / 1e9
         er_f   = self.get_er(freq)
@@ -246,18 +264,6 @@ class FractalAntenna:
             for f in freq
         ])
         return g if len(g) > 1 else float(g[0])
-
-    def radiation_pattern_dB(self, freq: float, theta_deg):
-        """
-        Patrón normalizado [dB] en el plano E.
-        Sierpinski: |sin θ|^1.5  (similar a monopolo).
-        Koch:       |sin θ|^1.2  (ligeramente más omnidireccional).
-        """
-        theta = np.radians(np.asarray(theta_deg, dtype=float))
-        exp   = {'sierpinski': 1.5, 'koch': 1.2}.get(self.fractal_type, 1.3)
-        p     = np.abs(np.sin(theta)) ** exp
-        p     = p / np.max(p)
-        return 10 * np.log10(p + 1e-10)
 
     # ── Geometría fractal ─────────────────────────────────────────────────────
 
@@ -319,15 +325,6 @@ class FractalAntenna:
         if self.fractal_type == 'sierpinski':
             return [self.base_freq * (self.scale_ratio ** k) for k in range(3)]
         return list(self.resonant_frequencies)
-
-    def mismatch_loss_dB(self, freq: float) -> float:
-        """
-        Pérdida por desadaptación de la antena sola [dB].
-        ML = −10·log10(1 − |Γ|²).
-        """
-        s11 = float(self.S11_dB(freq))
-        gamma_sq = 10.0 ** (s11 / 10.0)
-        return float(-10.0 * np.log10(max(1.0 - gamma_sq, 1e-10)))
 
     def eta_sys(self, freq: float, IL_imn_dB: float = 0.0,
                 gamma_imn: float = 0.0) -> float:

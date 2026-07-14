@@ -114,13 +114,3 @@ def run_pce_uhf_curve(f_hz: float = 550e6) -> dict:
         'Vdc_mV':  vdc,
         'f_MHz':   f_hz / 1e6,
     }
-
-
-@st.cache_data(show_spinner=False)
-def run_radiation_pattern_b(f_MHz: float = 700.0) -> dict:
-    """Patrón de radiación FLPDA en el plano E."""
-    flpda = FLPDA_Koch(tau=FLPDA_TAU, sigma=FLPDA_SIGMA,
-                       f_low=FLPDA_F_LOW_HZ, f_high=FLPDA_F_HIGH_HZ)
-    theta = np.linspace(0, 360, 361)
-    pat   = flpda.radiation_pattern_dB(f_MHz * 1e6, theta)
-    return {'theta_deg': theta.tolist(), 'pattern_dB': pat.tolist()}

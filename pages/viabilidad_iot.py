@@ -7,7 +7,7 @@ Cadena:  P_DC  →  E_ciclo  →  T_ciclo  →  mensajes/día
          + dimensionamiento del supercondensador
          + modo autónomo vs asistido
 
-Corresponde a §3.6 (Presupuesto energético del nodo IoT) y §4.3 (caso Cerro
+Corresponde a §4.6 (Presupuesto energético del nodo IoT) y §5.3 (caso Cerro
 Nutibara) del informe de grado.
 """
 
@@ -17,7 +17,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
-from configs.parametros import CANONICAL
+from configs.parametros import CANONICAL, RF_UHF
 from utils.pagina import (encabezado, control_interactivo,
                           donde_se_desarrolla as _ref)
 from utils.glosario import criterio
@@ -84,8 +84,8 @@ def render():
         "cada mensaje, cuánto tarda en acumularla, cuántos mensajes puede enviar al día "
         "y hasta qué distancia la operación se sostiene por sí sola."
     )
-    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-         "§4.3 Caso de estudio: Cerro Nutibara")
+    _ref("§4.6 Etapa 3: Presupuesto energético del nodo IoT · "
+         "§5.3 Caso de estudio: Cerro Nutibara")
 
     # ── KPIs operativos ──────────────────────────────────────────────────────
     P_DC_uW = CANONICAL['P_dc_uW']
@@ -110,8 +110,8 @@ def render():
     # ── Cadena propagación → rectificación → almacenamiento → transmisión ───
     st.subheader("Cadena energética operativa")
     _render_energy_chain(P_DC_uW, T_ciclo_s, E_ciclo_mJ, msg_per_day)
-    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-         "§4.3.1 Cálculo de la cadena de potencia")
+    _ref("§4.6 Etapa 3: Presupuesto energético del nodo IoT · "
+         "§5.3.1 Cálculo de la cadena de potencia")
 
     st.divider()
 
@@ -123,9 +123,8 @@ def render():
         "El cruce define el período entre transmisiones."
     )
     _render_t_ciclo_vs_d()
-    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-         "§2.5 Propagación RF y modelo de Friis · "
-         "Figura 6 (P_DC vs distancia) · Figura 7 (T_ciclo vs distancia)")
+    _ref("§4.6 Etapa 3: Presupuesto energético del nodo IoT · "
+         "§3.5 Propagación RF y modelo de Friis")
 
     st.divider()
 
@@ -150,7 +149,7 @@ def render():
                  "operación **V_max / V_min** [V]. La energía útil almacenada es "
                  "E = ½·C·(V_max² − V_min²).",
         referencia="C = **330 mF**, V_max = **3,3 V**, V_min = **1,8 V** (consistente con "
-                   "§5.1 y el Apéndice E.9: almacena ≥ 1 ciclo SF12).",
+                   "el Anexo B.9: almacena ≥ 1 ciclo SF12).",
         al_subir="Más C o mayor ventana V_max−V_min → más energía almacenada y más ciclos "
                  "por carga, pero el tiempo de carga completa crece y el supercap ocupa más.",
         al_bajar="Menos C → carga más rápido pero almacena menos; si no cubre un ciclo "
@@ -217,8 +216,8 @@ def render():
     )
     criterio("V_min cut-off")
     criterio("V_cs 130 mV")
-    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-         "Apéndice E.9 Caracterización temporal del supercondensador")
+    _ref("§4.6 Etapa 3: Presupuesto energético del nodo IoT · "
+         "Anexo B.9 Caracterización temporal del supercondensador")
 
     st.divider()
 
@@ -232,7 +231,7 @@ def render():
     )
     st.caption(
         ":material/push_pin: **Tabla de referencia fija** — calculada con la fuente "
-        "canónica del proyecto (TDT, EIRP 70 dBm, 550 MHz). *No* depende de los "
+        "canónica del proyecto (TDT, EIRP 72,15 dBm, 550 MHz). *No* depende de los "
         "controles del supercondensador de arriba: el número de mensajes/día lo fija "
         "la potencia cosechada y la energía por mensaje, no el tamaño del buffer. "
         "Otras fuentes y EIRP se exploran en el **mapa de viabilidad** más abajo."
@@ -258,9 +257,9 @@ def render():
         f"SF12 ≈ {86400*0.01/LORA_SF['SF12 (máximo alcance)']['ToA_s']:.0f} mensajes/día. "
         "“—” = cold-start no asegurado."
     )
-    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-         "§4.3.1 Cálculo de la cadena de potencia · "
-         "Tabla 5 (desglose energético por ciclo del nodo IoT)")
+    _ref("§4.6 Etapa 3: Presupuesto energético del nodo IoT · "
+         "§5.3.1 Cálculo de la cadena de potencia · "
+         "Anexo B.13 (desglose energético por ciclo del nodo IoT)")
 
     st.divider()
 
@@ -278,8 +277,8 @@ def render():
              "Cambia qué se muestra en el mapa.",
     ) or list(LORA_SF.keys())[-1]
     st.plotly_chart(_heatmap_t_ciclo(sf_sel), width="stretch")
-    _ref("Apéndice E.10 Operación fuera del caso canónico — mapa EIRP × distancia · "
-         "§4.3 Caso de estudio: Cerro Nutibara")
+    _ref("Anexo B.10 Operación fuera del caso canónico — mapa EIRP × distancia · "
+         "§5.3 Caso de estudio: Cerro Nutibara")
 
     st.divider()
 
@@ -292,8 +291,8 @@ def render():
         "del supercondensador."
     )
     st.plotly_chart(_lora_tx_timeline(), width="stretch")
-    _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT (perfiles LoRa SX1276) · "
-         "Tabla 5 (desglose energético por ciclo)")
+    _ref("§4.6 Etapa 3: Presupuesto energético del nodo IoT (perfiles LoRa SX1276) · "
+         "Anexo B.13 (desglose energético por ciclo)")
 
     st.divider()
 
@@ -331,7 +330,7 @@ def render():
         "urbana (±10–15 dB según ITU-R P.1546); la cadencia operativa debe reevaluarse "
         "por emplazamiento."
     )
-    _ref("§5.1 Conclusiones · §1.3 Alcance y limitaciones del estudio")
+    _ref("§6.1 Conclusiones · §1.2 Alcance y limitaciones del estudio")
 
     st.divider()
     st.page_link("pages/validacion.py",
@@ -350,7 +349,7 @@ def _render_energy_chain(P_DC_uW, T_ciclo_s, E_ciclo_mJ, msg_per_day):
         with st.container(border=True):
             st.markdown("#### :material/cell_tower: 1. Propagación")
             st.markdown(
-                f"EIRP = **70 dBm**  \n"
+                f"EIRP = **72,15 dBm**  \n"
                 f"d = **100 m**  \n"
                 f"FSPL = {CANONICAL['FSPL_dB']:.1f} dB  \n"
                 f"L_urb = {CANONICAL['L_urb_dB']:.0f} dB  \n"
@@ -473,13 +472,14 @@ def _render_t_ciclo_vs_d():
 
 
 def _messages_per_day_table():
-    """Tabla compacta: mensajes/día × SF × distancia, EIRP 70 dBm.
+    """Tabla compacta: mensajes/día × SF × distancia, EIRP 72,15 dBm.
     Por celda muestra el MÍNIMO entre la cota por energía y la cota por duty cycle
     regulatorio (1 % ISM 915 MHz Colombia). Marca con * cuando manda regulación."""
     # (math en top-level)
     # (pandas en top-level)
 
     distancias = [50, 100, 200, 300, 500, 750, 1000, 1500]
+    EIRP_DBM = RF_UHF['TV UHF (DVB-T)']['eirp_dbm']
     G = CANONICAL['gain_dBi']
     L_urb = CANONICAL['L_urb_dB']
     eta = CANONICAL['eta_mm'] * CANONICAL['eta_imn'] * CANONICAL['PCE'] * CANONICAL['eta_pmic']
@@ -491,7 +491,7 @@ def _messages_per_day_table():
     rows = []
     for d in distancias:
         FSPL = 20.0 * math.log10(4.0 * math.pi * d / lam)
-        P_in_dBm = 70.0 - FSPL - L_urb + G
+        P_in_dBm = EIRP_DBM - FSPL - L_urb + G
         P_in_W = 10 ** ((P_in_dBm - 30.0) / 10.0)
         P_dc_W = P_in_W * eta
         V_dc = math.sqrt(max(P_dc_W * R_load, 0.0))

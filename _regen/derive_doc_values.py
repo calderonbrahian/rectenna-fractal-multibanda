@@ -33,7 +33,7 @@ def eta_rad_band(f_hz):
     except Exception:
         return float(CANONICAL['eta_rad'])
 
-# ── TABLA 2 — Escenario A (7 bandas BANDS_A), con η_total por banda ───────────
+# ── Anexo B.11 — Escenario A (7 bandas BANDS_A), con η_total por banda ───────
 bandas = run_bandas(topology="doubler", Pin_dBm=-10.0)
 t2 = []
 for b in bandas:
@@ -49,16 +49,16 @@ for b in bandas:
         'eta_total_pct': round(eta_tot_band * 100, 1), 'Vdc_mV': round(b['Vdc_mV'], 0),
         's11_ok': b['s11_dB'] < -10,
     })
-out['tabla2_bandas'] = t2
+out['anexoB11_bandas'] = t2
 
-# ── TABLA 11 — validación Wang (matching_net=None, canónico) ──────────────────
+# ── Anexo B.18 — validación Wang (matching_net=None, canónico) ───────────────
 w = validate_wang2022(RectifierCircuit("doubler"), matching_net=None)
-out['tabla11_wang'] = {
+out['anexoB18_wang'] = {
     'freqs_GHz': w['freqs_GHz'], 'pce_wang': w['pce_referencia'],
     'pce_modelo': w['pce_simulacion'], 'error_pp': w['error_abs_pp'], 'RMSE': round(w['RMSE'], 2),
 }
 
-# ── TABLA 9 / E.8 — cadena de potencia vs distancia (TDT 70 dBm, 550 MHz) ─────
+# ── Anexo B.10 — cadena de potencia vs distancia (TDT 72,15 dBm, 550 MHz) ────
 flpda = FLPDA_Koch(tau=FLPDA_TAU, sigma=FLPDA_SIGMA, f_low=FLPDA_F_LOW_HZ, f_high=FLPDA_F_HIGH_HZ)
 rect = RectifierCircuit("doubler")
 def chain_at(dist_m, eirp_dbm=72.15, f_ghz=0.550):
@@ -67,8 +67,8 @@ def chain_at(dist_m, eirp_dbm=72.15, f_ghz=0.550):
     return {'d': dist_m, 'FSPL_dB': round(fspl, 1), 'Pin_dBm': round(r['P_rf_dBm'], 1),
             'PCE_pct': round(r['PCE']*100, 0), 'P_RF_uW': round(r['P_rf_uW'], 1),
             'P_DC_uW': round(r['P_dc_uW'], 1), 'V_dc_mV': round(r['V_dc_mV'], 1)}
-out['tabla9_chain'] = [chain_at(d) for d in (50, 100, 200, 400, 500, 1000)]
-# E.8 mapa EIRP x dist
+out['anexoB10_cadena'] = [chain_at(d) for d in (50, 100, 200, 400, 500, 1000)]
+# Anexo B.10 — mapa EIRP x dist (multi-fuente)
 src = [('TDT DVB-T (Cerro Nutibara)', 72.15, 0.550), ('LTE Macro 700 MHz', 46.0, 0.700),
        ('LTE Band 28 (700 MHz)', 43.0, 0.700), ('LoRa Gateway (Colombia)', 27.0, 0.915)]
 e8 = []
@@ -78,14 +78,14 @@ for name, eirp, f in src:
         rr = harvested_uw_full(eirp, d, f, flpda, rect, matching_net=None)
         row[f'd{d}'] = round(rr['P_dc_uW'], 1)
     e8.append(row)
-out['tablaE8_map'] = e8
+out['anexoB10_mapa'] = e8
 
 # ── Umbrales de viabilidad (code-derived) ────────────────────────────────────
 p_sf12_cont = avg_power_uw(LORA_PROFILES['LoRa SF12 BW125 (1% DC)'])
 out['umbral_sf12_continuo_uW'] = round(p_sf12_cont, 1)             # 438.5
 out['umbral_app_10min_uW'] = round(CANONICAL['E_ciclo_mJ'] / 600.0 * 1000, 1)  # 432.1
 
-# ── Supercap (ventana V_min→V_max, Ec. E.5) ──────────────────────────────────
+# ── Supercap (ventana V_min→V_max, Anexo B.9) ────────────────────────────────
 C_sup, Vmin, Vmax = 0.330, 1.8, 3.3
 E_util_J = 0.5 * C_sup * (Vmax**2 - Vmin**2)
 P_dc_W = CANONICAL['P_dc_uW'] * 1e-6
@@ -95,9 +95,9 @@ out['supercap'] = {'C_F': C_sup, 'Vmin': Vmin, 'Vmax': Vmax,
                    't_carga_s': round(t_carga_s, 1), 't_carga_min': round(t_carga_s/60, 1),
                    'n_ciclos': round(E_util_J*1e3 / CANONICAL['E_ciclo_mJ'], 1)}
 
-# ── E.7 — relación real V_dc = sqrt(P_DC · R_load) ────────────────────────────
-out['E7_vdc'] = {'P_dc_uW': CANONICAL['P_dc_uW'], 'R_load_ohm': RL_EQUIV,
-                 'V_dc_mV': round((P_dc_W * RL_EQUIV) ** 0.5 * 1e3, 1)}
+# ── Anexo B.3 — relación real V_dc = sqrt(P_DC · R_load) ─────────────────────
+out['anexoB3_vdc'] = {'P_dc_uW': CANONICAL['P_dc_uW'], 'R_load_ohm': RL_EQUIV,
+                      'V_dc_mV': round((P_dc_W * RL_EQUIV) ** 0.5 * 1e3, 1)}
 
 # ── Ganancia: @550 (canónica) y media en banda ───────────────────────────────
 freqs_band = np.linspace(FLPDA_F_LOW_HZ, FLPDA_F_HIGH_HZ, 50)
@@ -115,18 +115,18 @@ with open(os.path.join(OUT, "doc_values.json"), "w", encoding="utf-8") as fh:
     json.dump(out, fh, indent=2, ensure_ascii=False)
 
 # resumen legible
-print("== TABLA 2 (7 bandas) ==")
+print("== Anexo B.11 (7 bandas) ==")
 for r in t2:
     print(f"  {r['banda']:9} f={r['f_GHz']:.2f} S11={r['s11_dB']:6} PCE={r['PCE_pct']:5} eta_tot={r['eta_total_pct']:5} Vdc={r['Vdc_mV']:.0f}")
-print(f"== TABLA 11 Wang RMSE = {out['tabla11_wang']['RMSE']} pp ==")
-print(f"   freqs={out['tabla11_wang']['freqs_GHz']}")
-print(f"   modelo={out['tabla11_wang']['pce_modelo']}")
-print("== TABLA 9 chain ==")
-for r in out['tabla9_chain']:
+print(f"== Anexo B.18 Wang RMSE = {out['anexoB18_wang']['RMSE']} pp ==")
+print(f"   freqs={out['anexoB18_wang']['freqs_GHz']}")
+print(f"   modelo={out['anexoB18_wang']['pce_modelo']}")
+print("== Anexo B.10 cadena ==")
+for r in out['anexoB10_cadena']:
     print(f"  d={r['d']:5} Pin={r['Pin_dBm']:6} P_RF={r['P_RF_uW']:9} P_DC={r['P_DC_uW']:9} Vdc={r['V_dc_mV']:.0f}")
-print("== E.8 50m TDT ==", out['tablaE8_map'][0]['d50'])
+print("== Anexo B.10 mapa, 50m TDT ==", out['anexoB10_mapa'][0]['d50'])
 print("== umbrales ==", out['umbral_sf12_continuo_uW'], "(continuo) /", out['umbral_app_10min_uW'], "(10min)")
 print("== supercap ==", out['supercap'])
-print("== E.7 V_dc ==", out['E7_vdc'])
+print("== Anexo B.3 V_dc ==", out['anexoB3_vdc'])
 print("== ganancia ==", out['ganancia'])
 print("== n_canonical ==", out['conteos']['n_canonical_keys'])

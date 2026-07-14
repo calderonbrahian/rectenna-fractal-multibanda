@@ -3,9 +3,7 @@ Funciones de visualización Plotly reutilizables.
 Todas usan template 'simple_white' y paleta consistente con config.toml (tema institucional UdeA).
 """
 
-import numpy as np
 import plotly.graph_objects as go
-import plotly.express as px
 from plotly.subplots import make_subplots
 
 # Paleta coherente con config.toml chartCategoricalColors
@@ -118,42 +116,6 @@ def fig_sierpinski(triangulos: list, iterations: int = 3) -> go.Figure:
         **_base_layout(f'Sierpinski Gasket it.{iterations} (geometría normalizada)', height=380),
         xaxis=dict(scaleanchor='y', scaleratio=1, showgrid=False, zeroline=False, visible=False),
         yaxis=dict(showgrid=False, zeroline=False, visible=False),
-    )
-    return fig
-
-
-def fig_koch(puntos: list) -> go.Figure:
-    """Visualización de la curva de Koch."""
-    xs = [p[0] for p in puntos]
-    ys = [p[1] for p in puntos]
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=xs, y=ys, mode='lines',
-                             line=dict(color=COLORS[1], width=2), showlegend=False))
-    fig.update_layout(
-        **_base_layout('Curva de Koch it.2 (dipolo)', height=250),
-        xaxis=dict(scaleanchor='y', scaleratio=1, showgrid=False, zeroline=False, visible=False),
-        yaxis=dict(showgrid=False, zeroline=False, visible=False),
-    )
-    return fig
-
-
-def fig_polar_pattern(theta_deg: list, pattern_dB: list,
-                      titulo: str = 'Patrón de radiación (plano E)') -> go.Figure:
-    """Patrón de radiación en coordenadas polares."""
-    r_lin = [10 ** (v / 20) for v in pattern_dB]
-    fig = go.Figure(go.Scatterpolar(
-        r=r_lin, theta=theta_deg,
-        mode='lines', line=dict(color=COLORS[0], width=2),
-    ))
-    fig.update_layout(
-        template=TEMPLATE,
-        height=380,
-        title={'text': titulo, 'font': {'size': 14}},
-        polar=dict(
-            radialaxis=dict(visible=True, range=[0, 1.1]),
-            angularaxis=dict(direction='clockwise', tickfont_size=10),
-        ),
-        margin=dict(l=30, r=30, t=50, b=30),
     )
     return fig
 
@@ -338,21 +300,4 @@ def fig_rectifier_bw(bw: dict) -> go.Figure:
         xaxis_title='Frecuencia [MHz]',
         yaxis_title='PCE [%]',
     )
-    return fig
-
-
-def fig_barras_bandas(bandas: list, valores: list, labels: list,
-                      titulo: str = '', y_label: str = '') -> go.Figure:
-    """Gráfico de barras por banda objetivo."""
-    fig = go.Figure()
-    colores = [COLORS[i % len(COLORS)] for i in range(len(bandas))]
-    for i, (b, v, lbl) in enumerate(zip(bandas, valores, labels)):
-        fig.add_trace(go.Bar(
-            x=[b], y=[v], name=lbl,
-            marker_color=colores[i],
-            text=[f'{v:.1f}'], textposition='outside',
-            showlegend=False,
-        ))
-    fig.update_layout(**_base_layout(titulo))
-    fig.update_yaxes(title_text=y_label)
     return fig

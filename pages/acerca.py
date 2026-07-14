@@ -42,7 +42,7 @@ def render():
         with st.container(border=True):
             st.markdown("**Modelo físico:** Shockley + Carrel + Friis")
             st.markdown("**Enfoque:** analítico circuital (no onda completa)")
-            st.markdown(":material/menu_book: Metodología en §2.9 y Capítulo 3")
+            st.markdown(":material/menu_book: Metodología en §3.9 y Capítulo 4")
 
     st.divider()
 
@@ -56,7 +56,7 @@ def render():
         )
         st.latex(r"N \;=\; 1 + \left\lceil \frac{\log(f_H/f_L)}{\log(1/\tau)} \right\rceil")
         st.markdown(
-            "Con τ = 0,90, σ = 0,15 y banda 470–900 MHz se obtiene **N = 8** dipolos. "
+            "Con τ = 0,90, σ = 0,15 y banda 470–900 MHz se obtiene **N = 12** dipolos. "
             "La modificación fractal de Koch de orden 2 reduce la dimensión transversal "
             "del dipolo:"
         )
@@ -67,7 +67,7 @@ def render():
             r"P_{\mathrm{in}} \;=\; \mathrm{EIRP} \;-\; \mathrm{FSPL}(f,d) \;-\; L_{\mathrm{urb}} \;+\; G_{\mathrm{ant}}"
         )
         st.markdown(
-            f"En el escenario de referencia (EIRP = 70 dBm, d = 100 m, f = 550 MHz, "
+            f"En el escenario de referencia (EIRP = 72,15 dBm, d = 100 m, f = 550 MHz, "
             f"G = {CANONICAL['gain_dBi']:.2f} dBi, L_urb = {CANONICAL['L_urb_dB']:.0f} dB) "
             f"da **P_in = {CANONICAL['P_in_dBm']:.2f} dBm = {CANONICAL['P_in_mW']:.3f} mW**."
         )
@@ -116,8 +116,8 @@ def render():
             ":material/warning: El escenario A no cuantifica P_DC final porque los EIRP de "
             "fuentes urbanas (GSM/5G/WiFi) son variables y no están especificados."
         )
-    _ref("§2.9 Métodos de análisis electromagnético: enfoque adoptado · "
-         "§3.3 Arquitectura del pipeline de simulación · §3.4–§3.6 Módulos del modelo")
+    _ref("§3.9 Métodos de análisis electromagnético: enfoque adoptado · "
+         "§4.3 Estructura del modelo de simulación · §4.4–§4.6 Etapas del modelo")
 
     st.divider()
 
@@ -141,7 +141,7 @@ def render():
         "Referencia": st.column_config.TextColumn("Referencia APA7", width="large"),
         "Uso":        st.column_config.TextColumn("Uso en el modelo", width="medium"),
     })
-    _ref("Referencias del informe de grado · §2.2 Estado del arte en rectenas fractales")
+    _ref("Referencias del informe de grado · §3.2 Estado del arte en rectenas fractales")
 
     st.divider()
 
@@ -153,9 +153,9 @@ def render():
 ├── .streamlit/config.toml       # Tema claro institucional UdeA
 ├── pages/                       # Dos niveles: Demostración + Laboratorio
 │   ├── demo_1_problema.py       # N1 · El problema y la pregunta
-│   ├── demo_2_metodo.py         # N1 · La metodología (el aporte)
+│   ├── demo_2_metodo.py         # N1 · La metodología del estudio
 │   ├── demo_3_resultados.py     # N1 · Qué se demostró
-│   ├── demo_4_aporte.py         # N1 · El aporte y su alcance
+│   ├── demo_4_aporte.py         # N1 · El estudio y su alcance
 │   ├── escenario_a.py           # N2 · Escenario A — Sierpinski · 1,8–5,8 GHz
 │   ├── escenario_b.py           # N2 · Escenario B — FLPDA Koch · 470–900 MHz
 │   ├── comparacion.py           # N2 · Comparación de los dos escenarios
@@ -184,10 +184,9 @@ def render():
     └── test_models.py""",
         language="",
     )
-    _ref("§3.2 Justificación del entorno Python de código abierto · "
-         "§3.3 Arquitectura del pipeline de simulación · "
-         "Tabla 4 (arquitectura del pipeline de simulación) · "
-         "Apéndice A Arquitectura de la plataforma de simulación")
+    _ref("§4.2 Justificación del entorno Python de código abierto · "
+         "§4.3 Estructura del modelo de simulación · "
+         "Tabla 2 (etapas del modelo de simulación)")
 
     st.divider()
 
@@ -205,17 +204,17 @@ Este es un trabajo de modelado, no una medición. Los resultados estiman órdene
 - La PCE = 0,85 es el techo del modelo del rectificador, no un valor medido. El resultado de referencia opera justo en ese máximo, así que es un mejor caso, no un valor esperado en campo.
 - El η_total = 0,4023 es una figura de mérito de cinco factores. La potencia útil se obtiene aplicando solo cuatro factores sobre P_in, porque η_rad ya está contenida en la ganancia G; multiplicar η_total por P_in contaría dos veces la pérdida de radiación.
 
-La tabla completa de limitaciones (L1–L8), con el impacto cuantitativo de cada una y su posible mitigación, está en el Apéndice E del informe de grado.
+La tabla completa de limitaciones (L1–L8), con el impacto cuantitativo de cada una y su posible mitigación, está en el Anexo B del informe de grado.
 """
         )
-    _ref("§1.3 Alcance y limitaciones del estudio · §5.3 Limitaciones del estudio · "
-         "§4.5 Validación cruzada y análisis del error · "
-         "Apéndice E.11 Tabla canónica de limitaciones del estudio (L1–L8)")
+    _ref("§1.2 Alcance y limitaciones del estudio · §6.3 Limitaciones del estudio · "
+         "§5.5 Validación cruzada y análisis del error · "
+         "Anexo B.11 Tabla canónica de limitaciones del estudio (L1–L8)")
 
     st.caption(
         "Esta aplicación es la capa de presentación interactiva del trabajo de grado. "
         "El modelo físico es la fuente única de los valores presentados; los detalles "
-        "de reproducibilidad se documentan en el Apéndice B del informe de grado."
+        "de reproducibilidad se documentan en el §4.2 del informe de grado."
     )
 
 

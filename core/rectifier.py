@@ -241,19 +241,6 @@ class RectifierCircuit:
         Pin_W = 10.0 ** ((Pin_dBm - 30.0) / 10.0)
         return float(max(self.PCE(Pin_dBm, freq, IL_dB, gamma) * Pin_W * 1e6, 0.0))
 
-    def output_power_dBm(self, Pin_dBm: float, freq: float = 2.45e9,
-                         IL_dB: float = 0.0, gamma: float = 0.0) -> float:
-        """
-        Potencia DC de salida [dBm].
-        Retorna -100 dBm si PCE = 0 (sin cosecha útil).
-        """
-        pce   = self.PCE(Pin_dBm, freq, IL_dB, gamma)
-        Pin_W = 10.0 ** ((Pin_dBm - 30.0) / 10.0)
-        Pout_W = pce * Pin_W
-        if Pout_W < 1e-15:
-            return -100.0
-        return float(10.0 * np.log10(Pout_W * 1e3))
-
     # ── Resumen ───────────────────────────────────────────────────────────────
 
     def summary(self) -> str:

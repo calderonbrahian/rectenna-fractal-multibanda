@@ -29,4 +29,4 @@ st.success(
     "**Es viable.** Y la comparación deja criterios: A, omnidireccional y compacto, para IoT interior; "
     "B, directivo, para un nodo exterior fijo frente a una fuente firme."
 )
-st.caption("Nivel 1 · Demostración — 3/4 · Continúa en «El aporte».")
+st.caption("Nivel 1 · Demostración — 3/4 · Continúa en «El estudio y su alcance».")

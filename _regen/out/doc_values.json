@@ -1,5 +1,5 @@
 {
-  "tabla2_bandas": [
+  "anexoB11_bandas": [
     {
       "banda": "GSM1800",
       "f_GHz": 1.84,
@@ -85,7 +85,7 @@
       "s11_ok": false
     }
   ],
-  "tabla11_wang": {
+  "anexoB18_wang": {
     "freqs_GHz": [
       1.84,
       2.04,
@@ -124,7 +124,7 @@
     ],
     "RMSE": 15.5
   },
-  "tabla9_chain": [
+  "anexoB10_cadena": [
     {
       "d": 50,
       "FSPL_dB": 61.2,
@@ -180,7 +180,7 @@
       "V_dc_mV": 131.7
     }
   ],
-  "tablaE8_map": [
+  "anexoB10_mapa": [
     {
       "fuente": "TDT DVB-T (Cerro Nutibara)",
       "eirp_dbm": 72.15,
@@ -225,7 +225,7 @@
     "t_carga_min": 15.8,
     "n_ciclos": 4.9
   },
-  "E7_vdc": {
+  "anexoB3_vdc": {
     "P_dc_uW": 1335.0,
     "R_load_ohm": 1300.0,
     "V_dc_mV": 1317.4

@@ -1,6 +1,6 @@
 """
 Sección 7 · Comparación de los dos escenarios.
-Narrativa y Tabla 10 derivadas de §4.4 (Análisis comparativo de los dos
+Narrativa y Tabla 3 derivadas de §5.4 (Análisis comparativo de los dos
 escenarios) del informe de grado. Página de lectura.
 """
 
@@ -19,7 +19,7 @@ def render():
         para_que_sirve=("Ver lado a lado las diferencias y entender que cada topología "
                         "encaja en un escenario de despliegue distinto."),
         entradas="Ninguna; es una página de lectura.",
-        salidas="La tabla comparativa integral (Tabla 10 del informe) y su lectura.",
+        salidas="La tabla comparativa integral (Tabla 3 del informe) y su lectura.",
     )
 
     st.markdown(
@@ -72,9 +72,9 @@ def render():
             "complementaria."
         )
 
-    _ref("§4.4 Análisis comparativo de los dos escenarios · §4.1 Escenario A · "
-         "§4.2 Escenario B · Tabla 10 (comparación técnica integral) · "
-         "Figura 10 (PCE vs P_in, ambos escenarios)")
+    _ref("§5.4 Análisis comparativo de los dos escenarios · §5.1 Escenario A · "
+         "§5.2 Escenario B · Tabla 3 (comparación técnica integral) · "
+         "Figura 13 (PCE vs P_in, ambos escenarios)")
 
     col1, col2 = st.columns(2)
     with col1:

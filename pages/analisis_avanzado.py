@@ -47,14 +47,14 @@ def render():
         "qué parámetro pesa más, qué incertidumbre añade el entorno, cómo se dimensiona "
         "el almacenamiento y cómo se sitúa el trabajo frente a la literatura."
     )
-    _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo")
+    _ref("§5.3.2 Robustez del resultado: incertidumbre, sensibilidad y Monte Carlo")
 
     with st.container(border=True):
         st.markdown("**:material/tune: Parámetros de análisis** "
                     "*(afectan a varias pestañas)*")
         cc1, cc2, cc3, cc4, cc5 = st.columns(5)
         with cc1:
-            eirp_dbm = st.slider("EIRP [dBm]", 40.0, 80.0, 70.0, 1.0)
+            eirp_dbm = st.slider("EIRP [dBm]", 40.0, 80.0, 72.15, 1.0)
         with cc2:
             dist_m = st.slider("Distancia [m]", 50.0, 500.0, 100.0, 10.0)
         with cc3:
@@ -73,7 +73,7 @@ def render():
         magnitud="**EIRP** (potencia de la fuente, dBm), **distancia** (m), **frecuencia** "
                  "(GHz), **R_load** (carga del rectificador, Ω) y **N** (muestras del Monte "
                  "Carlo). Definen el punto de operación que se analiza.",
-        referencia="Escenario de referencia: EIRP = 70 dBm · d = 100 m · f = 550 MHz · "
+        referencia="Escenario de referencia: EIRP = 72,15 dBm · d = 100 m · f = 550 MHz · "
                    "R_load = 1 300 Ω · N = 10 000.",
         al_subir="Más EIRP o menor distancia → más P_DC. Más N → estimación Monte Carlo más "
                  "estable (pero más lenta).",
@@ -125,9 +125,8 @@ def render():
         st.caption(
             "Δ EIRP = ±3 dB · Δ dist = ±20 m · Δ freq = ±0.05 GHz · Δ R_load = ±300 Ω"
         )
-        _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
-             "Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
-             "Figura 8 (tornado sobre P_DC)")
+        _ref("§5.3.2 Robustez del resultado: incertidumbre, sensibilidad y Monte Carlo · "
+             "Anexo B.7 Sensibilidad ante variación de Q_L y R_load")
 
     # ── Monte Carlo ───────────────────────────────────────────────────────────
     with tab_mc:
@@ -164,8 +163,8 @@ cap de PCE = 0,85.
 
         st.plotly_chart(fig_mc_histogram(mc))
         st.caption(f"Muestras válidas (P_DC > 0): {mc['n_valid']}/{mc['n_total']}")
-        _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo · "
-             "§5.3 Limitaciones del estudio (L1–L8) · Figura 9 (Monte Carlo de P_DC)")
+        _ref("§5.3.2 Robustez del resultado: incertidumbre, sensibilidad y Monte Carlo · "
+             "§6.3 Limitaciones del estudio (L1–L8) · Figura 12 (Monte Carlo de P_DC)")
 
     # ── Ancho de banda rectificador ───────────────────────────────────────────
     with tab_bw:
@@ -218,7 +217,7 @@ cap de PCE = 0,85.
             st.metric("BW fraccional", f"{bw['fractional_bw']*100:.0f}%",   border=True)
 
         st.plotly_chart(fig_rectifier_bw(bw))
-        _ref("§2.7 Física del diodo Schottky · §2.7.2 Frecuencia de corte del SMS7630")
+        _ref("§3.7 Física del diodo Schottky · §3.7.2 Frecuencia de corte del SMS7630")
 
     # ── Presupuesto de enlace ─────────────────────────────────────────────────
     with tab_link:
@@ -264,9 +263,9 @@ cap de PCE = 0,85.
             f"PCE: {CANONICAL['PCE']*100:.0f}% · "
             f"η_PMIC: {CANONICAL['eta_pmic']*100:.0f}%"
         )
-        _ref("§2.5 Propagación RF y modelo de Friis · "
-             "§4.3.1 Cálculo de la cadena de potencia · "
-             "Tabla 8 (presupuesto de enlace RF→DC)")
+        _ref("§3.5 Propagación RF y modelo de Friis · "
+             "§5.3.1 Cálculo de la cadena de potencia · "
+             "Anexo B.16 (presupuesto de enlace RF→DC)")
 
     # ── Supercondensador ──────────────────────────────────────────────────────
     with tab_sc:
@@ -318,8 +317,8 @@ cap de PCE = 0,85.
 | P_auto-descarga | {sc['P_leak_uW']:.2f} µW |
 | η_almacenamiento | {sc['eta_storage']*100:.1f}% |
 """)
-        _ref("Apéndice E.9 Caracterización temporal del supercondensador · "
-             "§3.6 Presupuesto energético del nodo IoT")
+        _ref("Anexo B.9 Caracterización temporal del supercondensador · "
+             "§4.6 Etapa 3: Presupuesto energético del nodo IoT")
 
     # ── Estado del arte ───────────────────────────────────────────────────────
     with tab_art:
@@ -379,9 +378,9 @@ cap de PCE = 0,85.
             st.plotly_chart(fig_cmp)
             st.caption(":material/star: Este trabajo destacado en amarillo")
 
-        _ref("§2.2 Estado del arte en rectenas fractales · "
-             "§5.3 Limitaciones del estudio (L6: PCE = 0,85 es cap del modelo) · "
-             "Tabla 14 (resumen estructural por subsistema)")
+        _ref("§3.2 Estado del arte en rectenas fractales · "
+             "§6.3 Limitaciones del estudio (L6: PCE = 0,85 es cap del modelo) · "
+             "Anexo B.20 (resumen estructural por subsistema)")
 
     st.divider()
     st.page_link("pages/sensibilidad.py",

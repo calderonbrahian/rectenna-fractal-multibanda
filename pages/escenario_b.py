@@ -69,9 +69,9 @@ def render():
         "pese a operar en UHF, y una potencia continua que baste para arrancar y "
         "sostener un nodo IoT a distancias realistas. Las pestañas lo comprueban una a una."
     )
-    _ref("§3.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
-         "§4.2 Escenario B — FLPDA Koch (470–900 MHz) · "
-         "§2.3.3 Curva de Koch: reducción por iteración")
+    _ref("§4.4.2 FLPDA Koch: método de Carrel y número de dipolos · "
+         "§5.2 Escenario B — FLPDA Koch (470–900 MHz) · "
+         "§3.3.3 Curva de Koch: reducción por iteración")
 
     with st.spinner("Barrido de frecuencia FLPDA..."):
         sweep = run_sweep_freq_b()
@@ -138,9 +138,9 @@ def render():
             "Eso depende de cuánto concentre la antena la señal hacia la torre, y se ve en "
             "la siguiente pestaña, *Ganancia*."
         )
-        _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
-             "§4.2.1 Diseño paramétrico y dimensiones calculadas · "
-             "Figura 3 (S₁₁ FLPDA Koch)")
+        _ref("§3.4 Parámetros fundamentales de antenas y rectenas (coeficiente de reflexión y parámetros S) · "
+             "§5.2.1 Diseño paramétrico y dimensiones calculadas · "
+             "Figura 10 (S₁₁ FLPDA Koch)")
 
     with tab_gain:
         st.markdown(
@@ -168,8 +168,8 @@ def render():
             "mide en *Presupuesto LoRa*. *(Curva del modelo paramétrico de Carrel, §3.4.2; "
             "no es una figura del documento.)*"
         )
-        _ref("§2.4.4 Directividad, eficiencia de radiación y ganancia · "
-             "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
+        _ref("§3.4 Parámetros fundamentales de antenas y rectenas (directividad, eficiencia de radiación y ganancia) · "
+             "§4.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
     with tab_geom:
         col1, col2 = st.columns([1, 1])
@@ -193,7 +193,7 @@ def render():
                 'Pos. [cm]':   [round(p, 1) for p in geom['positions_cm']],
             })
             st.dataframe(df, hide_index=True)
-            st.caption(":material/content_copy: Corresponde a la **Tabla 6** del trabajo "
+            st.caption(":material/content_copy: Corresponde a la **Tabla B.14** del Anexo B "
                        "(geometría de los dipolos Koch).")
 
         st.divider()
@@ -327,11 +327,11 @@ def render():
             "*'¿qué pasaría si τ fuera 0,80?'* (menos dipolos, menos ganancia) "
             "o *'¿por qué no σ = 0,22?'* (boom más largo sin ganancia adicional)."
         )
-        _ref("§3.4.2 FLPDA Koch: método de Carrel · §2.3.3 Curva de Koch: reducción por "
-             "iteración · §2.3.4 Compromisos de la miniaturización Koch · "
-             "§4.2.1 Diseño paramétrico y dimensiones · "
-             "Figura 4 (geometría del arreglo) · Tabla 6 (geometría de dipolos) · "
-             "Apéndice E.4 Mapa de diseño τ–σ")
+        _ref("§4.4.2 FLPDA Koch: método de Carrel · §3.3.3 Curva de Koch: reducción por "
+             "iteración (incluye los compromisos de la miniaturización Koch) · "
+             "§5.2.1 Diseño paramétrico y dimensiones · "
+             "Figura 6 (geometría del arreglo) · Anexo B.14 (geometría de dipolos) · "
+             "Anexo B.4 Mapa de diseño τ–σ")
 
     with tab_budget:
         st.markdown("#### Potencia cosechada DC en el nodo IoT")
@@ -449,10 +449,9 @@ def render():
             "del modelo; aquella es la conclusión de uso.",
             icon=":material/info:",
         )
-        _ref("§3.6 Módulo 3 — Presupuesto energético del nodo IoT · "
-             "§2.5 Propagación RF y modelo de Friis · §4.3 Caso de estudio: Cerro Nutibara · "
-             "Figura 6 (P_DC vs distancia) · Figura 7 (T_ciclo vs distancia) · "
-             "Tabla 8 (presupuesto de enlace) · Tabla 9 (cadena de potencia completa)")
+        _ref("§4.6 Etapa 3: Presupuesto energético del nodo IoT · "
+             "§3.5 Propagación RF y modelo de Friis · §5.3 Caso de estudio: Cerro Nutibara · "
+             "Anexo B.16 (presupuesto de enlace) · Anexo B.17 (cadena de potencia completa)")
 
     with tab_pce:
         f_mhz_sel = st.select_slider(
@@ -486,16 +485,16 @@ def render():
             f"marca el P_in canónico del escenario de referencia. Y aquí está el contraste "
             f"con el Sierpinski: allí la señal ambiental era débil y la PCE quedaba muy por "
             f"debajo del techo; aquí la fuente TDT es **potente y estable**, así que el "
-            f"rectificador trabaja **cerca de su máximo**. *(Modelo PCE–P_in, Tabla 7; la "
-            f"versión combinada de ambos escenarios es la Figura 10.)*"
+            f"rectificador trabaja **cerca de su máximo**. *(Modelo PCE–P_in, Anexo B.15; la "
+            f"versión combinada de ambos escenarios es la Figura 13.)*"
         )
         st.download_button(
             "Descargar CSV", sweep_a_csv(pce_data),
             file_name=f"pce_uhf_{f_mhz_sel}MHz.csv", mime="text/csv",
         )
-        _ref("§2.7.2 Parámetros SPICE del SMS7630 y frecuencia de corte · "
-             "§4.3.1 Cálculo de la cadena de potencia · "
-             "Tabla 7 (dependencia PCE–P_in) · Figura 10 (PCE vs P_in, ambos escenarios)")
+        _ref("§3.7.2 Parámetros SPICE del SMS7630 y frecuencia de corte · "
+             "§5.3.1 Cálculo de la cadena de potencia · "
+             "Anexo B.15 (dependencia PCE–P_in) · Figura 13 (PCE vs P_in, ambos escenarios)")
 
         st.divider()
         st.markdown("##### ¿En qué punto del UHF conviene operar?")
@@ -513,8 +512,8 @@ def render():
             "escenario de referencia. No es casualidad: la antena se "
             "diseñó para esa banda."
         )
-        _ref("§2.6.2 El espectro UHF colombiano — Escenario B · "
-             "§4.3 Caso de estudio: Cerro Nutibara")
+        _ref("§3.6.2 El espectro UHF colombiano — Escenario B · "
+             "§5.3 Caso de estudio: Cerro Nutibara")
 
         st.divider()
         st.markdown("##### Cómo funciona el doblador Greinacher — *paso a paso*")
@@ -552,8 +551,8 @@ def render():
                 "conducen alternadamente, pero la salida es DC porque C2 actúa "
                 "como reservorio. Esta es la ecuación V_DC = N·(V_oc,pk − V_f) con N=2."
             )
-        _ref("Apéndice E.8 Operación interna del doblador Greinacher · "
-             "§3.5 Módulo 2 — Cadena RF-DC con Python/SciPy")
+        _ref("Anexo B.8 Operación interna del doblador Greinacher · "
+             "§4.5 Etapa 2: Cadena RF-DC con Python/SciPy")
 
         st.divider()
         st.markdown("##### El diodo Schottky en su curva característica")
@@ -605,9 +604,9 @@ def render():
             "varios órdenes de magnitud; por encima de 250 mV la resistencia serie "
             "R_S = 20 Ω empieza a dominar las pérdidas óhmicas."
         )
-        _ref("§2.7.1 Ecuación de Shockley · §2.7.2 Parámetros SPICE del SMS7630 · "
-             "Tabla 3 (parámetros SPICE del SMS7630) · "
-             "Apéndice E.5 Caracterización numérica I-V del diodo SMS7630")
+        _ref("§3.7.1 Ecuación de Shockley · §3.7.2 Parámetros SPICE del SMS7630 · "
+             "Anexo B.12 (parámetros SPICE del SMS7630) · "
+             "Anexo B.5 Caracterización numérica I-V del diodo SMS7630")
 
     st.divider()
     st.page_link("pages/comparacion.py",

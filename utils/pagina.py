@@ -52,32 +52,7 @@ def encabezado(
             st.markdown(f"**:material/menu_book: ¿Cómo se interpreta?**  \n{como_leer}")
 
 
-# ── 2. Caja "Cómo interpretar esta gráfica" ──────────────────────────────────
-
-def como_interpretar(
-    titulo_grafica: str = "esta gráfica",
-    *,
-    objetivo: str,
-    ejes: str,
-    tendencias: str,
-    si_sube_baja: str = "",
-    impacto_parametros: str = "",
-):
-    """Acompañar cada gráfica con una caja de interpretación uniforme.
-
-    Llamar inmediatamente debajo de `st.plotly_chart(...)`."""
-    with st.expander(f":material/visibility:  ¿Cómo interpretar {titulo_grafica}?",
-                     expanded=False):
-        st.markdown(f"**:material/track_changes: Objetivo de la gráfica**  \n{objetivo}")
-        st.markdown(f"**:material/swap_horiz: Ejes y unidades**  \n{ejes}")
-        st.markdown(f"**:material/trending_up: Lectura física de la tendencia**  \n{tendencias}")
-        if si_sube_baja:
-            st.markdown(f"**:material/arrow_upward: ¿Qué significa que la curva suba, baje o cambie?**  \n{si_sube_baja}")
-        if impacto_parametros:
-            st.markdown(f"**:material/tune: ¿Qué pasa si modifico los parámetros?**  \n{impacto_parametros}")
-
-
-# ── 3. Caja de impacto de parámetros (para calculadoras) ─────────────────────
+# ── 2. Caja de impacto de parámetros (para calculadoras) ─────────────────────
 
 def impacto_parametros(parametros: list[dict]):
     """Llamar debajo de los sliders de una calculadora.
@@ -89,7 +64,7 @@ def impacto_parametros(parametros: list[dict]):
         impacto_parametros([
             {"nombre": "EIRP", "simbolo": "EIRP [dBm]",
              "significado": "Potencia isotrópica radiada equivalente del transmisor.",
-             "rango": "40–80 dBm. Canónico TDT Nutibara: 70 dBm.",
+             "rango": "40–80 dBm. Canónico TDT Nutibara: 72,15 dBm.",
              "ecuacion": "P_in [dBm] = EIRP − FSPL − L_urb + G",
              "impacto": "+3 dB en EIRP → ×2 en P_in → ~×2 en P_DC."},
             ...

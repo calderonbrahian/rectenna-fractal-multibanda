@@ -70,8 +70,8 @@ def render():
         "radiofrecuencia del entorno podría sostener la operación periódica de un sensor "
         "inalámbrico."
     )
-    _ref("§4.3 Caso de estudio: Cerro Nutibara · §4.3.1 Cálculo de la cadena de potencia · "
-         "Tabla 8 (presupuesto de enlace) · Tabla 9 (cadena de potencia completa)")
+    _ref("§5.3 Caso de estudio: Cerro Nutibara · §5.3.1 Cálculo de la cadena de potencia · "
+         "Anexo B.16 (presupuesto de enlace) · Anexo B.17 (cadena de potencia completa)")
 
     # ── Indicadores: qué pregunta responde cada uno, antes de la cifra ───────
     st.markdown("##### Los tres indicadores que resumen ese resultado")
@@ -117,8 +117,8 @@ def render():
                   "multiplica por P_in para obtener P_DC.",
         )
     glosario_pagina("P_DC", "η_total", "PCE", "ganancia")
-    _ref("Potencia y eficiencia: §4.3.1 y Apéndice E.2 (identidades de cadena, 4 vs 5 "
-         "factores) · Mensajes LoRa por día: §3.6 Presupuesto energético del nodo IoT")
+    _ref("Potencia y eficiencia: §5.3.1 y Anexo B.2 (identidades de cadena, 4 vs 5 "
+         "factores) · Mensajes LoRa por día: §4.6 Etapa 3: Presupuesto energético del nodo IoT")
 
     st.divider()
 
@@ -153,9 +153,9 @@ def render():
         "- Al final de la cadena quedan los **1 335 µW** de potencia útil que recibe el "
         "nodo IoT, que son el resultado principal de esta página."
     )
-    _ref("Propagación y la pérdida de 67,25 dB: §2.5 Propagación RF y modelo de Friis · "
-         "Parámetros de la antena: §2.4 · FLPDA Koch: §3.4.2 y §4.2 · "
-         "Cálculo de la cadena: §4.3.1 · Figura 5 (cascada de eslabones de la cadena RF→DC)")
+    _ref("Propagación y la pérdida de 67,25 dB: §3.5 Propagación RF y modelo de Friis · "
+         "Parámetros de la antena: §3.4 · FLPDA Koch: §4.4.2 y §5.2 · "
+         "Cálculo de la cadena: §5.3.1 · Figura 11 (cascada de eslabones de la cadena RF→DC)")
 
     with st.expander(":material/straighten:  ¿Qué tan grande es la antena? (comparativa de tamaño)",
                       expanded=False):
@@ -216,8 +216,8 @@ def render():
             "lo que hacerlo contabilizaría dos veces la pérdida de radiación."
         )
 
-    _ref("§4.3.1 Cálculo de la cadena de potencia · "
-         "Apéndice E.2 Identidades de cadena (4 vs 5 factores)")
+    _ref("§5.3.1 Cálculo de la cadena de potencia · "
+         "Anexo B.2 Identidades de cadena (4 vs 5 factores)")
 
     st.divider()
 
@@ -238,7 +238,7 @@ def render():
     with st.container(border=True):
         st.markdown(
             "**Qué dice este diagrama** — esta descomposición de la cadena de potencia "
-            "corresponde al análisis desarrollado en el proyecto (Apéndice E.12)."
+            "corresponde al análisis desarrollado en el proyecto (Anexo B.12)."
         )
         st.markdown(
             "- La pérdida más importante es la rectificación (RF→DC): se lleva unos "
@@ -256,8 +256,8 @@ def render():
             "sobre todo en la conversión de potencia."
         )
 
-    _ref("§2.1 El sistema rectenna: arquitectura y eficiencia · "
-         "Apéndice E.12 Anatomía de la cadena de potencia (descomposición Sankey)")
+    _ref("§3.1 El sistema rectenna: arquitectura y eficiencia · "
+         "Anexo B.12 Anatomía de la cadena de potencia (descomposición Sankey)")
 
     with st.expander(":material/visibility:  Cómo leer este diagrama (colores y anchos)",
                       expanded=False):
@@ -323,8 +323,8 @@ def render():
             "para comparar con la literatura. No se multiplica por P_in para obtener P_DC."
         )
 
-    _ref("Reporte canónico de magnitudes: Apéndice E.1 · "
-         "Definición de cada parámetro: §2.4 Parámetros fundamentales de antenas y rectenas")
+    _ref("Reporte canónico de magnitudes: Anexo B.1 · "
+         "Definición de cada parámetro: §3.4 Parámetros fundamentales de antenas y rectenas")
 
     st.divider()
     st.page_link("pages/viabilidad_iot.py",
@@ -478,7 +478,7 @@ def _render_block_diagram():
 
     # Bloques: (x_center, label_top, label_bottom, color, icon)
     blocks = [
-        (1.0,  "Torre TDT",       "Cerro Nutibara<br>EIRP = 70 dBm",      "#0369A1", "📡"),
+        (1.0,  "Torre TDT",       "Cerro Nutibara<br>EIRP = 72,15 dBm",   "#0369A1", "📡"),
         (3.7,  "Antena FLPDA Koch", "12 dipolos · Carrel<br>G = 4,97 dBi · η_mm = 0,983", "#2563EB", "📶"),
         (6.4,  "Red de adaptación L", "Q_L = 40 · Q_C = 80<br>η_IMN = 0,9484",  "#7C3AED", "⚙️"),
         (9.1,  "Doblador Greinacher", "2× SMS7630<br>PCE = 0,85 (cap)",     "#B45309", "▷|"),

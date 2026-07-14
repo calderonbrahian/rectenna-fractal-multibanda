@@ -5,7 +5,7 @@ Punto de entrada Streamlit. La experiencia tiene DOS NIVELES claramente
 diferenciados:
 
   NIVEL 1 · DEMOSTRACIÓN (3 min) — para quien nunca vio el proyecto. Explica en
-  pocos minutos el problema, la pregunta, la metodología (el aporte), qué se
+  pocos minutos el problema, la pregunta, la metodología del estudio, qué se
   demostró y por qué el caso colombiano es solo la demostración. Mucho apoyo
   visual, pocas cifras. Usa las figuras del pipeline (`_regen/out/figuras/`).
 
@@ -38,13 +38,13 @@ page = st.navigation(
                     title="1 · El problema y la pregunta",
                     icon=":material/battery_alert:", default=True),
             st.Page("pages/demo_2_metodo.py",
-                    title="2 · La metodología (el aporte)",
+                    title="2 · La metodología del estudio",
                     icon=":material/schema:"),
             st.Page("pages/demo_3_resultados.py",
                     title="3 · Qué se demostró",
                     icon=":material/verified:"),
             st.Page("pages/demo_4_aporte.py",
-                    title="4 · El aporte y su alcance",
+                    title="4 · El estudio y su alcance",
                     icon=":material/flag:"),
         ],
         # ── NIVEL 2 · Laboratorio ─────────────────────────────────────────────

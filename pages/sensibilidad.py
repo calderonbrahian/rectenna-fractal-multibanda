@@ -45,7 +45,7 @@ def render():
         "alrededor del punto canónico indica robustez; una pendiente fuerte, alta "
         "sensibilidad."
     )
-    _ref("§4.3.2 Análisis de sensibilidad paramétrica y Monte Carlo")
+    _ref("§5.3.2 Robustez del resultado: incertidumbre, sensibilidad y Monte Carlo")
 
     topology = 'doubler'  # fijo: topología canónica
     with st.container(border=True):
@@ -126,8 +126,8 @@ def render():
             mime="text/csv",
         )
         criterio("Q_L 40")
-        _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
-             "§2.8 Redes de adaptación de impedancias (IMN)")
+        _ref("Anexo B.7 Sensibilidad ante variación de Q_L y R_load · "
+             "§3.8 Redes de adaptación de impedancias (IMN)")
 
     # ── R_load ────────────────────────────────────────────────────────────────
     with tab_rl:
@@ -161,8 +161,8 @@ def render():
             file_name=f"sensibilidad_Rload_{topology}_{f_GHz}GHz.csv",
             mime="text/csv",
         )
-        _ref("Apéndice E.7 Sensibilidad ante variación de Q_L y R_load · "
-             "§2.7 Física del diodo Schottky (carga del rectificador)")
+        _ref("Anexo B.7 Sensibilidad ante variación de Q_L y R_load · "
+             "§3.7 Física del diodo Schottky (carga del rectificador)")
 
     # ── Mapa τ–σ ──────────────────────────────────────────────────────────────
     with tab_ts:
@@ -186,8 +186,8 @@ def render():
             "**Eje Y** τ ∈ [0.80, 0.95] | **Eje X** σ ∈ [0.10, 0.22] | "
             "Ganancia promediada sobre 470–900 MHz | ⭐ = punto de diseño Escenario B"
         )
-        _ref("Apéndice E.4 Mapa de diseño τ–σ del FLPDA · "
-             "§3.4.2 FLPDA Koch: método de Carrel y número de dipolos")
+        _ref("Anexo B.4 Mapa de diseño τ–σ del FLPDA · "
+             "§4.4.2 FLPDA Koch: método de Carrel y número de dipolos")
 
     st.divider()
     st.page_link("pages/conclusiones.py",

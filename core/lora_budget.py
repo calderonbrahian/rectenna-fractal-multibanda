@@ -29,7 +29,7 @@ Existen DOS funciones distintas para calcular la potencia cosechada:
                              clipeado físicamente en 85%). Es el método
                              CANÓNICO usado para los resultados oficiales
                              reportados en la tesis (CANONICAL['P_dc_uW']
-                             = 1637,6 µW @ 100 m del Cerro Nutibara).
+                             = 1335,0 µW @ 100 m del Cerro Nutibara).
 
 Si los resultados de las dos funciones difieren significativamente, es
 esperado: la segunda incluye desglose por eslabón (η_rad, η_mm, η_imn,
@@ -40,7 +40,7 @@ PCE_rect, η_PMIC) y refleja la cadena RF→DC completa.
 ──────────────────────────────────────────────────────────────────────────────
 El default 7.5 dBi corresponde a la ganancia MEDIA de la FLPDA Koch it.2
 sobre toda la banda 470–900 MHz (referencia Carrel 1961: 8.0 dBi). Para
-cálculos puntuales a una frecuencia específica (p. ej. 7.10 dBi @ 550 MHz),
+cálculos puntuales a una frecuencia específica (p. ej. 4.97 dBi @ 550 MHz),
 usar harvested_uw_full() que toma la ganancia desde antenna.gain_dBi(f).
 ──────────────────────────────────────────────────────────────────────────────
 
@@ -301,19 +301,3 @@ def harvested_uw_full(eirp_dbm: float, dist_m: float, freq_ghz: float,
         'eta_total':    float(eta_total),
         'coldstart_ok': coldstart_ok,
     }
-
-
-def supercap_time_s(pout_uw: float, C_F: float = 0.33,
-                    V_min: float = 1.8, V_max: float = 3.3) -> float:
-    """
-    Tiempo de carga [s] de un supercondensador en la ventana operativa V_min→V_max.
-
-    Energía útil entre V_min y V_max (Ec. E.5 del documento):
-        E_util = ½·C·(V_max² − V_min²)  →  t = E_util / P_DC.
-
-    Con C = 0,33 F, V_min = 1,8 V, V_max = 3,3 V y P_DC = 1637,6 µW:
-        E_util = 1262,2 mJ  →  t ≈ 770,8 s ≈ 12,8 min.
-    """
-    if pout_uw <= 0:
-        return float('inf')
-    return 0.5 * C_F * (V_max ** 2 - V_min ** 2) / (pout_uw * 1e-6)

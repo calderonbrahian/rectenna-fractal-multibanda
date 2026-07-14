@@ -71,8 +71,8 @@ def render():
         "apreciable en todas. Las pestañas siguientes comprueban, una a una, cuáles de esas "
         "condiciones se cumplen."
     )
-    _ref("§2.3 Geometría fractal aplicada a antenas · §3.4.1 Sierpinski: modelo RLC y "
-         "resonancias · §4.1 Escenario A — Sierpinski (1,8–5,8 GHz)")
+    _ref("§3.3 Geometría fractal aplicada a antenas · §4.4.1 Sierpinski: modelo RLC y "
+         "resonancias · §5.1 Escenario A — Sierpinski (1,8–5,8 GHz)")
 
     topology = 'doubler'
     with st.container(border=True):
@@ -170,9 +170,9 @@ def render():
             "la energía entre para que se aproveche? La primera se ve en *Impedancia*; la "
             "segunda, en *PCE vs Pin*."
         )
-        _ref("§2.4.3 Coeficiente de reflexión y parámetros S · "
-             "§4.1.1 Resultados del modelo computacional · "
-             "Figura 1 (S₁₁ Sierpinski) · Tabla 2 (bandas del Escenario A)")
+        _ref("§3.4 Parámetros fundamentales de antenas y rectenas (coeficiente de reflexión y parámetros S) · "
+             "§5.1.1 Resultados del modelo computacional · "
+             "Figura 9 (S₁₁ Sierpinski) · Anexo B.11 (bandas del Escenario A)")
 
     with tab_imp:
         st.markdown(
@@ -216,7 +216,7 @@ def render():
             "desarrolla en **§3.4.1** del documento. Aquí se ve el resultado; la "
             "demostración está allí."
         )
-        _ref("§2.4.2 Impedancia de entrada Zₐ · §3.4.1 Sierpinski: modelo RLC y resonancias")
+        _ref("§3.4 Parámetros fundamentales de antenas y rectenas (impedancia de entrada Zₐ) · §4.4.1 Sierpinski: modelo RLC y resonancias")
 
     with tab_pce:
         col_f, _ = st.columns(2)
@@ -257,16 +257,16 @@ def render():
             "Eso deja una pregunta para el final: **¿coinciden la banda mejor adaptada y la "
             "que más convierte?** Si no coinciden, ninguna banda reúne las dos virtudes a la "
             "vez —y eso se comprueba en la *Tabla*—. *(Curva derivada del modelo PCE–P_in "
-            "del trabajo, Tabla 7.)*"
+            "del trabajo, Anexo B.15.)*"
         )
         st.download_button(
             "Descargar CSV",
             sweep_a_csv(sweep_pce, ['Pin_dBm', 'PCE_pct', 'Vdc_mV']),
             file_name=f"pce_vs_pin_{f_sel}.csv", mime="text/csv",
         )
-        _ref("§2.7 Física del diodo Schottky: modelo de Shockley · "
-             "§3.5 Módulo 2 — Cadena RF-DC · "
-             "Figura 2 (η_total por banda) · Tabla 2 · Tabla 7 (PCE–P_in)")
+        _ref("§3.7 Física del diodo Schottky: modelo de Shockley · "
+             "§4.5 Etapa 2: Cadena RF-DC · "
+             "Anexo B.11 (bandas del Escenario A) · Anexo B.15 (PCE–P_in)")
 
     with tab_geom:
         st.markdown(
@@ -334,14 +334,14 @@ def render():
             "multibanda es real y nace de la geometría.\n\n"
             "Lo que la geometría no garantiza es que esas bandas sean *aprovechables*: eso "
             "es lo que miden S₁₁, la impedancia y la PCE. El desarrollo formal de la "
-            "autosimilitud y su dimensión de Hausdorff está en **§2.3.1–§2.3.2**, y la "
+            "autosimilitud y su dimensión de Hausdorff está en **§3.3.1–§3.3.2**, y la "
             "verificación de las resonancias frente a Puente-Baliarda (1998), en la "
-            "**Tabla 12**."
+            "**Anexo B.19**."
         )
-        _ref("§2.3.1 Dimensión de Hausdorff y autosimilitud · "
-             "§2.3.2 Triángulo de Sierpinski: propiedades y dimensionado · "
-             "§3.4.1 Sierpinski: modelo RLC y resonancias · "
-             "Tabla 12 (verificación de resonancias vs Puente-Baliarda 1998)")
+        _ref("§3.3.1 Dimensión de Hausdorff y autosimilitud · "
+             "§3.3.2 Triángulo de Sierpinski: propiedades y dimensionado · "
+             "§4.4.1 Sierpinski: modelo RLC y resonancias · "
+             "Anexo B.19 (verificación de resonancias vs Puente-Baliarda 1998)")
 
     with tab_tabla:
         df = pd.DataFrame(bandas).rename(columns={
@@ -372,11 +372,11 @@ def render():
             "en varias bandas a la vez**. Es un hallazgo de exploración, de cotas superiores, "
             "no la cifra final del proyecto.\n\n"
             "El análisis completo de estas limitaciones, banda por banda, se desarrolla en "
-            "**§5.1** y en la tabla de limitaciones **L1–L8** (Apéndice E). El resultado "
+            "**§6.3** y en la tabla de limitaciones **L1–L8** (Anexo B.11). El resultado "
             "energético firme llega en el **Escenario B**."
         )
-        _ref("§4.1 Escenario A — Sierpinski · §4.1.1 Resultados del modelo computacional · "
-             "Tabla 2 (bandas del Escenario A y resultados del modelo)")
+        _ref("§5.1 Escenario A — Sierpinski · §5.1.1 Resultados del modelo computacional · "
+             "Anexo B.11 (bandas del Escenario A y resultados del modelo)")
 
     st.divider()
     st.page_link("pages/escenario_b.py",

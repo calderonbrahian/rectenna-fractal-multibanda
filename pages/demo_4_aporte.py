@@ -1,15 +1,15 @@
-"""NIVEL 1 · Demostración — 4/4 · El aporte y su alcance."""
+"""NIVEL 1 · Demostración — 4/4 · El estudio y su alcance."""
 import streamlit as st
 from utils.figuras import figura, FIG
 
-st.title("El aporte")
+st.title("El estudio y su alcance")
 st.subheader("Queda un método, no solo un número.")
 
 figura(FIG["maestra"], "El trabajo completo en una figura: del problema a las conclusiones.")
 
 st.markdown(
-    "El resultado central no es que la TDT del Cerro Nutibara alimente un nodo IoT. Ese fue el "
-    "**caso demostrador**. El aporte es una **metodología analítica, computacional y reproducible** "
+    "El resultado central no es que la TDT del Cerro Nutibara alimente un nodo IoT: ese fue el "
+    "**caso demostrador**. Lo que queda es una **metodología analítica, computacional y reproducible** "
     "para estudiar el aprovechamiento de energía de RF ambiental —de cualquier fuente—, validada "
     "contra literatura y disponible como código abierto."
 )
