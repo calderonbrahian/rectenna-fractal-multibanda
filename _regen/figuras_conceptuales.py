@@ -184,18 +184,31 @@ def figC3_anatomia_rectena():
 
 
 def figC2_flujo_metodologico():
-    """C2 · Flujo metodológico — el método como método (Q4)."""
-    nodes = [
-        ("Pregunta", "¿RF viable?", E.ic_question),
-        ("Escenario", "fuente · f", E.ic_pin),
-        ("Modelado", "antena · diodo", E.ic_model),
-        ("Validación", "Wang · P-B.", E.ic_check),
-        ("Resultados", "P_DC · η · T", E.ic_chart),
-        ("Criterios", "topología", E.ic_branch),
+    """Figura 9 · Flujo metodológico del estudio: los cuatro módulos encadenados
+    de la Tabla 2 (M1 Antena → M2 IMN → M3 Rectificador → M4 Presupuesto IoT),
+    cada uno con su salida principal. Mismo lenguaje IEEE que las Figuras 1, 3,
+    7 y 8: bloques de esquina recta, riel de señal, sin tarjetas ni numeración
+    circular. Sustituye la versión anterior (estilo tarjeta, 6 etapas genéricas
+    'Pregunta→Criterios') que duplicaba la Figura 2 y no reflejaba la Tabla 2."""
+    n = 4
+    fig, ax = E.canvas(n * 1.5, 2.55, (0, n), (0, 2.05))
+    etapas = [
+        ("Antena", "Zₐ(f), S₁₁(f)", E.ic_antenna_lp),
+        ("IMN", "IL(f)", E.ic_match),
+        ("Rectificador", "PCE, V_dc", E.ic_diode),
+        ("Presupuesto", "T_ciclo, d_max", E.ic_chart),
     ]
-    fig = _hflow(nodes, E.AC_METHOD, w=0.9, h=1.15, title_fs=8.4, sub_fs=6.4,
-                 numbered=True)
-    return _save(fig, "FigC2_flujo_metodologico.png"), "C2 · 6 etapas numeradas"
+    y0 = 1.05
+    E.rail(ax, 0.08, n - 0.08, y0 - 0.78, lw=0.6)
+    for i, (t, s, ic) in enumerate(etapas):
+        cx = i + 0.5
+        E.node_ieee(ax, cx, y0, 0.92, 1.05, t, sub=s, icon=ic, title_fs=8.2, sub_fs=6.3)
+        if i < n - 1:
+            E.flow_ieee(ax, cx + 0.46, y0, cx + 0.54, y0)
+    E.label_ieee(ax, n / 2, y0 - 0.78 - 0.14,
+                "cuatro módulos encadenados: la salida de uno es la entrada del siguiente (Tabla 2)",
+                fs=6.8, style="italic", color=E.MUTE)
+    return _save(fig, "FigC2_flujo_metodologico.png"), "C2 · 4 módulos M1–M4, estilo editorial"
 
 
 def figC4_cadena_reproducible():
@@ -235,9 +248,9 @@ def figC6_koch_resonancia():
     n = 4
     fig, ax = E.canvas(n * 1.5, 2.55, (0, n), (0, 2.05))
     etapas = [
-        ("Geometría\nKoch", "curva autosimilar", E.ic_koch_fold),
+        ("Geometría", "curva de Koch", E.ic_koch_fold),
         ("Iteraciones", "n = 0, 1, 2…", E.ic_iterate),
-        ("Longitud\neléctrica", "L crece con n", E.ic_ruler),
+        ("Longitud", "eléctrica, L(n)", E.ic_ruler),
         ("Resonancia", "f multibanda", E.ic_resonance),
     ]
     y0 = 1.05
