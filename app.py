@@ -36,61 +36,46 @@ st.set_page_config(
 # → cierre. Quien quiera profundizar encuentra toda la matemática en «④».
 page = st.navigation(
     {
-        "① La historia · ¿qué problema y por qué?": [
-            st.Page("pages/demo_1_problema.py",
-                    title="El problema y la pregunta",
+        "1 · Historia": [
+            st.Page("pages/demo_1_problema.py", title="El problema",
                     icon=":material/battery_alert:", default=True),
-            st.Page("pages/demo_2_metodo.py",
-                    title="Cómo se abordó",
+            st.Page("pages/demo_2_metodo.py", title="Cómo se abordó",
                     icon=":material/schema:"),
         ],
-        "② Los resultados · ¿qué se obtuvo?": [
-            st.Page("pages/demo_3_resultados.py",
-                    title="Qué se obtuvo (en breve)",
+        "2 · Resultados": [
+            st.Page("pages/demo_3_resultados.py", title="Qué se obtuvo",
                     icon=":material/lightbulb:"),
-            st.Page("pages/inicio.py",
-                    title="Resultado de referencia",
+            st.Page("pages/inicio.py", title="Resultado de referencia",
                     icon=":material/verified:"),
         ],
-        "③ El modelo · ¿cómo funciona?": [
-            st.Page("pages/escenario_a.py",
-                    title="Escenario A — Sierpinski",
+        "3 · El modelo": [
+            st.Page("pages/escenario_a.py", title="Escenario A · Sierpinski",
                     icon=":material/cell_tower:"),
-            st.Page("pages/escenario_b.py",
-                    title="Escenario B — FLPDA Koch",
+            st.Page("pages/escenario_b.py", title="Escenario B · FLPDA Koch",
                     icon=":material/radio:"),
-            st.Page("pages/comparacion.py",
-                    title="¿Por qué la FLPDA? (comparación)",
+            st.Page("pages/comparacion.py", title="Comparación",
                     icon=":material/compare:"),
-            st.Page("pages/viabilidad_iot.py",
-                    title="¿Alcanza para un nodo IoT?",
+            st.Page("pages/viabilidad_iot.py", title="Viabilidad IoT",
                     icon=":material/sensors:"),
         ],
-        "④ La matemática · ecuaciones, constantes y código": [
-            st.Page("pages/detras_del_modelo.py",
-                    title="Detrás del modelo",
+        "4 · La matemática": [
+            st.Page("pages/detras_del_modelo.py", title="Detrás del modelo",
                     icon=":material/function:"),
         ],
-        "⑤ ¿Es creíble? · validación e incertidumbre": [
-            st.Page("pages/validacion.py",
-                    title="Validación (Wang 2022)",
+        "5 · Validación": [
+            st.Page("pages/validacion.py", title="Validación (Wang)",
                     icon=":material/biotech:"),
-            st.Page("pages/analisis_avanzado.py",
-                    title="Incertidumbre (Monte Carlo)",
+            st.Page("pages/analisis_avanzado.py", title="Incertidumbre (MC)",
                     icon=":material/analytics:"),
-            st.Page("pages/sensibilidad.py",
-                    title="Sensibilidad paramétrica",
+            st.Page("pages/sensibilidad.py", title="Sensibilidad",
                     icon=":material/tune:"),
         ],
-        "⑥ Cierre · conclusiones y referencias": [
-            st.Page("pages/conclusiones.py",
-                    title="Conclusiones y limitaciones",
+        "6 · Cierre": [
+            st.Page("pages/conclusiones.py", title="Conclusiones",
                     icon=":material/flag:"),
-            st.Page("pages/demo_4_aporte.py",
-                    title="El estudio y su alcance",
+            st.Page("pages/demo_4_aporte.py", title="Alcance del estudio",
                     icon=":material/straighten:"),
-            st.Page("pages/acerca.py",
-                    title="Metodología y referencias",
+            st.Page("pages/acerca.py", title="Metodología y refs.",
                     icon=":material/info:"),
         ],
     },
