@@ -36,19 +36,19 @@ st.set_page_config(
 # → cierre. Quien quiera profundizar encuentra toda la matemática en «④».
 page = st.navigation(
     {
-        "1 · Historia": [
+        "Historia": [
             st.Page("pages/demo_1_problema.py", title="El problema",
                     icon=":material/battery_alert:", default=True),
             st.Page("pages/demo_2_metodo.py", title="Cómo se abordó",
                     icon=":material/schema:"),
         ],
-        "2 · Resultados": [
+        "Resultados": [
             st.Page("pages/demo_3_resultados.py", title="Qué se obtuvo",
                     icon=":material/lightbulb:"),
             st.Page("pages/inicio.py", title="Resultado de referencia",
                     icon=":material/verified:"),
         ],
-        "3 · El modelo": [
+        "El modelo": [
             st.Page("pages/escenario_a.py", title="Escenario A · Sierpinski",
                     icon=":material/cell_tower:"),
             st.Page("pages/escenario_b.py", title="Escenario B · FLPDA Koch",
@@ -57,12 +57,10 @@ page = st.navigation(
                     icon=":material/compare:"),
             st.Page("pages/viabilidad_iot.py", title="Viabilidad IoT",
                     icon=":material/sensors:"),
-        ],
-        "4 · La matemática": [
             st.Page("pages/detras_del_modelo.py", title="Detrás del modelo",
                     icon=":material/function:"),
         ],
-        "5 · Validación": [
+        "Validación": [
             st.Page("pages/validacion.py", title="Validación (Wang)",
                     icon=":material/biotech:"),
             st.Page("pages/analisis_avanzado.py", title="Incertidumbre (MC)",
@@ -70,7 +68,7 @@ page = st.navigation(
             st.Page("pages/sensibilidad.py", title="Sensibilidad",
                     icon=":material/tune:"),
         ],
-        "6 · Cierre": [
+        "Cierre": [
             st.Page("pages/conclusiones.py", title="Conclusiones",
                     icon=":material/flag:"),
             st.Page("pages/demo_4_aporte.py", title="Alcance del estudio",
