@@ -213,7 +213,7 @@ orden de magnitud.
         )
         _ref("§4.7 Estrategia de validación cruzada · "
              "§5.5 Validación cruzada y análisis del error · "
-             "Figura 14 (modelo vs Wang) · Anexo B.18 (comparación banda a banda) · "
+             "Figura 16 (modelo vs Wang) · Anexo B.18 (comparación banda a banda) · "
              "Referencia: Wang et al. (2022), IEEE TAP")
 
     # ── Carrel (1961) ───────────────────────────────────────────────────────

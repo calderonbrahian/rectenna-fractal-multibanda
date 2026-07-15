@@ -155,7 +155,7 @@ def render():
     )
     _ref("Propagación y la pérdida de 67,25 dB: §3.5 Propagación RF y modelo de Friis · "
          "Parámetros de la antena: §3.4 · FLPDA Koch: §4.4.2 y §5.2 · "
-         "Cálculo de la cadena: §5.3.1 · Figura 11 (cascada de eslabones de la cadena RF→DC)")
+         "Cálculo de la cadena: §5.3.1 · Figura 13 (cascada de eslabones de la cadena RF→DC)")
 
     with st.expander(":material/straighten:  ¿Qué tan grande es la antena? (comparativa de tamaño)",
                       expanded=False):

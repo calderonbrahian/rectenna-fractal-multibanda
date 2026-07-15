@@ -164,7 +164,7 @@ cap de PCE = 0,85.
         st.plotly_chart(fig_mc_histogram(mc))
         st.caption(f"Muestras válidas (P_DC > 0): {mc['n_valid']}/{mc['n_total']}")
         _ref("§5.3.2 Robustez del resultado: incertidumbre, sensibilidad y Monte Carlo · "
-             "§6.3 Limitaciones del estudio (L1–L8) · Figura 12 (Monte Carlo de P_DC)")
+             "§6.3 Limitaciones del estudio (L1–L8) · Figura 14 (Monte Carlo de P_DC)")
 
     # ── Ancho de banda rectificador ───────────────────────────────────────────
     with tab_bw:

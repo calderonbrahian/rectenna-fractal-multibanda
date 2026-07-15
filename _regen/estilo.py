@@ -158,10 +158,37 @@ def flow_ieee(ax, x0, y0, x1, y1, lw=0.9, ms=8.5, color=None):
                  shrinkA=1, shrinkB=1))
 
 
+def phase_bracket(ax, x0, x1, y, label, lw=0.8, tick=0.05, fs=7.4):
+    """Corchete fino con etiqueta centrada, para agrupar un tramo del diagrama
+    en una fase narrativa (p. ej. 'Planteamiento' | 'Desarrollo' | 'Resultado').
+    Sin relleno, sin caja — una regla técnica de figura editorial."""
+    ax.plot([x0, x0, x1, x1], [y - tick, y, y, y - tick], color=MUTE, lw=lw, zorder=3)
+    ax.text((x0 + x1) / 2, y + tick * 1.9, label, ha="center", va="bottom",
+            fontsize=fs, color=MUTE, family=FONT_SERIF, style="italic", zorder=4)
+
+
+def rail(ax, x0, x1, y, lw=0.7, color=None):
+    """Línea base fina que enhebra una cadena de bloques, como un bus/riel de
+    señal de un esquemático profesional. Se dibuja detrás de los bloques."""
+    ax.plot([x0, x1], [y, y], color=color or RAIL, lw=lw, zorder=0)
+
+
 def label_ieee(ax, x, y, text, fs=8.5, weight="normal", ha="center", style="normal",
               color=None):
     ax.text(x, y, text, ha=ha, va="center", fontsize=fs, family=FONT_SERIF,
             fontweight=weight, style=style, color=color or INK)
+
+
+def ic_antenna_lp(ax, cx, cy, s, c):
+    """Antena log-periódica de dipolos (LPDA/FLPDA), boom + 5 elementos decrecientes
+    — icono específico del diseño del proyecto, más profesional que el monopolo
+    genérico de tres arcos."""
+    _ln(ax, [cx - s, cx + s * 0.9], [cy, cy], c, 1.1)          # boom
+    lens = [0.85, 0.66, 0.5, 0.37, 0.27]
+    xs = [cx - s * 0.78 + k * s * 0.46 for k in range(5)]
+    for x, l in zip(xs, lens):
+        _ln(ax, [x, x], [cy - l * s * 0.55, cy + l * s * 0.55], c, 1.3)
+    ax.add_patch(Circle((cx + s, cy), s * 0.05, facecolor=c, edgecolor="none", zorder=5))
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -277,3 +304,62 @@ def ic_branch(ax, cx, cy, s, c):
     _ln(ax, [cx + s*0.5, cx + s*0.5], [cy - s*0.5, cy + s*0.5], AC_B, 1.5)
     for dy in (-0.3, 0, 0.3):
         _ln(ax, [cx + s*0.2, cx + s*0.5], [cy + dy*s*2, cy + dy*s*2], AC_B, 1.3)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  ICONOS ADICIONALES — figuras explicativas Koch / Sierpinski (§3.3)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def ic_koch_fold(ax, cx, cy, s, c):
+    """Curva de Koch plegada (línea quebrada autosimilar), representando 'geometría'."""
+    xs = [cx - s, cx - s*0.33, cx - s*0.11, cx + s*0.11, cx + s*0.33, cx + s]
+    ys = [cy, cy, cy + s*0.55, cy - s*0.55, cy, cy]
+    _ln(ax, xs, ys, c, 1.4)
+
+def ic_iterate(ax, cx, cy, s, c):
+    """Tres niveles anidados (cuadrado > cuadrado > cuadrado), 'iteración'."""
+    for k, f in enumerate((1.0, 0.6, 0.32)):
+        ax.add_patch(Rectangle((cx - s*f, cy - s*f), 2*s*f, 2*s*f,
+                     facecolor="none", edgecolor=c, lw=1.3 - k*0.2, zorder=4-k))
+
+def ic_ruler(ax, cx, cy, s, c):
+    """Doble flecha con marcas de medida, 'longitud eléctrica'."""
+    _ln(ax, [cx - s, cx + s], [cy, cy], c, 1.3)
+    for x in (-1.0, -0.5, 0, 0.5, 1.0):
+        _ln(ax, [cx + x*s, cx + x*s], [cy - s*0.18, cy + s*0.18], c, 1.0)
+    ax.add_patch(Polygon([[cx - s, cy], [cx - s*0.8, cy + s*0.14], [cx - s*0.8, cy - s*0.14]],
+                 closed=True, facecolor=c, edgecolor="none", zorder=5))
+    ax.add_patch(Polygon([[cx + s, cy], [cx + s*0.8, cy + s*0.14], [cx + s*0.8, cy - s*0.14]],
+                 closed=True, facecolor=c, edgecolor="none", zorder=5))
+
+def ic_resonance(ax, cx, cy, s, c):
+    """Curva de resonancia (pico agudo), 'resonancia'."""
+    import math
+    xs = [cx - s + (k/40.0)*2*s for k in range(41)]
+    ys = [cy - s*0.6 + s*1.3 * math.exp(-((x-cx)/(s*0.28))**2) for x in xs]
+    ax.plot(xs, ys, color=c, lw=1.5, solid_capstyle="round", zorder=4)
+    _ln(ax, [cx - s, cx + s], [cy - s*0.6, cy - s*0.6], c, 1.1)
+
+def ic_sine(ax, cx, cy, s, c):
+    """Onda senoidal, 'corriente inducida'."""
+    import math
+    xs = [cx - s + (k/50.0)*2*s for k in range(51)]
+    ys = [cy + s*0.55*math.sin((x-cx)/s*2*math.pi) for x in xs]
+    ax.plot(xs, ys, color=c, lw=1.5, solid_capstyle="round", zorder=4)
+
+def ic_sierpinski_mini(ax, cx, cy, s, c):
+    """Triángulo de Sierpinski simplificado (it.1), 'geometría fractal'."""
+    h = s * 0.9
+    pts_outer = [[cx, cy + h], [cx - h*0.87, cy - h*0.5], [cx + h*0.87, cy - h*0.5]]
+    ax.add_patch(Polygon(pts_outer, closed=True, facecolor="none", edgecolor=c, lw=1.3, zorder=4))
+    mid = lambda a, b: [(a[0]+b[0])/2, (a[1]+b[1])/2]
+    m01 = mid(pts_outer[0], pts_outer[1]); m12 = mid(pts_outer[1], pts_outer[2]); m02 = mid(pts_outer[0], pts_outer[2])
+    ax.add_patch(Polygon([m01, m12, m02], closed=True, facecolor="white", edgecolor=c, lw=1.0, zorder=5))
+
+def ic_spectrum(ax, cx, cy, s, c):
+    """Varios picos espectrales, 'multibanda'."""
+    xs = [cx - s*0.8, cx - s*0.3, cx + s*0.2, cx + s*0.7]
+    heights = [0.5, 1.0, 0.7, 0.85]
+    for x, h in zip(xs, heights):
+        _ln(ax, [x, x], [cy - s*0.5, cy - s*0.5 + h*s], c, 1.6)
+    _ln(ax, [cx - s, cx + s], [cy - s*0.5, cy - s*0.5], c, 1.0)

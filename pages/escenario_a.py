@@ -172,7 +172,7 @@ def render():
         )
         _ref("§3.4 Parámetros fundamentales de antenas y rectenas (coeficiente de reflexión y parámetros S) · "
              "§5.1.1 Resultados del modelo computacional · "
-             "Figura 9 (S₁₁ Sierpinski) · Anexo B.11 (bandas del Escenario A)")
+             "Figura 11 (S₁₁ Sierpinski) · Anexo B.11 (bandas del Escenario A)")
 
     with tab_imp:
         st.markdown(

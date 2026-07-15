@@ -74,7 +74,7 @@ def render():
 
     _ref("§5.4 Análisis comparativo de los dos escenarios · §5.1 Escenario A · "
          "§5.2 Escenario B · Tabla 3 (comparación técnica integral) · "
-         "Figura 13 (PCE vs P_in, ambos escenarios)")
+         "Figura 15 (PCE vs P_in, ambos escenarios)")
 
     col1, col2 = st.columns(2)
     with col1:

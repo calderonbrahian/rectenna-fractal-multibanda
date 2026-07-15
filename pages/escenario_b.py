@@ -140,7 +140,7 @@ def render():
         )
         _ref("§3.4 Parámetros fundamentales de antenas y rectenas (coeficiente de reflexión y parámetros S) · "
              "§5.2.1 Diseño paramétrico y dimensiones calculadas · "
-             "Figura 10 (S₁₁ FLPDA Koch)")
+             "Figura 12 (S₁₁ FLPDA Koch)")
 
     with tab_gain:
         st.markdown(
@@ -486,7 +486,7 @@ def render():
             f"con el Sierpinski: allí la señal ambiental era débil y la PCE quedaba muy por "
             f"debajo del techo; aquí la fuente TDT es **potente y estable**, así que el "
             f"rectificador trabaja **cerca de su máximo**. *(Modelo PCE–P_in, Anexo B.15; la "
-            f"versión combinada de ambos escenarios es la Figura 13.)*"
+            f"versión combinada de ambos escenarios es la Figura 15.)*"
         )
         st.download_button(
             "Descargar CSV", sweep_a_csv(pce_data),
@@ -494,7 +494,7 @@ def render():
         )
         _ref("§3.7.2 Parámetros SPICE del SMS7630 y frecuencia de corte · "
              "§5.3.1 Cálculo de la cadena de potencia · "
-             "Anexo B.15 (dependencia PCE–P_in) · Figura 13 (PCE vs P_in, ambos escenarios)")
+             "Anexo B.15 (dependencia PCE–P_in) · Figura 15 (PCE vs P_in, ambos escenarios)")
 
         st.divider()
         st.markdown("##### ¿En qué punto del UHF conviene operar?")
