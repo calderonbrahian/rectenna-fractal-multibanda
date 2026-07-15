@@ -119,6 +119,52 @@ def caption(ax, x, y, text, fs=7.8):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  PRIMITIVAS "IEEE" — diagrama técnico de artículo, sin tarjetas ni sombras.
+#  Rectángulo de esquina recta, borde fino monocromo, tipografía serif académica.
+# ══════════════════════════════════════════════════════════════════════════════
+
+FONT_SERIF = "Times New Roman"
+
+
+def node_ieee(ax, cx, cy, w, h, title, sub=None, icon=None, icon_color=None,
+              title_fs=9.3, sub_fs=7.3, step=None, lw=1.0):
+    """Bloque rectangular de esquina recta (sin 'rounding', sin relleno de color,
+    sin franja de acento, sin sombra). Icono de línea en tinta neutra arriba,
+    título en serif debajo, subtítulo opcional en cursiva gris más pequeño."""
+    ax.add_patch(Rectangle((cx - w/2, cy - h/2), w, h,
+                 linewidth=lw, edgecolor=INK, facecolor="white", zorder=2))
+    ic_color = icon_color or INK
+    ty = cy
+    if icon is not None:
+        icon(ax, cx, cy + h * 0.24, min(w, h) * 0.27, ic_color)
+        ty = cy - h * 0.16
+    if sub:
+        ax.text(cx, ty + (0.0 if icon else h * 0.14), title, ha="center", va="center",
+                fontsize=title_fs, color=INK, family=FONT_SERIF, zorder=4)
+        ax.text(cx, ty - h * 0.24, sub, ha="center", va="center",
+                fontsize=sub_fs, color=MUTE, family=FONT_SERIF, style="italic", zorder=4)
+    else:
+        ax.text(cx, ty, title, ha="center", va="center", fontsize=title_fs,
+                color=INK, family=FONT_SERIF, zorder=4)
+    if step is not None:
+        ax.text(cx - w / 2 + 0.07, cy + h / 2 - 0.07, str(step), ha="left", va="top",
+                fontsize=7.2, color=MUTE, family=FONT_SERIF, style="italic", zorder=5)
+
+
+def flow_ieee(ax, x0, y0, x1, y1, lw=0.9, ms=8.5, color=None):
+    """Flecha fina monocroma (estilo diagrama de bloques de artículo técnico)."""
+    ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>",
+                 mutation_scale=ms, linewidth=lw, color=color or INK, zorder=1,
+                 shrinkA=1, shrinkB=1))
+
+
+def label_ieee(ax, x, y, text, fs=8.5, weight="normal", ha="center", style="normal",
+              color=None):
+    ax.text(x, y, text, ha=ha, va="center", fontsize=fs, family=FONT_SERIF,
+            fontweight=weight, style=style, color=color or INK)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  ICONOS TÉCNICOS DE LÍNEA  (ax, cx, cy, s, color)  — s = radio aproximado
 # ══════════════════════════════════════════════════════════════════════════════
 

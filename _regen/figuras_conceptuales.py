@@ -60,43 +60,61 @@ def _hflow(nodes, accent, w=0.92, h=1.3, title_fs=8.4, sub_fs=6.6,
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  Figuras 1–3 del cuerpo — estética de diagrama técnico (IEEE/Nature Electronics):
+#  bloques de esquina recta, tipografía serif, sin tarjetas ni sombras ni relleno
+#  de color. El color se reserva para lo semánticamente necesario (A=oro/B=verde).
+# ══════════════════════════════════════════════════════════════════════════════
+
 def figC5_maestra():
-    """C5 · La tesis en una figura (graphical abstract) — cuadrícula 2×4."""
+    """Figura 2 · Mapa del trabajo de grado: del problema a las conclusiones.
+    Secuencia metodológica en serpentina (2 filas × 4), numerada, monocroma."""
     stages = [
-        ("Problema", "energía IoT", E.ic_alert),
-        ("Pregunta", "¿RF viable?", E.ic_question),
-        ("Hipótesis", "sí, y medible", E.ic_bulb),
-        ("Metodología", "modelo analítico", E.ic_model),
-        ("Dos topologías", "Sierpinski · FLPDA", E.ic_branch),
-        ("Simulación", "cadena RF→DC", E.ic_waves),
-        ("Resultados", "viabilidad", E.ic_chart),
-        ("Conclusiones", "viabilidad demostrada", E.ic_check),
+        ("Problema", "energía IoT", E.ic_alert, E.INK),
+        ("Pregunta", "¿RF viable?", E.ic_question, E.INK),
+        ("Hipótesis", "sí, y medible", E.ic_bulb, E.INK),
+        ("Metodología", "modelo analítico", E.ic_model, E.INK),
+        ("Dos topologías", "Sierpinski · FLPDA", E.ic_branch, E.INK),
+        ("Simulación", "cadena RF→DC", E.ic_waves, E.INK),
+        ("Resultados", "viabilidad", E.ic_chart, E.INK),
+        ("Conclusiones", "viabilidad demostrada", E.ic_check, E.INK),
     ]
-    fig, ax = E.canvas(9.2, 5.0, (0, 4.4), (0, 2.7))
-    top_y, bot_y = 1.85, 0.72
+    fig, ax = E.canvas(9.2, 4.7, (0, 4.4), (0, 2.5))
+    top_y, bot_y = 1.72, 0.62
     xs_top = [0.55, 1.5, 2.45, 3.4]      # 1-4 izq→der
     xs_bot = [3.4, 2.45, 1.5, 0.55]      # 5-8 der→izq (boustrofedón)
-    W, H = 0.92, 1.02
+    W, H = 0.92, 1.0
     for k in range(4):
-        t, s, ic = stages[k]
-        E.node(ax, xs_top[k], top_y, W, H, t, sub=s, icon=ic, accent=E.AC_METHOD,
-               idx=k + 1, title_fs=8.0, sub_fs=6.2)
+        t, s, ic, ic_c = stages[k]
+        E.node_ieee(ax, xs_top[k], top_y, W, H, t, sub=s, icon=ic, icon_color=ic_c,
+                    step=k + 1, title_fs=7.8, sub_fs=6.0)
         if k < 3:
-            E.flow(ax, xs_top[k] + W/2, top_y, xs_top[k + 1] - W/2, top_y, accent=E.RAIL)
-    E.flow(ax, xs_top[3], top_y - H/2, xs_bot[0], bot_y + H/2, accent=E.RAIL)  # baja 4→5
+            E.flow_ieee(ax, xs_top[k] + W/2, top_y, xs_top[k + 1] - W/2, top_y)
+    # bajada de fila (4→5), con quiebre a 90°, como un diagrama de flujo de artículo
+    x_mid = xs_top[3]
+    E.flow_ieee(ax, x_mid, top_y - H/2, x_mid, (top_y - H/2 + bot_y + H/2) / 2, lw=0.9)
+    ax.plot([x_mid, xs_bot[0]],
+            [(top_y - H/2 + bot_y + H/2) / 2] * 2, color=E.INK, lw=0.9, zorder=1)
+    E.flow_ieee(ax, xs_bot[0], (top_y - H/2 + bot_y + H/2) / 2, xs_bot[0], bot_y + H/2, lw=0.9)
     for k in range(4):
-        t, s, ic = stages[4 + k]
-        E.node(ax, xs_bot[k], bot_y, W, H, t, sub=s, icon=ic, accent=E.AC_METHOD,
-               idx=5 + k, title_fs=8.0, sub_fs=6.2)
+        t, s, ic, ic_c = stages[4 + k]
+        if t == "Dos topologías":
+            # única marca de color: distingue Escenario A (oro) / B (verde)
+            E.node_ieee(ax, xs_bot[k], bot_y, W, H, t, sub=s, icon=ic,
+                        step=5 + k, title_fs=7.8, sub_fs=6.0)
+        else:
+            E.node_ieee(ax, xs_bot[k], bot_y, W, H, t, sub=s, icon=ic, icon_color=ic_c,
+                        step=5 + k, title_fs=7.8, sub_fs=6.0)
         if k < 3:
-            E.flow(ax, xs_bot[k] - W/2, bot_y, xs_bot[k + 1] + W/2, bot_y, accent=E.RAIL)
-    return _save(fig, "FigC5_maestra.png"), "C5 · 8 etapas (2×4 graphical abstract)"
+            E.flow_ieee(ax, xs_bot[k] - W/2, bot_y, xs_bot[k + 1] + W/2, bot_y)
+    return _save(fig, "FigC5_maestra.png"), "C5 · 8 etapas (secuencia metodológica, estilo técnico)"
 
 
 def figC1_fuentes_a_caso():
-    """C1 · Del entorno urbano al caso — recorrido físico con iconos (Q2)."""
+    """Figura 1 · Fuentes de RF ambiental y selección del caso de estudio.
+    Recorrido físico de la energía, del entorno urbano hasta la viabilidad,
+    con el caso de estudio marcado mediante una anotación de artículo (línea guía)."""
     n = 5
-    fig, ax = E.canvas(n * 1.5, 3.1, (0, n), (0, 2.5))
+    fig, ax = E.canvas(n * 1.5, 2.75, (0, n), (0, 2.2))
     etapas = [
         ("Entorno\nurbano", "AM·FM·TDT·LTE·5G", E.ic_city),
         ("Campo EM", "densidad RF", E.ic_waves),
@@ -104,22 +122,27 @@ def figC1_fuentes_a_caso():
         ("Modelo", "analítico", E.ic_model),
         ("Viabilidad", "energía útil", E.ic_chart),
     ]
+    y0 = 1.05
     for i, (t, s, ic) in enumerate(etapas):
         cx = i + 0.5
-        E.node(ax, cx, 1.45, 0.92, 1.3, t, sub=s, icon=ic, accent=E.AC_METHOD,
-               title_fs=8.4, sub_fs=6.4)
+        E.node_ieee(ax, cx, y0, 0.92, 1.25, t, sub=s, icon=ic, title_fs=8.2, sub_fs=6.3)
         if i < n - 1:
-            E.flow(ax, cx + 0.46, 1.45, cx + 0.54, 1.45, accent=E.RAIL)
-    # marca de caso sobre la primera etapa
-    E.ic_pin(ax, 0.5, 2.24, 0.13, E.AC_A)
-    ax.text(0.5, 2.42, "Caso: TDT (Colombia)", ha="center", fontsize=6.8,
-            color=E.INK, fontweight="bold", family=E.FONT)
-    return _save(fig, "FigC1_fuentes_a_caso.png"), "C1 · recorrido físico + caso"
+            E.flow_ieee(ax, cx + 0.46, y0, cx + 0.54, y0)
+    # Anotación de caso de estudio: línea guía fina + etiqueta (estilo figura de artículo,
+    # no insignia). Único acento de color: oro, para marcar la elección del caso.
+    x0 = 0.5
+    ax.plot([x0, x0], [y0 + 0.625, y0 + 1.02], color=E.COL["A"], lw=1.0, zorder=3)
+    ax.add_patch(E.Circle((x0, y0 + 1.02), 0.02,
+                 facecolor=E.COL["A"], edgecolor="none", zorder=4))
+    E.label_ieee(ax, x0, y0 + 1.16, "Caso de estudio: TDT (Colombia)",
+                fs=7.6, style="italic", color=E.COL["A"])
+    return _save(fig, "FigC1_fuentes_a_caso.png"), "C1 · recorrido físico + caso (estilo técnico)"
 
 
 def figC3_anatomia_rectena():
-    """C3 · Qué ES una rectena — cinco etapas conceptuales, sin números (Q3, obs.8).
-    Cadena CONCEPTUAL (bloques). La cadena CUANTITATIVA vive en la cascada (Cap. 4)."""
+    """Figura 3 · Anatomía de una rectena: las cinco etapas de la cadena RF→DC.
+    Cadena CONCEPTUAL (bloques con símbolos de circuito), monocroma. La cadena
+    CUANTITATIVA vive en la cascada de eficiencia (Cap. 4)."""
     nodes = [
         ("Antena", "capta la onda", E.ic_antenna),
         ("Adaptación\n(IMN)", "transfiere P", E.ic_match),
@@ -127,8 +150,15 @@ def figC3_anatomia_rectena():
         ("Gestor\n(PMIC)", "acondiciona", E.ic_chip),
         ("Carga IoT", "consume", E.ic_battery),
     ]
-    fig = _hflow(nodes, E.AC_METHOD, w=0.9, h=1.15, title_fs=8.4, sub_fs=6.6)
-    return _save(fig, "FigC3_anatomia_rectena.png"), "C3 · anatomía (5 etapas, conceptual)"
+    n = len(nodes)
+    fig, ax = E.canvas(n * 1.5, 2.4, (0, n), (0, 1.9))
+    y0 = 0.95
+    for i, (t, s, ic) in enumerate(nodes):
+        cx = i + 0.5
+        E.node_ieee(ax, cx, y0, 0.9, 1.05, t, sub=s, icon=ic, title_fs=8.2, sub_fs=6.3)
+        if i < n - 1:
+            E.flow_ieee(ax, cx + 0.45, y0, cx + 0.55, y0)
+    return _save(fig, "FigC3_anatomia_rectena.png"), "C3 · anatomía (5 etapas, estilo técnico)"
 
 
 def figC2_flujo_metodologico():
