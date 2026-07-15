@@ -214,24 +214,8 @@ def fig_sweep_generic(x, y_series: dict, x_label: str, y_label: str,
 def fig_tornado(sens: dict) -> go.Figure:
     """Gráfico de tornado para análisis de sensibilidad."""
     results = sens['results']
-    params  = [r['param'] for r in results]
-    lows    = [r['val_low'] for r in results]
-    highs   = [r['val_high'] for r in results]
     base    = sens['baseline']
 
-    fig = go.Figure()
-    for i, (p, lo, hi) in enumerate(zip(params, lows, highs)):
-        fig.add_trace(go.Bar(
-            x=[lo - base, hi - base],
-            y=[p, p],
-            orientation='h',
-            marker_color=[COLORS[3], COLORS[1]],
-            showlegend=False,
-            base=[base, base],
-            name=p,
-            hovertemplate=f'{p}: [{{x:.2f}} µW]',
-        ))
-    # Simplify: single bars per param showing range
     fig2 = go.Figure()
     for i, r in enumerate(results):
         fig2.add_trace(go.Bar(

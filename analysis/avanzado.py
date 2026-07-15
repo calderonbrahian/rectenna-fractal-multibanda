@@ -47,7 +47,7 @@ MC_SEED = 42
 @st.cache_data(show_spinner=False)
 def run_monte_carlo(eirp_dbm: float = 72.15, dist_m: float = 100.0,
                     freq_ghz: float = 0.55, R_load: float = 1300.0,
-                    n_samples: int = 2000) -> dict:
+                    n_samples: int = 10000) -> dict:
     """Propagación de incertidumbre Monte Carlo sobre P_DC (determinista, MC_SEED).
 
     La frecuencia NO se trata como portadora con deriva gaussiana: la señal
@@ -61,7 +61,7 @@ def run_monte_carlo(eirp_dbm: float = 72.15, dist_m: float = 100.0,
         'dist_m':   {'type': 'uniform', 'half_range': 15.0},
         'freq_ghz': {'type': 'uniform', 'half_range': 0.003},  # canal 6 MHz DVB-T2
     }
-    np.random.seed(MC_SEED)
+    # La reproducibilidad la garantiza default_rng(MC_SEED) dentro de monte_carlo_pdc.
     result = monte_carlo_pdc(base, uncertainties, _compute_pdc, n_samples=n_samples)
     # Convert ndarray to list for caching
     result['samples'] = result['samples'].tolist()

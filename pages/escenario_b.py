@@ -357,9 +357,9 @@ def render():
             al_bajar="Más cerca → más P_DC y mensajes más frecuentes, hasta saturar el "
                      "techo de la cadena.",
             limite="Por debajo de ~50 m la hipótesis de campo lejano y la corrección "
-                   "urbana media dejan de ser fiables; más allá de ≈ 1 200 m el cold-start "
+                   "urbana media dejan de ser fiables; más allá de ≈ 1 010 m el cold-start "
                    "(V_DC ≥ 130 mV) ya no está asegurado (a 1 000 m el modelo aún da "
-                   "V_DC ≈ 146 mV).",
+                   "V_DC ≈ 131,7 mV).",
         )
         st.markdown(
             "**Explóralo tú:** mueve la distancia y vigila dos umbrales. ¿A qué distancia el "

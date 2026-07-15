@@ -42,23 +42,6 @@ Autor: Brahian Calderón Múnera · UdeA · 2026
 
 import numpy as np
 
-# ── Parámetros de estilo IEEE para matplotlib ─────────────────────────────────
-IEEE_RCPARAMS = {
-    'font.family':      'serif',
-    'font.size':        10,
-    'axes.labelsize':   11,
-    'axes.titlesize':   12,
-    'legend.fontsize':  9,
-    'xtick.labelsize':  9,
-    'ytick.labelsize':  9,
-    'figure.dpi':       150,
-    'savefig.dpi':      300,
-    'axes.grid':        True,
-    'grid.alpha':       0.3,
-    'lines.linewidth':  1.5,
-    'axes.axisbelow':   True,
-}
-
 
 class FractalAntenna:
     """
@@ -326,22 +309,6 @@ class FractalAntenna:
             return [self.base_freq * (self.scale_ratio ** k) for k in range(3)]
         return list(self.resonant_frequencies)
 
-    def eta_sys(self, freq: float, IL_imn_dB: float = 0.0,
-                gamma_imn: float = 0.0) -> float:
-        """
-        Eficiencia total de la cadena antena+IMN [0..1].
-        η_sys = η_rad · (1 − γ²_IMN) · 10^(−IL_IMN/10).
-
-        Parámetros
-        ----------
-        freq       : frecuencia de evaluación [Hz]
-        IL_imn_dB  : pérdida de inserción de la red L [dB] (de LMatchNetwork)
-        gamma_imn  : coeficiente de reflexión residual de la IMN [0..1]
-        """
-        eta_r     = self.eta_rad(freq)
-        eta_match = (1.0 - gamma_imn ** 2) * 10.0 ** (-IL_imn_dB / 10.0)
-        return float(np.clip(eta_r * eta_match, 0.0, 1.0))
-
     # ── Resumen ───────────────────────────────────────────────────────────────
 
     def summary(self) -> str:
@@ -356,6 +323,6 @@ class FractalAntenna:
             f'  Factor escala    : {self.scale_ratio}',
             f'  Res. fractales   : {fr_fractal} GHz  (f0*ratio^k)',
             f'  Bandas objetivo  : {len(self.target_bands)}  (Wang et al. 2022)',
-            f'  NOTA: S11_dB() = antena sin IMN -- ver eta_sys() para sistema completo',
+            f'  NOTA: S11_dB() = antena sin IMN (sistema completo: ver core/lora_budget.harvested_uw_full)',
         ]
         return '\n'.join(lines)

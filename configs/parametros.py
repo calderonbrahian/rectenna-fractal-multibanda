@@ -140,11 +140,8 @@ CANONICAL = {
     'R_load_ohm': 1300.0,   # resistencia de carga (BQ25504 input)
 }
 
-# ── Referencia Wang et al. (2022) IEEE TAP ───────────────────────────────────
-WANG2022_FREQS_GHZ  = [1.84, 2.04, 2.36, 2.54, 3.30, 4.76, 5.80]
-WANG2022_PCE_PCT    = [44.4, 43.9, 45.4, 43.4, 36.1, 32.4, 28.3]
-WANG2022_S11_DB     = [-14,  -13,  -16,  -12,  -11,  -10,   -9]
-WANG2022_GAIN_DBI   = [ 2.1,  2.2,  2.3,  2.2,  2.0,  1.9,  1.8]
+# Nota: los datos de referencia de Wang et al. (2022) viven en core/comparacion.py
+# (dict WANG2022), única fuente de verdad usada por validate_wang2022().
 
 # ── Parámetros rcParams — Estilo APA7 para matplotlib ───────────────────────
 APA7_RC = {

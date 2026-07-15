@@ -130,7 +130,7 @@ def fspl_dB(dist_m: float, freq_ghz: float) -> float:
 
 
 def received_power_dBm(eirp_dbm: float, dist_m: float, freq_ghz: float,
-                       ant_gain_dBi: float = 4.9) -> float:
+                       ant_gain_dBi: float = 4.97) -> float:
     """
     Potencia disponible en la antena [dBm] (Friis).
     Incluye corrección urbana (ITU-R P.1546) y las pérdidas explícitas de

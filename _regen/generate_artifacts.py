@@ -371,7 +371,7 @@ def fig07_tciclo_dist():
                  f"(E_ciclo={E_mJ:.1f} mJ)", fontsize=10)
     ax.grid(True, which="both", alpha=0.25)
     _save(fig, "Fig07_Tciclo_distancia.png")
-    # verificación: a 100 m T debe ≈ 158 s
+    # verificación: a 100 m T debe ≈ 194 s
     i100 = int(np.argmin(np.abs(dist - 100)))
     return f"T_ciclo @ {dist[i100]:.0f} m ≈ {t_ciclo[i100]:.0f} s (canónico ~194 s @100m)"
 

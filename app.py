@@ -78,6 +78,11 @@ page = st.navigation(
                     title="Sensibilidad paramétrica",
                     icon=":material/tune:"),
         ],
+        "Laboratorio · Detrás del modelo": [
+            st.Page("pages/detras_del_modelo.py",
+                    title="Constantes, variables y ecuaciones",
+                    icon=":material/function:"),
+        ],
         "Laboratorio · Cierre y referencia": [
             st.Page("pages/conclusiones.py",
                     title="Conclusiones y limitaciones",

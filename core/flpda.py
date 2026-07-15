@@ -185,7 +185,7 @@ class FLPDA_Koch:
         Impedancia de entrada compleja [Ω] — modelo de región activa LPDA.
 
         Cada dipolo se modela como resonador RLC serie con:
-            R_dip ≈ 73 Ω (resistencia de radiación de medio dipolo λ/2)
+            R_dip ≈ 73 Ω (resistencia de radiación de un dipolo λ/2)
             L_dip = R_dip·Q / ω_res       Q ≈ 4.5 (LPDA, FR-4)
             C_dip = 1/(ω_res²·L_dip)
 

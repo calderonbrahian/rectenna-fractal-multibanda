@@ -21,6 +21,9 @@ import numpy as np
 from dataclasses import dataclass
 from typing import Callable
 
+from configs.parametros import POL_LOSS_DB, HARM_LOSS_DB
+from core.lora_budget import fspl_dB
+
 
 # ── Analisis de sensibilidad parametrica ────────────────────────────────────
 
@@ -231,9 +234,8 @@ def link_budget_table(eirp_dbm: float, dist_m: float, freq_ghz: float,
     -------
     list of dict con 'parameter', 'value', 'unit', 'cumulative_dBm'
     """
-    c0 = 3e8
-    lam = c0 / (freq_ghz * 1e9)
-    fspl = 20 * np.log10(4 * np.pi * dist_m / lam)
+    # FSPL desde la función canónica (SSOT), no reimplementada.
+    fspl = fspl_dB(dist_m, freq_ghz)
 
     rows = []
     cumul = eirp_dbm
@@ -249,6 +251,18 @@ def link_budget_table(eirp_dbm: float, dist_m: float, freq_ghz: float,
     cumul -= urban_correction_dB
     rows.append({'parameter': 'Correccion urbana ITU-R P.1546',
                  'value': f'-{urban_correction_dB:.1f}', 'unit': 'dB',
+                 'cumulative_dBm': f'{cumul:.1f}'})
+
+    # Pérdidas explícitas de la cadena canónica (revisión de modelo 2026-07).
+    # Estaban ausentes: su omisión daba P_DC≈1642 µW en vez de 1335 µW.
+    cumul -= POL_LOSS_DB
+    rows.append({'parameter': 'Perdida polarizacion (Koch it.2)',
+                 'value': f'-{POL_LOSS_DB:.1f}', 'unit': 'dB',
+                 'cumulative_dBm': f'{cumul:.1f}'})
+
+    cumul -= HARM_LOSS_DB
+    rows.append({'parameter': 'Perdida reflexion de armonicos (doblador)',
+                 'value': f'-{HARM_LOSS_DB:.1f}', 'unit': 'dB',
                  'cumulative_dBm': f'{cumul:.1f}'})
 
     cumul += gain_dBi
@@ -465,27 +479,13 @@ STATE_OF_ART = [
         'notes': 'Mediciones en ambiente real (Londres)',
     },
     {
-        'reference': 'Shen et al. (2019)',
-        'journal': 'IEEE Access',
-        'antenna': 'Koch fractal dipolo',
-        'substrate': 'FR-4',
-        'freq_range': '0.9 / 1.8 / 2.45 GHz',
-        'bands': 3,
-        'gain_dBi': '2.5-4.0',
-        'PCE_max': '52%',
-        'Pin_dBm': -5,
-        'P_dc_uW': '~100',
-        'rectifier': 'Doubler',
-        'notes': 'Fractal Koch, triple banda',
-    },
-    {
         'reference': 'Este trabajo (Esc. B)',
         'journal': 'Tesis UdeA',
         'antenna': 'FLPDA Koch it.2',
         'substrate': 'FR-4',
         'freq_range': '470-900 MHz',
         'bands': 'Continua UHF',
-        'gain_dBi': '7.1-7.5',
+        'gain_dBi': '4.8-5.0',   # ganancia REALIZADA (incluye eta_rad); directiva ~7.2
         'PCE_max': None,      # Se llena con valor calculado
         'Pin_dBm': None,
         'P_dc_uW': None,
