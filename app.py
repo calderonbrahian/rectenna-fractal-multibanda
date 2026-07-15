@@ -30,25 +30,29 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# ── Navegación narrativa en capas ─────────────────────────────────────────────
+# Un solo recorrido guiado, no dos silos. Cada sección responde una pregunta y
+# lleva a la siguiente: historia → resultados → modelo → matemática → validación
+# → cierre. Quien quiera profundizar encuentra toda la matemática en «④».
 page = st.navigation(
     {
-        # ── NIVEL 1 · Demostración (3 minutos) ────────────────────────────────
-        "Demostración · 3 min": [
+        "① La historia · ¿qué problema y por qué?": [
             st.Page("pages/demo_1_problema.py",
-                    title="1 · El problema y la pregunta",
+                    title="El problema y la pregunta",
                     icon=":material/battery_alert:", default=True),
             st.Page("pages/demo_2_metodo.py",
-                    title="2 · La metodología del estudio",
+                    title="Cómo se abordó",
                     icon=":material/schema:"),
-            st.Page("pages/demo_3_resultados.py",
-                    title="3 · Qué se demostró",
-                    icon=":material/verified:"),
-            st.Page("pages/demo_4_aporte.py",
-                    title="4 · El estudio y su alcance",
-                    icon=":material/flag:"),
         ],
-        # ── NIVEL 2 · Laboratorio ─────────────────────────────────────────────
-        "Laboratorio · Escenarios": [
+        "② Los resultados · ¿qué se obtuvo?": [
+            st.Page("pages/demo_3_resultados.py",
+                    title="Qué se obtuvo (en breve)",
+                    icon=":material/lightbulb:"),
+            st.Page("pages/inicio.py",
+                    title="Resultado de referencia",
+                    icon=":material/verified:"),
+        ],
+        "③ El modelo · ¿cómo funciona?": [
             st.Page("pages/escenario_a.py",
                     title="Escenario A — Sierpinski",
                     icon=":material/cell_tower:"),
@@ -56,18 +60,18 @@ page = st.navigation(
                     title="Escenario B — FLPDA Koch",
                     icon=":material/radio:"),
             st.Page("pages/comparacion.py",
-                    title="Comparación de escenarios",
+                    title="¿Por qué la FLPDA? (comparación)",
                     icon=":material/compare:"),
-        ],
-        "Laboratorio · Caso y viabilidad": [
-            st.Page("pages/inicio.py",
-                    title="Resultado de referencia",
-                    icon=":material/verified:"),
             st.Page("pages/viabilidad_iot.py",
-                    title="Viabilidad del nodo IoT",
+                    title="¿Alcanza para un nodo IoT?",
                     icon=":material/sensors:"),
         ],
-        "Laboratorio · Validación y análisis": [
+        "④ La matemática · ecuaciones, constantes y código": [
+            st.Page("pages/detras_del_modelo.py",
+                    title="Detrás del modelo",
+                    icon=":material/function:"),
+        ],
+        "⑤ ¿Es creíble? · validación e incertidumbre": [
             st.Page("pages/validacion.py",
                     title="Validación (Wang 2022)",
                     icon=":material/biotech:"),
@@ -78,15 +82,13 @@ page = st.navigation(
                     title="Sensibilidad paramétrica",
                     icon=":material/tune:"),
         ],
-        "Laboratorio · Detrás del modelo": [
-            st.Page("pages/detras_del_modelo.py",
-                    title="Constantes, variables y ecuaciones",
-                    icon=":material/function:"),
-        ],
-        "Laboratorio · Cierre y referencia": [
+        "⑥ Cierre · conclusiones y referencias": [
             st.Page("pages/conclusiones.py",
                     title="Conclusiones y limitaciones",
                     icon=":material/flag:"),
+            st.Page("pages/demo_4_aporte.py",
+                    title="El estudio y su alcance",
+                    icon=":material/straighten:"),
             st.Page("pages/acerca.py",
                     title="Metodología y referencias",
                     icon=":material/info:"),

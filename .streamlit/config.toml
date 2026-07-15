@@ -1,16 +1,17 @@
-# Tema institucional UdeA — Light academic
-# Limpio, profesional, optimizado para lectura prolongada y proyección en sala.
+# Tema institucional UdeA — identidad del póster de sustentación
+# Teal institucional (#007297) + lima de acento. Limpio, profesional,
+# optimizado para lectura prolongada y proyección en sala.
 
 [theme]
 base = "light"
-primaryColor       = "#1E40AF"   # Azul UdeA institucional
+primaryColor       = "#007297"   # Teal institucional UdeA (identidad del póster)
 backgroundColor    = "#FFFFFF"
-secondaryBackgroundColor = "#F8FAFC"
-codeBackgroundColor      = "#F1F5F9"
-textColor           = "#0F172A"   # Slate-900
-linkColor           = "#1E40AF"
-borderColor         = "#CBD5E1"
-codeTextColor       = "#1E293B"
+secondaryBackgroundColor = "#F4F8F9"
+codeBackgroundColor      = "#EEF4F5"
+textColor           = "#0F2A30"   # Teal muy oscuro
+linkColor           = "#007297"
+borderColor         = "#CBD9DC"
+codeTextColor       = "#134152"
 showWidgetBorder = true
 showSidebarBorder = true
 baseRadius   = "8px"
@@ -26,20 +27,20 @@ headingFontSizes = ["28px", "22px", "18px", "16px", "14px", "12px"]
 headingFontWeights = [700, 600, 600, 600, 500, 500]
 linkUnderline = false
 
-# Colores semánticos (consistentes con paleta accesible Paul Tol)
-greenColor  = "#15803D"   # éxito / sostenible / canónico verde
-redColor    = "#B91C1C"   # error / no viable
-yellowColor = "#B45309"   # advertencia / cap activo
+# Colores semánticos (accesibles sobre blanco)
+greenColor  = "#4C9A2A"   # sostenible / lima institucional oscurecida
+redColor    = "#B91C1C"   # no viable
+yellowColor = "#B45309"   # cap activo / advertencia
 orangeColor = "#C2410C"
-blueColor   = "#1E40AF"
+blueColor   = "#0E7490"
 violetColor = "#6D28D9"
 grayColor   = "#475569"
 
-# Paleta categorical para gráficas (legible sobre blanco)
+# Paleta categorical: teal institucional primero, luego accesible (Paul Tol)
 chartCategoricalColors = [
-    "#1E40AF",   # azul UdeA
-    "#15803D",   # verde botánico
-    "#B45309",   # ámbar academico
+    "#007297",   # teal UdeA
+    "#4C9A2A",   # verde lima institucional
+    "#B45309",   # ámbar académico
     "#B91C1C",   # rojo señal
     "#6D28D9",   # violeta
     "#0E7490",   # cian profundo
@@ -47,20 +48,20 @@ chartCategoricalColors = [
     "#475569",   # gris pizarra
 ]
 chartSequentialColors = [
-    "#EFF6FF","#DBEAFE","#BFDBFE","#93C5FD","#60A5FA",
-    "#3B82F6","#2563EB","#1D4ED8","#1E40AF","#1E3A8A",
+    "#ECF6F8","#D3E9EE","#A9D4DD","#7FBFCC","#54A9BB",
+    "#2A94AA","#007297","#005E7E","#004A64","#00374B",
 ]
 
-dataframeBorderColor = "#CBD5E1"
-dataframeHeaderBackgroundColor = "#F1F5F9"
+dataframeBorderColor = "#CBD9DC"
+dataframeHeaderBackgroundColor = "#EEF4F5"
 
 [theme.sidebar]
-backgroundColor = "#F8FAFC"
+backgroundColor = "#F4F8F9"
 secondaryBackgroundColor = "#FFFFFF"
-codeBackgroundColor = "#F1F5F9"
-textColor = "#0F172A"
-borderColor = "#CBD5E1"
-primaryColor = "#1E40AF"
+codeBackgroundColor = "#EEF4F5"
+textColor = "#0F2A30"
+borderColor = "#CBD9DC"
+primaryColor = "#007297"
 
 [server]
 headless = true
