@@ -86,6 +86,26 @@ BANDS_A = {
     'WiFi_5.8': 5.80e9,
 }
 
+# ── Escenario A urbano difuso — potencia RF ambiental por banda ───────────────
+# Potencia RF disponible en el puerto de la antena (ya incluye apertura/ganancia)
+# para un entorno URBANO DENSO. NO son mediciones de este trabajo (estudio de
+# modelado, limitación L1): son un supuesto parametrizado, acotado por el rango
+# medido en Piñuela et al. (2013), "Ambient RF Energy Harvesting in Urban and
+# Semi-Urban Environments", IEEE Trans. MTT 61(7):2715 — que reporta potencias
+# ambientales típicas de −30 a −15 dBm en bandas fuertes de ciudad. Las bandas
+# bajas (celular DL) se asumen algo más fuertes que WiFi/5G altas. La viabilidad
+# se evalúa como CURVA frente a este nivel (analysis/), no atada a un único valor.
+URBAN_AMBIENT_DBM = {
+    'GSM1800':  -18.0,   # celular DL, banda fuerte
+    'LTE':      -18.0,
+    'WiFi_2.4': -22.0,   # WiFi denso pero intermitente
+    '5G_2.6':   -20.0,
+    '5G_3.5':   -20.0,
+    '5G_4.9':   -24.0,   # bandas altas, más débiles/direccionales
+    'WiFi_5.8': -24.0,
+}
+URBAN_AMBIENT_NOMINAL_DBM = -20.0   # nivel uniforme de referencia para barridos
+
 # ── Escenario B — FLPDA Koch (Carrel 1961) ────────────────────────────────────
 FLPDA_TAU       = 0.90
 FLPDA_SIGMA     = 0.15

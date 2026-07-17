@@ -34,11 +34,11 @@ def render():
         ("Tamaño físico",          "~39 × 34 mm² (PCB)",     "Boom de 500 mm"),
         ("Patrón de radiación",    "Omnidireccional",        "Directivo (end-fire)"),
         ("Ganancia típica",        "2,5–3,5 dBi",            "4,83 dBi (media en banda)"),
-        ("S₁₁ < −10 dB",           "1 de 7 bandas",          "Continuo 470–900 MHz"),
+        ("S₁₁ < −10 dB",           "1/7 (50 Ω) · 6/7 (integrado)", "Continuo 470–900 MHz"),
         ("Fuentes objetivo",       "WiFi, LTE, 5G sub-6",    "TDT, LTE 700, GSM 850"),
         ("P_DC a 100 m de fuente", "~0,3–8 µW (interior)",   "1 335 µW (TDT 10 kW)"),
         ("Escenario óptimo",       "IoT interior / portátil","Estación exterior fija"),
-        ("Carga viable",           "Sensor BLE / ZigBee",    "Nodo LoRa SF12"),
+        ("Carga viable",           "Sensor ADC / reporte esporádico", "Nodo LoRa SF12"),
         ("η_total (rango)",        "1,0–13,8 % (por banda)", "28–67 % (varía con P_in; tope 67 % por PCE 0,85)"),
     ]
     df = pd.DataFrame(tabla10, columns=["Criterio", "Escenario A — Sierpinski it. 3",
@@ -50,7 +50,8 @@ def render():
     st.caption("El cap de PCE = 85 % es el límite del rectificador, no de η_total.")
     st.caption(
         ":material/lightbulb: **Filas decisivas:** la ganancia (B concentra más energía "
-        "hacia la fuente), el S₁₁ (B está adaptada en toda la banda; A solo en 1 de 7) y "
+        "hacia la fuente), el S₁₁ (B está adaptada en toda la banda; A en 1 de 7 con línea "
+        "de 50 Ω y 6 de 7 con co-diseño conjugado integrado) y "
         "la P_DC (solo B la cuantifica) son las que inclinan la elección hacia B para una "
         "estación fija."
     )

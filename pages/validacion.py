@@ -186,7 +186,7 @@ def render():
 |---|------|-----------------|-------------------|
 | 1 | Desadaptación fuera de resonancia (el modelo asume adaptación ideal y η_mm real cae) | Dominante | ≈ 15 – 18 pp |
 | 2 | Sustrato FR-4 vs Duroid 5880 (tan δ 22× mayor) | Segundo orden | ≈ 10 – 12 pp |
-| 3 | Ausencia de elementos adicionales (el Sierpinski cubre 1 de 7 bandas) | Menor | ≈ 2 – 4 pp |
+| 3 | Ausencia de elementos adicionales (el Sierpinski cubre 1 de 7 bandas con línea de 50 Ω) | Menor | ≈ 2 – 4 pp |
 
 El sesgo es asimétrico. A baja frecuencia (1,84 – 2,04 GHz) el modelo sobreestima
 (+25 a +12 pp): asume una adaptación RF ideal que el circuito de Wang no alcanza. A alta

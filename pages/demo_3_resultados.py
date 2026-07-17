@@ -14,7 +14,8 @@ c3.metric("Error vs. Wang (2022)", "15,50 pp")
 st.markdown(
     "Con la antena dirigida (Escenario B) frente al transmisor de TDT, el modelo estima **1 335 µW** "
     "de potencia útil a 100 m: suficiente para sostener un nodo IoT de bajo consumo. La difusa "
-    "multibanda (Escenario A) queda como límite ilustrativo: adapta solo 1 de 7 bandas sobre FR-4."
+    "multibanda (Escenario A) adapta 1 de 7 bandas con línea de 50 Ω y 6 de 7 con co-diseño "
+    "conjugado integrado; su cosecha de µW sirve a sensores de reporte esporádico (energía-asistido)."
 )
 
 figura(FIG["cascada"], "¿Dónde se va la energía? La cascada de eficiencia de la cadena RF→DC (Escenario B).")

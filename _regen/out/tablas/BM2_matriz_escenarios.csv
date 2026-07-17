@@ -1,0 +1,6 @@
+escenario,topologia,sensor,modo,resultado
+E1 remoto vista a torre TDT (≤100 m),FLPDA dirigida,LoRa SF12 continuo,1 sin batería,1.335 µW ≫ 438 µW · viable
+E2 periferia torre (100–175 m),FLPDA dirigida,LoRa esporádico + tampón,1→2,cae bajo umbral hacia ~175 m
+"E3 urbano denso (techo, WiFi/celular)",Sierpinski multibanda,ADC / telemetría muy esporádica,2 energía-asistido,"≈2,4 µW · sostiene sensor ultra-bajo"
+E4 urbano muy denso (−10 dBm/banda),Sierpinski multibanda,telemetría periódica,2 energía-asistido,≈83 µW · ciclos moderados
+E5 campo lejos de infraestructura,ninguna capta,—,—,inviable por RF · requiere otra fuente

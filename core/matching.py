@@ -159,6 +159,64 @@ class LMatchNetwork:
             return r_lp if r_lp.insertion_loss_dB <= r_hp.insertion_loss_dB else r_hp
         return self._optimize(freq, topology)
 
+    # ── Co-diseño conjugado antena → diodo (rectena integrada) ────────────────
+
+    def conjugate_efficiency(self, freq: float, Z_ant: complex,
+                             Z_load: complex) -> float:
+        """
+        Eficiencia de transferencia de potencia de una red L con pérdidas (Q
+        finito) que adapta por CONJUGADO una fuente compleja Z_ant (antena) a
+        una carga compleja Z_load (diodo), SIN interfaz forzada de 50 Ω.
+
+        Este es el modelo de una rectena INTEGRADA: la antena se conecta
+        directamente, vía la red de adaptación, al diodo. No existe una línea de
+        50 Ω, por lo que la "reflexión de la antena" (S11 referido a 50 Ω) NO es
+        una pérdida; la única pérdida de acople es la de la propia red L por el Q
+        finito de sus componentes SMD.
+
+        Se optimizan numéricamente los dos elementos (L, C) en ambas
+        orientaciones L para MAXIMIZAR la potencia entregada a Re(Z_load), y se
+        devuelve η = P_entregada / P_disponible, con
+        P_disponible = |V_s|² / (8·Re(Z_ant)).
+
+        Contraste con design(): design() adapta una fuente de 50 Ω al diodo
+        (arquitectura modular con línea de 50 Ω); conjugate_efficiency() adapta
+        la impedancia real de la antena al diodo (arquitectura integrada). La
+        diferencia entre ambas es justamente la "pérdida por reflexión de la
+        antena" que penaliza a una geometría multibanda cuyo puerto no está a
+        50 Ω. Referencia: Pozar 4ed §5.1; arquitectura integrada de rectena en
+        Valenta & Durgin (2014) IEEE MTT-S.
+        """
+        w  = 2.0 * np.pi * freq
+        Zs = complex(Z_ant)
+        Zd = complex(Z_load)
+        Rs = max(Zs.real, 1e-3)
+        P_avs = 1.0 / (8.0 * Rs)   # con |V_s| = 1
+
+        def eff(orient, x):
+            L, C = 10 ** x[0], 10 ** x[1]
+            if orient == 'A':
+                Zser, Zsh = self._ZL(L, w), self._ZC(C, w)
+            else:
+                Zser, Zsh = self._ZC(C, w), self._ZL(L, w)
+            Zpar = Zsh * Zd / (Zsh + Zd)
+            Zin  = Zser + Zpar
+            Iin  = 1.0 / (Zs + Zin)
+            Vn   = Iin * Zpar
+            Id   = Vn / Zd
+            P_load = 0.5 * abs(Id) ** 2 * max(Zd.real, 0.0)
+            return P_load / P_avs
+
+        best = 0.0
+        for orient in ('A', 'B'):
+            L0 = 1.0 / (w * max(abs(Zd), 1.0))
+            C0 = 1.0 / (w * max(abs(Zs), 1.0))
+            x0 = [np.log10(max(L0, 1e-12)), np.log10(max(C0, 1e-15))]
+            r = minimize(lambda x: -eff(orient, x), x0, method='Nelder-Mead',
+                         options={'xatol': 1e-10, 'fatol': 1e-10, 'maxiter': 12000})
+            best = max(best, -r.fun)
+        return float(np.clip(best, 0.0, 1.0))
+
     def _optimize(self, freq: float, topology: str) -> LMatchResult:
         """
         Optimiza L y C minimizando |Γ| con Nelder-Mead.
