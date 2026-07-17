@@ -110,6 +110,47 @@ def figM3_montecarlo(ant, rec, imn):
     _save(fig, "FigM3_montecarlo_multibanda.png")
 
 
+def figM4_cascada(ant, rec, imn):
+    """Cascada de eficiencia del Escenario A multibanda (paridad con la del B).
+    Muestra la energía que sobrevive en cada eslabón de la cadena agregada
+    (suma de las ramas por banda), a ambiente urbano nominal. El escalón que
+    colapsa la cosecha es la rectificación a baja señal, no el acople."""
+    from configs.parametros import URBAN_AMBIENT_DBM
+    P_av = P_cm = P_dc_rect = 0.0
+    for banda, f in BANDS_A.items():
+        p_amb_dbm = URBAN_AMBIENT_DBM[banda]
+        p_amb_uw = 10 ** (p_amb_dbm / 10.0) * 1000.0
+        za = ant.impedance(f); zd = rec.diode.impedance(f)
+        eta = imn.conjugate_efficiency(f, za, zd)
+        il = -10.0 * np.log10(max(eta, 1e-6))
+        P_av += p_amb_uw
+        P_cm += p_amb_uw * eta
+        P_dc_rect += rec.output_power_uw(p_amb_dbm, f, IL_dB=il, gamma=0.0)
+    from configs.parametros import BQ25504_ETA_PMIC as ETA_PMIC
+    P_dc = P_dc_rect * ETA_PMIC
+    uW = [P_av, P_cm, P_dc_rect, P_dc]
+    pct = [100.0 * v / P_av for v in uW]
+    etapas = ["P disponible\n(antena)", "Acople\nconjugado", "Rectificación\n(PCE baja señal)", "Salida DC\n(PMIC)"]
+    facs = [pct[1] / 100, pct[2] / pct[1], pct[3] / pct[2]]
+    fig, ax = plt.subplots(figsize=(6.6, 4.0))
+    xs = np.arange(len(etapas))
+    ax.step(xs, pct, where="mid", color=C_A, lw=2.2)
+    ax.fill_between(xs, pct, step="mid", color=C_A, alpha=0.12)
+    for i, (x, p, u) in enumerate(zip(xs, pct, uW)):
+        ax.annotate(f"{u:.1f} µW", (x, p), textcoords="offset points",
+                    xytext=(0, 8), ha="center", fontsize=8.5, color=E.INK, fontweight="bold")
+    for i, fac in enumerate(facs):
+        ax.annotate(f"×{fac:.3f}", (xs[i] + 0.5, (pct[i] + pct[i + 1]) / 2),
+                    textcoords="offset points", xytext=(0, 0), ha="center",
+                    fontsize=8, color=C_ROJO)
+    ax.set_xticks(xs); ax.set_xticklabels(etapas, fontsize=8.5)
+    ax.set_ylabel("Energía conservada (%)")
+    ax.set_yscale("log"); ax.set_ylim(1, 130)
+    ax.set_title(f"Cascada de eficiencia — Escenario A multibanda · η_sistema = "
+                 f"{pct[3]:.2f} %", fontsize=10.5)
+    _save(fig, "FigM4_cascada_multibanda.png")
+
+
 def tablas(ant, rec, imn):
     filas = mb.harvest_per_band(ant, rec, imn)
     pd.DataFrame(filas).to_csv(os.path.join(OUT_T, "BM1_cosecha_por_banda.csv"),
@@ -137,5 +178,6 @@ if __name__ == "__main__":
     figM1_acople(ant, rec, imn)
     figM2_cosecha(ant, rec, imn)
     figM3_montecarlo(ant, rec, imn)
+    figM4_cascada(ant, rec, imn)
     tablas(ant, rec, imn)
     print("\nListo — figuras y tablas del rediseño multibanda generadas.")
