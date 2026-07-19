@@ -313,14 +313,22 @@ def fig15_flpda_completa():
 
 
 def fig05_cascada():
-    etapas = ["η_rad", "η_mm", "η_IMN", "PCE", "η_PMIC"]
-    facs = [CANONICAL["eta_rad"], CANONICAL["eta_mm"], CANONICAL["eta_imn"],
+    # Cascada de la identidad P_DC (Ecuación 2): arranca en la potencia YA
+    # disponible en el puerto de la antena (P_in_mW, que incorpora la ganancia
+    # realizada / η_rad vía el balance de enlace de Friis) y conserva solo los
+    # cuatro eslabones posteriores. NO se repite η_rad aquí: incluirlo de nuevo
+    # duplicaría la pérdida de radiación ya contenida en P_in_mW y rompería la
+    # identidad citada en la Nota de la Figura 19 (1 982×0,983×0,9484×0,85×0,85
+    # = 1 335,0 µW). El FOM de cinco factores (η_rad·η_mm·η_imn·PCE·η_pmic =
+    # eta_total, 0.4023) es una métrica aparte y no se grafica en esta cascada.
+    etapas = ["η_mm", "η_IMN", "PCE", "η_PMIC"]
+    facs = [CANONICAL["eta_mm"], CANONICAL["eta_imn"],
             CANONICAL["PCE"], CANONICAL["eta_pmic"]]
     cum = np.cumprod(facs) * 100.0
     fig, ax = plt.subplots(figsize=(6.6, 4.0))
     xs = np.arange(len(etapas) + 1)
     ys = np.concatenate([[100.0], cum])
-    labels = ["P interceptada"] + etapas
+    labels = ["P disponible\nen antena"] + etapas
     ax.step(xs, ys, where="post", color=C_AZUL, lw=2)
     ax.fill_between(xs, ys, step="post", color=C_AZUL, alpha=0.10)
     for i in range(len(etapas)):
@@ -328,11 +336,14 @@ def fig05_cascada():
                     textcoords="offset points", xytext=(2, 6), fontsize=8, color=C_ROJO)
     ax.set_xticks(xs); ax.set_xticklabels(labels, rotation=20, ha="right", fontsize=9)
     ax.set_ylabel("Energía conservada (%)")
-    ax.set_title(f"Cascada de eficiencia RF→DC — η_total = "
-                 f"{CANONICAL['eta_total']*100:.2f}%", fontsize=11)
+    eta_pdc = facs[0] * facs[1] * facs[2] * facs[3]
+    # "η_cadena" (post-antena, 4 factores) y no "η_total": ese símbolo queda
+    # reservado al FOM de 5 factores con η_rad (0,4023) de la Tabla B.1.
+    ax.set_title("Cascada de eficiencia RF→DC — η_cadena = "
+                 f"{eta_pdc*100:.2f}%".replace(".", ","), fontsize=11)
     ax.set_ylim(0, 105)
     _save(fig, "Fig05_cascada_RFDC.png")
-    return f"η_total={CANONICAL['eta_total']:.4f} (η_total FOM con η_rad realista)"
+    return f"η_total={eta_pdc:.4f} (identidad P_DC de 4 factores, sin η_rad; coincide con 1982×...=1335 µW)"
 
 
 def fig06_pdc_dist():
@@ -427,7 +438,11 @@ def fig10_pce_ambos():
     ax.plot(a["Pin_dBm"], a["PCE_pct"], color=C_A, lw=2.0, ls="--",
             label="Escenario A · 3,30 GHz")
     ax.axvline(CANONICAL["P_in_dBm"], color=C_ROJO, ls=":", lw=1.4,
-               label=f"P_in canónico {CANONICAL['P_in_dBm']:.2f} dBm")
+               label=f"P_in canónico B {CANONICAL['P_in_dBm']:.2f} dBm".replace(".", ","))
+    # punto de operación urbano de A: potencia agregada de las 7 bandas (66,0 µW)
+    pin_a_dbm = 10.0 * np.log10(66.0e-3)          # µW -> mW -> dBm
+    ax.axvline(pin_a_dbm, color=C_A, ls=":", lw=1.4,
+               label=f"P_in agregado A {pin_a_dbm:.1f} dBm".replace(".", ",").replace("-", "−"))
     ax.set_xlabel("P_in (dBm)"); ax.set_ylabel("PCE (%)")
     ax.set_ylim(0, 90); ax.legend(fontsize=8)
     ax.set_title("Eficiencia de conversión RF→DC de ambos escenarios", fontsize=11)
