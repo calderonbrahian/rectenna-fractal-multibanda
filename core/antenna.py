@@ -63,21 +63,28 @@ class FractalAntenna:
                  fractal_type: str = 'sierpinski',
                  iterations:   int = 3,
                  base_freq:    float = 1.84e9,
-                 h:            float = 1.6e-3):
+                 h:            float = 1.6e-3,
+                 substrate:    str = 'FR4'):
         """
         Parámetros
         ----------
         fractal_type : 'sierpinski' o 'koch'
         iterations   : número de iteraciones fractales (3 recomendado)
         base_freq    : frecuencia fundamental de diseño [Hz]
-        h            : espesor del sustrato FR-4 [m]
+        h            : espesor del sustrato [m]
+        substrate    : nombre ('FR4', 'RT5880', 'RO4003C') u objeto Substrate.
+                       Por defecto 'FR4' → εr(f)/tan δ(f) idénticos al modelo
+                       previo (get_er delega en configs.fr4_er; tan δ en
+                       configs.fr4_tan_delta), preservando los valores canónicos.
         """
+        from core.substrates import get_substrate
         self.fractal_type = fractal_type
         self.iterations   = iterations
         self.base_freq    = base_freq
         self.h            = h
         self.c0           = 3e8          # velocidad de la luz [m/s]
-        self.loss_tan     = 0.02         # tan δ de FR-4
+        self.substrate    = get_substrate(substrate)
+        self.loss_tan     = self.substrate.tan_ref   # tan δ nominal (FR-4=0.02)
         self.scale_ratio  = self._SCALE.get(fractal_type, 2.0)
 
         self._calc_dimensions()
@@ -98,16 +105,13 @@ class FractalAntenna:
 
     def get_er(self, freq: float) -> float:
         """
-        Permitividad relativa dinámica FR-4.
-        Interpola linealmente εr=4.4 @ 1 GHz → εr=4.1 @ 5.8 GHz.
-        Valores fuera de rango son clipeados al extremo correspondiente.
+        Permitividad relativa del sustrato a la frecuencia freq.
+        Delega en el objeto sustrato (para FR-4: εr=4.4 @ 1 GHz → 4.1 @ 5.8 GHz,
+        idéntico al modelo previo, vía configs.fr4_er). Clipeo fuera de rango
+        gestionado por la función del sustrato.
         Referencia: Bahl & Trivedi (1977); Pozar cap. 3.
         """
-        f_GHz  = freq / 1e9
-        er_low,  f_low  = 4.4, 1.0
-        er_high, f_high = 4.1, 5.8
-        t = float(np.clip((f_GHz - f_low) / (f_high - f_low), 0.0, 1.0))
-        return er_low + t * (er_high - er_low)
+        return float(self.substrate.er(freq))
 
     # ── Geometría y resonancias ───────────────────────────────────────────────
 
@@ -226,10 +230,9 @@ class FractalAntenna:
                 "eta_rad() solo está calibrado para fractal_type='sierpinski'. "
                 "Para el Escenario B (FLPDA Koch) use core.flpda.FLPDA_Koch.eta_rad()."
             )
-        from configs.parametros import fr4_tan_delta
         fghz   = float(np.asarray(freq, dtype=float).ravel()[0]) / 1e9
         er_f   = self.get_er(freq)
-        td_f   = fr4_tan_delta(freq)
+        td_f   = self.substrate.tan_delta(freq)   # FR-4: idéntico a fr4_tan_delta
         L_diel = td_f * np.sqrt(er_f) * 8.0 * (0.3 + fghz)
         L_cond = 0.05 * fghz ** 0.5
         eta = 1.0 / (1.0 + L_diel + L_cond)
@@ -318,7 +321,7 @@ class FractalAntenna:
         lines = [
             f'FractalAntenna -- {self.fractal_type.capitalize()} it.{self.iterations}',
             f'  f0               : {self.base_freq/1e9:.3f} GHz',
-            f'  Sustrato         : FR-4  er(f0)={er0:.2f}  h={self.h*1e3:.1f} mm  tand={self.loss_tan}',
+            f'  Sustrato         : {self.substrate.name}  er(f0)={er0:.2f}  h={self.h*1e3:.1f} mm  tand={self.loss_tan}',
             f'  Dimension        : {self.base_dim*1e3:.1f} mm  (lam_eff/2 @ f0)',
             f'  Factor escala    : {self.scale_ratio}',
             f'  Res. fractales   : {fr_fractal} GHz  (f0*ratio^k)',

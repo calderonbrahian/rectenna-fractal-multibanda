@@ -43,6 +43,9 @@ def render():
             st.markdown("**Modelo físico:** Shockley + Carrel + Friis")
             st.markdown("**Enfoque:** analítico circuital (no onda completa)")
             st.markdown(":material/menu_book: Metodología en §3.9 y Capítulo 4")
+            st.link_button(":material/code: Repositorio en GitHub",
+                           "https://github.com/calderonbrahian/rectenna-fractal-multibanda",
+                           width="stretch")
 
     st.divider()
 

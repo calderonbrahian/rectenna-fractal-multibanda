@@ -280,7 +280,7 @@ cap de PCE = 0,85.
                                           value=float(CANONICAL['P_dc_uW']), step=10.0)
             E_ciclo_mj = st.number_input("E_ciclo [mJ]",
                                           min_value=1.0, max_value=5000.0,
-                                          value=259.25, step=1.0)
+                                          value=float(CANONICAL['E_ciclo_mJ']), step=1.0)
         with col2:
             C_mf = st.select_slider("Capacitancia [mF]",
                                      options=[100, 220, 330, 470, 1000, 4700],

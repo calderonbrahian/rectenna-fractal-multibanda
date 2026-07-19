@@ -19,6 +19,8 @@ from plots.charts import (
     fig_s11, fig_impedancia, fig_sierpinski, fig_pce_pin,
 )
 from core.antenna import FractalAntenna
+from core.patch import MicrostripPatchAntenna
+from core import multiband as mb
 from utils.exportar import resultados_a_csv, sweep_a_csv
 from utils.pagina import (encabezado, badge_exploracion,
                           control_interactivo, donde_se_desarrolla as _ref)
@@ -135,12 +137,13 @@ def render():
     st.divider()
 
     glosario_pagina("S11", "adaptación", "ganancia", "impedancia", "PCE")
-    tab_s11, tab_imp, tab_pce, tab_geom, tab_tabla = st.tabs([
+    tab_s11, tab_imp, tab_pce, tab_geom, tab_tabla, tab_cosecha = st.tabs([
         ":material/show_chart: S11",
         ":material/electrical_services: Impedancia",
         ":material/bolt: PCE vs Pin",
         ":material/shape_line: Geometría",
         ":material/table_view: Tabla",
+        ":material/battery_charging_full: Cosecha (co-diseño)",
     ])
 
     with tab_s11:
@@ -377,6 +380,62 @@ def render():
         )
         _ref("§5.1 Escenario A — Sierpinski · §5.1.1 Resultados del modelo computacional · "
              "Anexo B.11 (bandas del Escenario A y resultados del modelo)")
+
+    with tab_cosecha:
+        st.markdown(
+            "Las pestañas anteriores usan la interfaz forzada de **50 Ω** (línea de "
+            "conexión estándar), donde solo 1 de las 7 bandas objetivo se adapta bien. "
+            "Si en cambio la antena fractal se conecta **directamente** al rectificador "
+            "mediante una red de **co-diseño conjugado por banda** (sin pasar por 50 Ω), "
+            "la interfaz deja de ser el cuello de botella: 6 de las 7 bandas quedan "
+            "adaptadas. Esta pestaña usa `core.multiband` — el módulo que modela esa "
+            "rectena integrada — para cuantificar cuánto cambia la cosecha."
+        )
+        with st.spinner("Calculando cosecha multibanda con co-diseño conjugado..."):
+            ant_sierp, rec_mb, imn_mb = mb.build_default()
+            filas_mb = mb.harvest_per_band(ant_sierp, rec_mb, imn_mb)
+            p_dc_sierp = mb.harvest_total_uw(ant_sierp, rec_mb, imn_mb)
+
+            ant_patch = MicrostripPatchAntenna(2.45e9, 'FR4')
+            p_dc_patch = mb.harvest_total_uw(ant_patch, rec_mb, imn_mb)
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("P_DC Sierpinski (co-diseño)", f"{p_dc_sierp:.2f} µW",
+                      help="core.multiband.harvest_total_uw sobre las 7 bandas urbanas "
+                           "(configs.parametros.URBAN_AMBIENT_DBM), sumadas en DC.")
+        with col2:
+            st.metric("P_DC Parche microcinta (FR-4, mismo método)", f"{p_dc_patch:.2f} µW",
+                      delta=f"{p_dc_sierp - p_dc_patch:+.2f} µW vs Sierpinski",
+                      help="Mismo core.multiband.harvest_total_uw, alimentado con la "
+                           "impedancia del parche estrecho de banda (2,45 GHz) en vez de "
+                           "la Sierpinski: comparación homóloga, misma cadena.")
+        with col3:
+            n_bandas_ok = sum(1 for f in filas_mb if f['PCE_pct'] > 0.0)
+            st.metric("Bandas con conversión > 0", f"{n_bandas_ok} / {len(filas_mb)}")
+
+        st.markdown(
+            f"La rectena integrada multibanda (Sierpinski + co-diseño conjugado) cosecha "
+            f"**{p_dc_sierp:.2f} µW**, frente a **{p_dc_patch:.2f} µW** del parche "
+            f"microcinta equivalente (banda única en 2,45 GHz) bajo el mismo ambiente "
+            f"urbano y la misma cadena de cálculo. La ventaja de la Sierpinski viene de "
+            f"sumar en DC varias bandas activas a la vez, no de una banda individual "
+            f"mejor adaptada."
+        )
+
+        df_mb = pd.DataFrame(filas_mb).rename(columns={
+            'banda': 'Banda', 'f_GHz': 'f [GHz]', 'P_amb_dBm': 'P_amb [dBm]',
+            'eta_cm': 'η_conjugado', 'PCE_pct': 'PCE [%]', 'P_dc_uW': 'P_dc [µW]',
+        })
+        st.dataframe(df_mb, hide_index=True)
+        st.caption(
+            ":material/lightbulb: `η_conjugado` es la eficiencia de la red de adaptación "
+            "conjugada Za(f)→Zdiodo(f) por banda (sin la penalización de forzar 50 Ω); "
+            "de ahí que 6 de las 7 bandas conviertan algo, frente a 1/7 con línea de 50 Ω."
+        )
+        _ref("core.multiband (harvest_per_band, harvest_total_uw) · "
+             "_regen/FASE0_factibilidad_multibanda.md · "
+             "Rediseño multibanda: co-diseño conjugado integrado + modo energía-asistido")
 
     st.divider()
     st.page_link("pages/escenario_b.py",

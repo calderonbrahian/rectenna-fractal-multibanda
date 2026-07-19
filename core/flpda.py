@@ -52,7 +52,8 @@ class FLPDA_Koch:
                  f_low:     float = 470e6,
                  f_high:    float = 900e6,
                  koch_iter: int   = 2,
-                 er:        float = 4.4):
+                 er:        float = 4.4,
+                 substrate: str   = 'FR4'):
         """
         Parámetros
         ----------
@@ -61,16 +62,23 @@ class FLPDA_Koch:
         f_low     : frecuencia mínima de la banda [Hz]
         f_high    : frecuencia máxima de la banda [Hz]
         koch_iter : iteraciones de la curva de Koch (0–3)
-        er        : permitividad relativa del sustrato (FR-4=4.4)
+        er        : permitividad relativa del sustrato. MANTIENE PRECEDENCIA por
+                    compatibilidad: el valor del constructor (FR-4=4.4) se usa
+                    tal cual; 'substrate' solo aporta el nombre y la tan δ nominal.
+        substrate : nombre ('FR4', 'RT5880', 'RO4003C') u objeto Substrate.
+                    Por defecto 'FR4' → tan δ=0.02, idéntico al modelo previo
+                    (preserva la ganancia canónica @ 550 MHz = 4.97 dBi).
         """
+        from core.substrates import get_substrate
         self.tau       = tau
         self.sigma     = sigma
         self.f_low     = f_low
         self.f_high    = f_high
         self.koch_iter = min(int(koch_iter), 3)
         self.er        = er
+        self.substrate = get_substrate(substrate)
         self.c0        = 3e8
-        self.loss_tan  = 0.02   # tan δ FR-4
+        self.loss_tan  = self.substrate.tan_ref   # tan δ nominal (FR-4=0.02)
 
         self.k_red = self._KOCH_REDUCTION[self.koch_iter]
         self._design()

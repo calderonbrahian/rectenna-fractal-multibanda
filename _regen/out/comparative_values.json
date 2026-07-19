@@ -1,0 +1,142 @@
+{
+ "f0_patch_GHz": 2.45,
+ "patch_dimensions": {
+  "FR4": {
+   "W_mm": 37.577,
+   "L_mm": 29.128,
+   "h_mm": 1.6,
+   "dL_mm": 0.7408,
+   "eps_eff": 4.0008,
+   "W_eff_mm": 39.058,
+   "L_eff_mm": 30.609
+  },
+  "RT5880": {
+   "W_mm": 48.402,
+   "L_mm": 40.5,
+   "h_mm": 1.575,
+   "dL_mm": 0.8302,
+   "eps_eff": 2.1088,
+   "W_eff_mm": 50.063,
+   "L_eff_mm": 42.16
+  },
+  "RO4003C": {
+   "W_mm": 40.591,
+   "L_mm": 32.078,
+   "h_mm": 1.524,
+   "dL_mm": 0.7273,
+   "eps_eff": 3.3336,
+   "W_eff_mm": 42.046,
+   "L_eff_mm": 33.533
+  }
+ },
+ "sierpinski_dimensions": {
+  "lado_base_mm": 38.864,
+  "escala_por_iteracion": 0.5,
+  "lados_por_iteracion_mm": {
+   "it0": 38.864,
+   "it1": 19.432,
+   "it2": 9.716,
+   "it3": 4.858
+  },
+  "f0_GHz": 1.84,
+  "iteraciones": 3
+ },
+ "resonances": {
+  "sierpinski": [
+   1.84,
+   3.68
+  ],
+  "patch_FR4": [
+   1.92,
+   2.45,
+   4.9
+  ],
+  "patch_RT5880": [
+   2.063,
+   2.45,
+   4.9
+  ],
+  "flpda": [
+   0.47,
+   0.522,
+   0.58,
+   0.645,
+   0.716,
+   0.796,
+   0.884
+  ]
+ },
+ "performance": {
+  "sierpinski_FR4": {
+   "gain_dBi_f0": 0.352,
+   "eta_rad_f0": 0.6098,
+   "S11_min_dB": -22.97
+  },
+  "patch_FR4": {
+   "gain_dBi_f0": 4.671,
+   "eta_rad_f0": 0.5985,
+   "S11_min_dB": -22.04
+  },
+  "patch_RT5880": {
+   "gain_dBi_f0": 6.691,
+   "eta_rad_f0": 0.953,
+   "S11_min_dB": -15.57
+  },
+  "patch_RO4003C": {
+   "gain_dBi_f0": 6.365,
+   "eta_rad_f0": 0.8841,
+   "S11_min_dB": -33.84
+  },
+  "flpda_FR4": {
+   "gain_dBi_f0": 4.97,
+   "eta_rad_f0": 0.5972,
+   "S11_min_dB": -17.82
+  }
+ },
+ "harvest_urban_uW": {
+  "sierpinski_FR4": 2.427,
+  "patch_FR4": 2.322,
+  "metodo": "core.multiband.harvest_total_uw (co-diseño conjugado, ambiente URBAN_AMBIENT_DBM); misma cadena para ambas antenas."
+ },
+ "literature": {
+  "Zapata2021": {
+   "fuente": "externa",
+   "geometria": "espiral microcinta",
+   "sustrato": "ARLON AD450",
+   "er": 4.5,
+   "tand": 0.0035,
+   "h_mm": 3.0,
+   "bandas_GHz": [
+    1.6,
+    2.38,
+    3.38,
+    4.16
+   ],
+   "ganancia_dBi": [
+    2.48,
+    7.66
+   ],
+   "software": "CST"
+  },
+  "Elshaekh2025": {
+   "fuente": "externa",
+   "geometria": "monopolo impreso",
+   "sustrato": "FR4",
+   "bandas_GHz": [
+    0.9,
+    4.5,
+    7.0
+   ],
+   "ganancia_dBi": [
+    3.5,
+    4.0
+   ],
+   "software": "CST+medido"
+  },
+  "Wang2022": {
+   "fuente": "externa",
+   "sustrato": "Duroid 5880",
+   "nota": "ya citado en el documento (referencia de validación del rectificador)"
+  }
+ }
+}
