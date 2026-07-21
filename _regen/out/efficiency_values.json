@@ -1,0 +1,220 @@
+{
+  "sierpinski": {
+    "ambiente_urbano_difuso": {
+      "eta_cm": 0.5489310532594812,
+      "PCE": 0.07884125650804186,
+      "eta_pmic": 0.85,
+      "eta_cadena": 0.036786651878971295,
+      "eta_total": 0.036786651878971295,
+      "P_in_dBm": -11.806562762354877,
+      "P_in_uW": 65.96958070509415,
+      "P_dc_uW": 2.4268,
+      "bandas": [
+        {
+          "banda": "GSM1800",
+          "f_GHz": 1.84,
+          "P_amb_dBm": -18.0,
+          "eta_cm": 0.5219,
+          "PCE_pct": 7.93,
+          "P_dc_uW": 1.068
+        },
+        {
+          "banda": "LTE",
+          "f_GHz": 2.04,
+          "P_amb_dBm": -18.0,
+          "eta_cm": 0.429,
+          "PCE_pct": 4.39,
+          "P_dc_uW": 0.5913
+        },
+        {
+          "banda": "WiFi_2.4",
+          "f_GHz": 2.45,
+          "P_amb_dBm": -22.0,
+          "eta_cm": 0.5731,
+          "PCE_pct": 5.88,
+          "P_dc_uW": 0.3155
+        },
+        {
+          "banda": "5G_2.6",
+          "f_GHz": 2.54,
+          "P_amb_dBm": -20.0,
+          "eta_cm": 0.5658,
+          "PCE_pct": 3.15,
+          "P_dc_uW": 0.2674
+        },
+        {
+          "banda": "5G_3.5",
+          "f_GHz": 3.3,
+          "P_amb_dBm": -20.0,
+          "eta_cm": 0.606,
+          "PCE_pct": 2.17,
+          "P_dc_uW": 0.1846
+        },
+        {
+          "banda": "5G_4.9",
+          "f_GHz": 4.76,
+          "P_amb_dBm": -24.0,
+          "eta_cm": 0.72,
+          "PCE_pct": 0.0,
+          "P_dc_uW": 0.0
+        },
+        {
+          "banda": "WiFi_5.8",
+          "f_GHz": 5.8,
+          "P_amb_dBm": -24.0,
+          "eta_cm": 0.7389,
+          "PCE_pct": 0.0,
+          "P_dc_uW": 0.0
+        }
+      ],
+      "descripcion": "Ambiente urbano difuso, cosecha agregada de 7 bandas (BANDS_A) por co-diseño conjugado integrado (sin interfaz de 50 Ω); P_in=66.0 µW agregados (URBAN_AMBIENT_DBM, ya en el puerto de antena)."
+    },
+    "fuente_fuerte_cercana": {
+      "gain_dBi": -0.6739194638540695,
+      "eta_rad": 0.46765248644348284,
+      "eta_cm": 0.6059537637842226,
+      "PCE": 0.06889527920916678,
+      "eta_pmic": 0.85,
+      "eta_cadena": 0.03548525068219559,
+      "eta_total": 0.03548525068219559,
+      "P_in_dBm": -15.527170274019745,
+      "P_in_uW": 28.008056419258835,
+      "P_dc_uW": 0.9938729031584773,
+      "descripcion": "Fuente fuerte cercana — emisor intencional en banda (p. ej. small cell 5G a 3,3 GHz): EIRP=20,0 dBm, d=0,4 m (LOS de interior, sin corrección urbana NLOS), f=3,30 GHz, co-diseño conjugado de una sola banda. Se evita 2,45 GHz por ser anti-resonancia del Sierpinski (dominio de validez del acople)."
+    }
+  },
+  "parche_FR4": {
+    "ambiente_urbano_difuso": {
+      "eta_cm": 0.5341997387784754,
+      "PCE": 0.07753016389138459,
+      "eta_pmic": 0.85,
+      "eta_cadena": 0.03520410430349552,
+      "eta_total": 0.03520410430349552,
+      "P_in_dBm": -11.806562762354877,
+      "P_in_uW": 65.96958070509415,
+      "P_dc_uW": 2.3224,
+      "bandas": [
+        {
+          "banda": "GSM1800",
+          "f_GHz": 1.84,
+          "P_amb_dBm": -18.0,
+          "eta_cm": 0.5031,
+          "PCE_pct": 7.45,
+          "P_dc_uW": 1.0034
+        },
+        {
+          "banda": "LTE",
+          "f_GHz": 2.04,
+          "P_amb_dBm": -18.0,
+          "eta_cm": 0.4435,
+          "PCE_pct": 4.64,
+          "P_dc_uW": 0.6252
+        },
+        {
+          "banda": "WiFi_2.4",
+          "f_GHz": 2.45,
+          "P_amb_dBm": -22.0,
+          "eta_cm": 0.5834,
+          "PCE_pct": 6.02,
+          "P_dc_uW": 0.3227
+        },
+        {
+          "banda": "5G_2.6",
+          "f_GHz": 2.54,
+          "P_amb_dBm": -20.0,
+          "eta_cm": 0.461,
+          "PCE_pct": 2.28,
+          "P_dc_uW": 0.1936
+        },
+        {
+          "banda": "5G_3.5",
+          "f_GHz": 3.3,
+          "P_amb_dBm": -20.0,
+          "eta_cm": 0.5875,
+          "PCE_pct": 2.09,
+          "P_dc_uW": 0.1775
+        },
+        {
+          "banda": "5G_4.9",
+          "f_GHz": 4.76,
+          "P_amb_dBm": -24.0,
+          "eta_cm": 0.7019,
+          "PCE_pct": 0.0,
+          "P_dc_uW": 0.0
+        },
+        {
+          "banda": "WiFi_5.8",
+          "f_GHz": 5.8,
+          "P_amb_dBm": -24.0,
+          "eta_cm": 0.8234,
+          "PCE_pct": 0.0,
+          "P_dc_uW": 0.0
+        }
+      ],
+      "descripcion": "Ambiente urbano difuso, cosecha agregada de 7 bandas (BANDS_A) por co-diseño conjugado integrado (sin interfaz de 50 Ω); P_in=66.0 µW agregados (URBAN_AMBIENT_DBM, ya en el puerto de antena)."
+    },
+    "fuente_fuerte_wifi": {
+      "gain_dBi": 4.670653056920996,
+      "eta_rad": 0.5985015861225943,
+      "eta_cm": 0.5833581540284647,
+      "PCE": 0.3850159175882944,
+      "eta_pmic": 0.85,
+      "eta_cadena": 0.19091184871250047,
+      "eta_total": 0.19091184871250047,
+      "P_in_dBm": -7.59564064297758,
+      "P_in_uW": 173.95460725865155,
+      "P_dc_uW": 33.20999566380613,
+      "descripcion": "Fuente fuerte cercana tipo WiFi/router: EIRP=20,0 dBm, d=0,4 m (LOS de interior, sin corrección urbana NLOS), f=2,45 GHz, co-diseño conjugado de una sola banda (coincide con la banda de diseño f0 del parche)."
+    }
+  },
+  "flpda": {
+    "fuente_cercana_100m": {
+      "gain_dBi": 4.969866168453466,
+      "eta_rad": 0.5971941938278464,
+      "eta_mm": 0.9830385260110701,
+      "eta_imn": 0.9484,
+      "IL_dB": 0.23008454693849448,
+      "PCE": 0.85,
+      "eta_pmic": 0.85,
+      "eta_cadena": 0.6735966757547794,
+      "eta_total": 0.40226802374249276,
+      "P_in_dBm": 2.970840192519923,
+      "P_in_uW": 1981.9104120345844,
+      "P_incidente_uW": 3318.7034176121124,
+      "P_dc_uW": 1335.0082651902815,
+      "descripcion": "FLPDA no aplica a WiFi 2.45 GHz (fuera de su banda de diseño 470-900 MHz; forzarla violaría el dominio de validez del modelo). Sustituto honesto: fuente fuerte/cercana DENTRO de su banda — TDT DVB-T (EIRP=72.15 dBm) @ 100 m, 550 MHz (idéntico al caso canónico)."
+    },
+    "fuente_lejana_1000m": {
+      "gain_dBi": 4.969866168453466,
+      "eta_rad": 0.5971941938278464,
+      "eta_mm": 0.9830385260110701,
+      "eta_imn": 0.9484,
+      "IL_dB": 0.23008454693849448,
+      "PCE": 0.85,
+      "eta_pmic": 0.85,
+      "eta_cadena": 0.6735966757547794,
+      "eta_total": 0.40226802374249276,
+      "P_in_dBm": -17.029159807480077,
+      "P_in_uW": 19.819104120345845,
+      "P_incidente_uW": 33.18703417612113,
+      "P_dc_uW": 13.350082651902813,
+      "descripcion": "Fuente débil/lejana dentro de la banda de diseño de la FLPDA — TDT DVB-T (EIRP=72.15 dBm) @ 1000 m, 550 MHz."
+    },
+    "tdt_100m_canonico": {
+      "gain_dBi": 4.97,
+      "eta_rad": 0.5972,
+      "eta_mm": 0.983,
+      "eta_imn": 0.9484,
+      "IL_dB": null,
+      "PCE": 0.85,
+      "eta_pmic": 0.85,
+      "eta_cadena": 0.67357,
+      "eta_total": 0.4023,
+      "P_in_dBm": 2.97,
+      "P_in_uW": 1982.0,
+      "P_incidente_uW": 3318.8212,
+      "P_dc_uW": 1335.0,
+      "descripcion": "TDT Cerro Nutibara @ 100 m, 550 MHz — caso CANÓNICO del documento. Reutiliza CANONICAL de configs/parametros.py sin recalcular; eta_cadena=67.36% (4 factores post-antena) sobre P_in en puerto (1982 µW), eta_total=40.23% (5 factores, con eta_rad) sobre P_incidente (≈3319 µW = P_in/eta_rad). Pequeño residuo en las identidades por el redondeo de los factores CANÓNICOS publicados."
+    }
+  }
+}
