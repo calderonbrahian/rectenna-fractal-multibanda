@@ -1,67 +1,64 @@
-# Tema institucional UdeA — identidad del póster de sustentación
-# Teal institucional (#007297) + lima de acento. Limpio, profesional,
-# optimizado para lectura prolongada y proyección en sala.
+# Identidad visual del proyecto — SSOT de color: _regen/estilo.py (COL).
+# Escenario A = oro (#B8860B) · Escenario B = verde (#2F7D4F) · acento teal (#0B6E8F).
+# Paleta sobria, sin gradientes: mismo lenguaje visual que las figuras del documento.
 
 [theme]
 base = "light"
-primaryColor       = "#007297"   # Teal institucional UdeA (identidad del póster)
-backgroundColor    = "#FFFFFF"
-secondaryBackgroundColor = "#F4F8F9"
-codeBackgroundColor      = "#EEF4F5"
-textColor           = "#0F2A30"   # Teal muy oscuro
-linkColor           = "#007297"
-borderColor         = "#CBD9DC"
-codeTextColor       = "#134152"
+primaryColor        = "#0B6E8F"   # teal de acento (serie neutra / conceptual)
+backgroundColor     = "#FFFFFF"
+secondaryBackgroundColor = "#F7F8FA"   # FILL de estilo.py
+textColor           = "#22262E"   # INK de estilo.py
+linkColor           = "#0B6E8F"
+borderColor         = "#E4E7EC"
+codeBackgroundColor = "#F4F6F8"
+codeTextColor       = "#22262E"
 showWidgetBorder = true
 showSidebarBorder = true
-baseRadius   = "8px"
-buttonRadius = "8px"
+baseRadius   = "10px"
+buttonRadius = "10px"
 
 font = "'Inter':https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
 headingFont = "'Inter':https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap"
 codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
-baseFontSize = 14
+baseFontSize = 15
 baseFontWeight = 400
-codeFontSize = "13px"
-headingFontSizes = ["28px", "22px", "18px", "16px", "14px", "12px"]
+headingFontSizes = ["30px", "22px", "18px", "16px", "14px", "12px"]
 headingFontWeights = [700, 600, 600, 600, 500, 500]
 linkUnderline = false
 
-# Colores semánticos (accesibles sobre blanco)
-greenColor  = "#4C9A2A"   # sostenible / lima institucional oscurecida
-redColor    = "#B91C1C"   # no viable
-yellowColor = "#B45309"   # cap activo / advertencia
-orangeColor = "#C2410C"
-blueColor   = "#0E7490"
-violetColor = "#6D28D9"
-grayColor   = "#475569"
+# Colores semánticos coherentes con la paleta del proyecto
+greenColor  = "#2F7D4F"   # Escenario B / viable (verde)
+redColor    = "#CC3311"   # umbral / no viable (warn)
+yellowColor = "#B8860B"   # Escenario A / cap activo (oro)
+orangeColor = "#EE7733"   # curva de modelo (validación)
+blueColor   = "#0B6E8F"   # teal de acento
+violetColor = "#AA3377"   # violeta auxiliar
+grayColor   = "#5C6672"   # MUTE
 
-# Paleta categorical: teal institucional primero, luego accesible (Paul Tol)
+# Categorical: el hilo conductor A (oro) -> B (verde) -> acento (teal) primero
 chartCategoricalColors = [
-    "#007297",   # teal UdeA
-    "#4C9A2A",   # verde lima institucional
-    "#B45309",   # ámbar académico
-    "#B91C1C",   # rojo señal
-    "#6D28D9",   # violeta
-    "#0E7490",   # cian profundo
-    "#9F1239",   # rosa profundo
-    "#475569",   # gris pizarra
+    "#B8860B",   # A · oro (concentrar)
+    "#2F7D4F",   # B · verde (acumular)
+    "#0B6E8F",   # acento teal
+    "#EE7733",   # naranja modelo
+    "#AA3377",   # violeta auxiliar
+    "#CC3311",   # rojo umbral
+    "#5C6672",   # gris
 ]
 chartSequentialColors = [
-    "#ECF6F8","#D3E9EE","#A9D4DD","#7FBFCC","#54A9BB",
-    "#2A94AA","#007297","#005E7E","#004A64","#00374B",
+    "#F1F7F9","#D8E9EE","#B0D3DC","#88BDCA","#61A7B7",
+    "#3A91A5","#0B6E8F","#095A76","#07465D","#053344",
 ]
 
-dataframeBorderColor = "#CBD9DC"
-dataframeHeaderBackgroundColor = "#EEF4F5"
+dataframeBorderColor = "#E4E7EC"
+dataframeHeaderBackgroundColor = "#F4F6F8"
 
 [theme.sidebar]
-backgroundColor = "#F4F8F9"
+backgroundColor = "#F7F8FA"
 secondaryBackgroundColor = "#FFFFFF"
-codeBackgroundColor = "#EEF4F5"
-textColor = "#0F2A30"
-borderColor = "#CBD9DC"
-primaryColor = "#007297"
+textColor = "#22262E"
+borderColor = "#E4E7EC"
+primaryColor = "#0B6E8F"
 
 [server]
 headless = true

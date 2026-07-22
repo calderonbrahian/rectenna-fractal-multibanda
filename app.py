@@ -1,19 +1,20 @@
 """
-Rectenna Fractal Multibanda — Demostración interactiva del proyecto de grado
-============================================================================
-Punto de entrada Streamlit. La experiencia tiene DOS NIVELES claramente
-diferenciados:
+Rectena Fractal Multibanda — herramienta para COMPRENDER el modelo y REPRODUCIR
+la investigación.
+================================================================================
+La aplicación es una extensión del documento de grado, no una plataforma de
+simulación. Cuatro páginas, cuatro preguntas:
 
-  NIVEL 1 · DEMOSTRACIÓN (3 min) — para quien nunca vio el proyecto. Explica en
-  pocos minutos el problema, la pregunta, la metodología del estudio, qué se
-  demostró y por qué el caso colombiano es solo la demostración. Mucho apoyo
-  visual, pocas cifras. Usa las figuras del pipeline (`_regen/out/figuras/`).
+    1 · ¿Qué problema resuelve?        (la historia y la pregunta de investigación)
+    2 · ¿Cómo funciona el modelo?      (la cadena energética explorable)
+    3 · ¿Qué descubrió la investigación?  (los hallazgos — página central)
+    4 · ¿Cómo reproducirlo?            (código, pruebas, pipeline y mini-demo)
 
-  NIVEL 2 · LABORATORIO — para quien quiere profundizar: escenarios, simulación,
-  sensibilidades, validación, comparación y análisis avanzado.
+Todo valor mostrado proviene EN VIVO de core/ y configs/, o de los JSON del
+pipeline (_regen/out). La app no define números ni figuras propias.
 
-Toda figura proviene del pipeline (única fuente gráfica del documento, la app y
-el póster). Regenerar: `python _regen/generate_artifacts.py`.
+Hilo conductor: A (concentrar en una fuente dominante) vs B (acumular energía
+distribuida). Paleta oro/verde del proyecto (SSOT: _regen/estilo.py).
 
 Ejecución local:
     .venv/Scripts/streamlit run app.py
@@ -24,59 +25,21 @@ Autor: Brahian Calderón Múnera · UdeA · 2026
 import streamlit as st
 
 st.set_page_config(
-    page_title="Rectenna Multibanda · UdeA",
+    page_title="Rectena Multibanda · UdeA",
     page_icon=":material/bolt:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# ── Navegación narrativa en capas ─────────────────────────────────────────────
-# Un solo recorrido guiado, no dos silos. Cada sección responde una pregunta y
-# lleva a la siguiente: historia → resultados → modelo → matemática → validación
-# → cierre. Quien quiera profundizar encuentra toda la matemática en «④».
-page = st.navigation(
-    {
-        "Historia": [
-            st.Page("pages/demo_1_problema.py", title="El problema",
-                    icon=":material/battery_alert:", default=True),
-            st.Page("pages/demo_2_metodo.py", title="Cómo se abordó",
-                    icon=":material/schema:"),
-        ],
-        "Resultados": [
-            st.Page("pages/demo_3_resultados.py", title="Qué se obtuvo",
-                    icon=":material/lightbulb:"),
-            st.Page("pages/inicio.py", title="Resultado de referencia",
-                    icon=":material/verified:"),
-        ],
-        "El modelo": [
-            st.Page("pages/escenario_a.py", title="Escenario A · Sierpinski",
-                    icon=":material/cell_tower:"),
-            st.Page("pages/escenario_b.py", title="Escenario B · FLPDA Koch",
-                    icon=":material/radio:"),
-            st.Page("pages/comparacion.py", title="Comparación",
-                    icon=":material/compare:"),
-            st.Page("pages/viabilidad_iot.py", title="Viabilidad IoT",
-                    icon=":material/sensors:"),
-            st.Page("pages/detras_del_modelo.py", title="Detrás del modelo",
-                    icon=":material/function:"),
-        ],
-        "Validación": [
-            st.Page("pages/validacion.py", title="Validación (Wang)",
-                    icon=":material/biotech:"),
-            st.Page("pages/analisis_avanzado.py", title="Incertidumbre (MC)",
-                    icon=":material/analytics:"),
-            st.Page("pages/sensibilidad.py", title="Sensibilidad",
-                    icon=":material/tune:"),
-        ],
-        "Cierre": [
-            st.Page("pages/conclusiones.py", title="Conclusiones",
-                    icon=":material/flag:"),
-            st.Page("pages/demo_4_aporte.py", title="Alcance del estudio",
-                    icon=":material/straighten:"),
-            st.Page("pages/acerca.py", title="Metodología y refs.",
-                    icon=":material/info:"),
-        ],
-    },
-    position="sidebar",
-)
+page = st.navigation([
+    st.Page("pages/1_El_problema.py", title="El problema",
+            icon=":material/help:", default=True),
+    st.Page("pages/2_El_modelo.py", title="El modelo",
+            icon=":material/schema:"),
+    st.Page("pages/3_Los_hallazgos.py", title="Los hallazgos",
+            icon=":material/lightbulb:"),
+    st.Page("pages/4_Reproducir.py", title="Reproducir",
+            icon=":material/replay:"),
+], position="sidebar")
+
 page.run()
