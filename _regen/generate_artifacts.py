@@ -443,8 +443,20 @@ def fig10_pce_ambos():
     pin_a_dbm = 10.0 * np.log10(66.0e-3)          # µW -> mW -> dBm
     ax.axvline(pin_a_dbm, color=C_A, ls=":", lw=1.4,
                label=f"P_in agregado A {pin_a_dbm:.1f} dBm".replace(".", ",").replace("-", "−"))
+    # Franja de las bandas urbanas del Escenario A (−24 a −18 dBm por banda,
+    # URBAN_AMBIENT_DBM): es DONDE opera realmente cada rama, muy por debajo
+    # del punto en que la literatura reporta sus eficiencias.
+    ax.axvspan(-24.0, -18.0, color=C_A, alpha=0.12, zorder=0,
+               label="Bandas urbanas de A (−24 a −18 dBm)")
+    # Punto de referencia de la literatura: las eficiencias publicadas se
+    # reportan a −10 dBm (Wang et al., 2022). Marcarlo evita comparar
+    # porcentajes obtenidos en puntos de operación distintos. No se anota un
+    # valor único de PCE porque depende de la frecuencia (comparación banda a
+    # banda en la tabla de validación).
+    ax.axvline(-10.0, color=C_GRIS, ls="-.", lw=1.3,
+               label="Referencia literatura −10 dBm")
     ax.set_xlabel("P_in (dBm)"); ax.set_ylabel("PCE (%)")
-    ax.set_ylim(0, 90); ax.legend(fontsize=8)
+    ax.set_ylim(0, 90); ax.legend(fontsize=7.5, loc="upper left")
     ax.set_title("Eficiencia de conversión RF→DC de ambos escenarios", fontsize=11)
     _save(fig, "Fig10_PCE_ambos.png")
     return f"PCE_B max={max(b['PCE_pct']):.1f}% · PCE_A max={max(a['PCE_pct']):.1f}%"
