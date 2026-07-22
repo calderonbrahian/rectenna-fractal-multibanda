@@ -38,7 +38,8 @@ B_GREEN = COL["B"]   # Escenario B · FLPDA
 
 # ── primitivas locales (cajas con texto envuelto, flechas limpias) ────────────
 def box(ax, cx, cy, w, h, lines, accent=AC, fill=FILL, edge=LINE,
-        fs=9.0, bold_first=True, sub=None, sub_fs=7.2, lw=1.1, stripe=True):
+        fs=9.0, bold_first=True, sub=None, sub_fs=7.2, lw=1.1, stripe=True,
+        n_bold=1):
     """Caja redondeada con franja de acento a la izquierda y texto multilínea.
     Las filas (títulos + sublíneas) se reparten ponderadas por tamaño de fuente,
     de modo que ningún texto desborde la caja."""
@@ -51,7 +52,7 @@ def box(ax, cx, cy, w, h, lines, accent=AC, fill=FILL, edge=LINE,
                                facecolor=accent, edgecolor="none", zorder=3))
     rows = []
     for k, ln in enumerate(lines):
-        rows.append((ln, fs, "bold" if (bold_first and k == 0) else "normal", INK))
+        rows.append((ln, fs, "bold" if (bold_first and k < n_bold) else "normal", INK))
     if sub:
         for s in sub.split("\n"):
             rows.append((s, sub_fs, "normal", MUTE))
@@ -130,53 +131,63 @@ def fig_c1():
 # R1 — Recorrido de la investigación (abre Cap. 4): flujo vertical + E1–E5
 # ══════════════════════════════════════════════════════════════════════════════
 def fig_r1():
-    fig, ax = lienzo(6.0, 5.6, (0, 12), (0, 13.4))
-    W, H = 9.2, 1.28
-    cx = 6.55
-    pasos = [
-        (["Pregunta de investigación",
-          "¿Es viable recuperar energía RF ambiental para complementar",
-          "la autonomía de dispositivos de bajo consumo?"], None, INK, 1.75),
-        (["Definición del escenario",
-          "fuentes RF, estrategias de captación y caso de estudio"], "E1", AC, H),
-        (["Modelado electromagnético",
-          "antenas: impedancia, S₁₁(f) y ganancia"], "E2", AC, H),
-        (["Modelado RF-DC y energético",
-          "adaptación, rectificación, gestión y almacenamiento"], "E3", AC, H),
-        (["Implementación computacional",
-          "Python abierto, pruebas automatizadas y repositorio"], "E4", AC, H),
-        (["Comparación y validación",
-          "estrategias frente a frente y contraste con la literatura"], "E5", AC, H),
-        (["Resultados",
-          "viabilidad, criterios de selección y limitaciones"], None, B_GREEN, H),
+    """Recorrido de la investigación (E1–E5), en flujo horizontal."""
+    fig, ax = lienzo(5.71, 2.86, (0, 13.2), (0, 6.6))
+    cx = 6.6
+    W_ANCHA = 12.6
+
+    # ── fila superior: la pregunta que gobierna el trabajo ───────────────────
+    y_preg, h_preg = 5.80, 1.20
+    box(ax, cx, y_preg, W_ANCHA, h_preg, ["Pregunta de investigación"],
+        sub="¿Es viable recuperar energía RF ambiental para complementar\n"
+            "la autonomía de dispositivos de bajo consumo?",
+        accent=INK, fs=8.0, sub_fs=6.4, lw=0.9)
+
+    # ── fila central: las cinco etapas metodológicas ─────────────────────────
+    etapas = [
+        ("E1", ["Definición del", "escenario"],
+         "fuentes RF y\ncaso de estudio"),
+        ("E2", ["Modelado", "electromagnético"],
+         "impedancia, S₁₁(f)\ny ganancia"),
+        ("E3", ["Modelado RF-DC", "y energético"],
+         "adaptación,\nrectificación, gestión"),
+        ("E4", ["Implementación", "computacional"],
+         "Python abierto\ny repositorio"),
+        ("E5", ["Comparación", "y validación"],
+         "las dos estrategias\ny la literatura"),
     ]
-    gap = 0.62
-    y = 13.4 - 0.15
-    centers = []
-    for lines, tag, acc, h in pasos:
-        cy = y - h / 2
-        centers.append((cy, h))
-        first = [lines[0]]
-        sub = " ".join(lines[1:]) if len(lines) > 1 else None
-        if len(lines) == 3:  # pregunta en dos líneas
-            box(ax, cx, cy, W, h, [lines[0]], sub=lines[1] + "\n" + lines[2],
-                accent=acc, fs=9.4, sub_fs=7.1, lw=1.3)
-        else:
-            box(ax, cx, cy, W, h, first, sub=sub, accent=acc, fs=9.6, sub_fs=7.4)
-        if tag:
-            ax.text(cx - W / 2 - 0.55, cy, tag, ha="center", va="center",
-                    fontsize=9.5, color=acc, fontweight="bold", family=FONT)
-        y = y - h - gap
-    for k in range(len(centers) - 1):
-        c0, h0 = centers[k]
-        c1, h1 = centers[k + 1]
-        arrow(ax, cx, c0 - h0 / 2 - 0.04, cx, c1 + h1 / 2 + 0.04, color=RAIL, lw=1.6)
-    ax.plot([cx - W / 2 - 0.98, cx - W / 2 - 0.98],
-            [centers[1][0] + centers[1][1] / 2, centers[5][0] - centers[5][1] / 2],
-            color=RAIL, lw=1.0)
-    ax.text(cx - W / 2 - 1.22, (centers[1][0] + centers[5][0]) / 2, "etapas metodológicas",
-            ha="center", va="center", rotation=90, fontsize=7.6, color=MUTE,
+    n = len(etapas)
+    hueco = 0.20
+    w_et = (W_ANCHA - (n - 1) * hueco) / n
+    h_et, y_et = 2.10, 3.35
+    x0 = cx - W_ANCHA / 2 + w_et / 2
+    centros = []
+    for k, (tag, titulo, sub) in enumerate(etapas):
+        x = x0 + k * (w_et + hueco)
+        centros.append(x)
+        box(ax, x, y_et, w_et, h_et, titulo, sub=sub, accent=AC,
+            fs=6.5, sub_fs=5.2, lw=0.8, n_bold=2)
+        ax.text(x, y_et + h_et / 2 + 0.20, tag, ha="center", va="bottom",
+                fontsize=7.2, color=AC, fontweight="bold", family=FONT)
+    for k in range(n - 1):
+        arrow(ax, centros[k] + w_et / 2 + 0.02, y_et,
+              centros[k + 1] - w_et / 2 - 0.02, y_et, color=RAIL, lw=1.5, ms=10)
+
+    # ── fila inferior: a dónde lleva el recorrido ────────────────────────────
+    y_res, h_res = 0.80, 1.00
+    box(ax, cx, y_res, W_ANCHA, h_res, ["Resultados"],
+        sub="viabilidad, criterios de selección y limitaciones",
+        accent=B_GREEN, fs=8.0, sub_fs=6.4, lw=0.9)
+
+    # ── conexiones verticales entre filas ────────────────────────────────────
+    arrow(ax, cx, y_preg - h_preg / 2 - 0.04, cx, y_et + h_et / 2 + 0.44,
+          color=RAIL, lw=1.6)
+    arrow(ax, cx, y_et - h_et / 2 - 0.04, cx, y_res + h_res / 2 + 0.04,
+          color=RAIL, lw=1.6)
+    ax.text(cx - W_ANCHA / 2, y_et - h_et / 2 - 0.38, "etapas metodológicas",
+            ha="left", va="center", fontsize=6.2, color=MUTE,
             style="italic", family=FONT)
+
     save(fig, "R1_recorrido.png")
 
 
