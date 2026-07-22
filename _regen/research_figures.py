@@ -89,29 +89,38 @@ def save(fig, name):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# C1 — Por qué energía RF (§1.1): tres franjas honestas → RF como complemento
+# C1 — Por qué energía RF (§1.1): tres aportes → sistema de almacenamiento →
+#      mayor autonomía. La RF ambiental COMPLEMENTA (no reemplaza) las demás
+#      estrategias de alimentación. Paleta oro/teal del proyecto.
 # ══════════════════════════════════════════════════════════════════════════════
 def fig_c1():
-    fig, ax = lienzo(6.2, 2.9, (0, 12.6), (0.2, 6.4))
-    bx, bw, bh = 3.55, 6.5, 1.55
-    ys = (5.35, 3.25, 1.15)
+    fig, ax = lienzo(6.6, 2.65, (0, 15.6), (0.0, 6.4))
+    bx, bw, bh = 2.85, 5.3, 1.5
+    ys = (5.35, 3.30, 1.25)
     box(ax, bx, ys[0], bw, bh, ["Energía solar"],
-        sub="entrega mucha potencia,\npero solo con iluminación",
-        accent="#C9A227", fs=9.3, sub_fs=7.0)
+        sub="mucha potencia, pero\ndepende de la iluminación",
+        accent=A_GOLD, fs=9.2, sub_fs=6.9)
     box(ax, bx, ys[1], bw, bh, ["RF ambiental"],
-        sub="señales débiles pero presentes\ndía y noche (TDT 24/7)",
-        accent=AC, fs=9.3, sub_fs=7.0)
-    box(ax, bx, ys[2], bw, bh, ["Batería sola"],
-        sub="se agota y exige reemplazo\nperiódico en campo",
-        accent=COL["warn"], fs=9.3, sub_fs=7.0)
-    cx2, cy2, w2, h2 = 10.0, 3.25, 4.5, 2.1
-    box(ax, cx2, cy2, w2, h2,
-        ["RF como", "complemento", "de la autonomía"],
-        accent=AC, fs=9.8, bold_first=True, lw=1.4)
+        sub="aporte modesto, disponible\ndía y noche (TDT 24/7)",
+        accent=AC, fs=9.2, sub_fs=6.9, lw=1.5)
+    box(ax, bx, ys[2], bw, bh, ["Red o batería"],
+        sub="energía firme, pero finita\no costosa de reemplazar",
+        accent=A_GOLD, fs=9.2, sub_fs=6.9)
+    # etapa central: el almacenamiento donde convergen los aportes
+    cxs, cys, ws, hs = 8.55, 3.30, 3.9, 2.0
+    box(ax, cxs, cys, ws, hs, ["Sistema de", "almacenamiento"],
+        sub="acumula los aportes\nde todas las fuentes",
+        accent=AC, fs=9.4, sub_fs=6.9, lw=1.4)
+    # resultado: autonomía
+    cxa, cya, wa, ha = 13.30, 3.30, 4.15, 2.0
+    box(ax, cxa, cya, wa, ha, ["Mayor autonomía", "del dispositivo"],
+        accent=AC, fs=9.0, lw=1.4)
     for y in ys:
-        arrow(ax, bx + bw / 2 + 0.1, y, cx2 - w2 / 2 - 0.1, cy2,
-              color=RAIL, lw=1.5)
-    ax.text(10.0, 1.15, "no reemplaza la fuente principal:\nreduce la dependencia de la batería",
+        arrow(ax, bx + bw / 2 + 0.1, y, cxs - ws / 2 - 0.1, cys,
+              color=(AC if y == ys[1] else RAIL), lw=(1.9 if y == ys[1] else 1.4))
+    arrow(ax, cxs + ws / 2 + 0.1, cys, cxa - wa / 2 - 0.1, cya, color=AC, lw=1.9)
+    ax.text(10.95, 1.05,
+            "la energía RF complementa a las demás fuentes:\nsuma un aporte continuo, no las reemplaza",
             ha="center", va="center", fontsize=7.2, color=MUTE,
             style="italic", family=FONT)
     save(fig, "C1_por_que_rf.png")
