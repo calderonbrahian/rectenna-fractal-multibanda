@@ -84,7 +84,9 @@ def fig01_s11_sierpinski():
     from simulation.escenario_a import run_sweep_freq
     sw = run_sweep_freq()
     f = np.array(sw["freqs_GHz"]); s11 = np.array(sw["s11_dB"])
-    fig, ax = plt.subplots(figsize=(6.4, 4.0))
+    # 3,3 in de alto: a 14,5 cm de ancho el bloque de figura cabe en el
+    # resto de pagina en vez de arrastrarse entero a la siguiente.
+    fig, ax = plt.subplots(figsize=(6.4, 3.3))
     ax.plot(f, s11, color=C_A, lw=2, label="Modelo Sierpinski it.3")
     ax.axhline(-10, color="#555", ls="--", lw=1.2, label="Umbral −10 dB")
     for name, fhz in BANDS_A.items():
@@ -135,7 +137,8 @@ def fig03_s11_flpda():
     from simulation.escenario_b import run_sweep_freq_b
     sw = run_sweep_freq_b()
     f = np.array(sw["freqs_MHz"]); s11 = np.array(sw["s11_dB"])
-    fig, ax = plt.subplots(figsize=(6.6, 4.0))
+    # Misma altura que la figura homologa del Escenario A (fig01).
+    fig, ax = plt.subplots(figsize=(6.6, 3.3))
     ax.axvspan(sw["f_low_MHz"], sw["f_high_MHz"], color=C_VERDE, alpha=0.10,
                label="Banda diseñada 470–900 MHz")
     ax.plot(f, s11, color=C_VERDE, lw=2.2, label="Modelo FLPDA Koch it.2")
